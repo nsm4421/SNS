@@ -1,4 +1,3 @@
-import 'package:sns/features/auth/domain/entity/user.entity.dart';
 import 'package:sns/features/auth/domain/repository/auth.repository.dart';
 
 class SignUpUseCase {
@@ -6,17 +5,15 @@ class SignUpUseCase {
 
   SignUpUseCase(this._repository);
 
-  Future<String> call({
+  Future<void> call({
     required String email,
     required String password,
     required String username,
   }) async {
-    final user = UserEntity(
+    await _repository.signUp(
       email: email,
       password: password,
       username: username,
     );
-    // TODO : 회원가입처리
-    return 'token';
   }
 }

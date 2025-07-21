@@ -1,5 +1,17 @@
-import 'package:sns/features/auth/domain/entity/user.entity.dart';
+import 'package:sns/core/constant/auth_state.constant.dart';
 
-abstract interface class AuthRepository {
-  Future<String> signUp({required UserEntity user});
+abstract class AuthRepository {
+  Stream<AuthStatus> get authStatusStream;
+
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String username,
+  });
+
+  Future<void> signIn({required String email, required String password});
+
+  Future<void> signOut();
+
+  Future<void> restoreSession();
 }
