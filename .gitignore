@@ -5,6 +5,8 @@ android/
 **.config.dart
 **.g.dart
 **.freezed.dart
+.env
+/supabase
 
 # Miscellaneous
 *.class
