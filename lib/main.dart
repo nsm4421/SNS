@@ -21,10 +21,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Karma',
-      theme: ThemeData.dark(useMaterial3: true),
-      home: SignUpPage(),
+    return BlocProvider(
+      create: (_) => getIt<AuthenticationBloc>()..add(AppStartedEvent()),
+      child: MaterialApp(
+        title: 'Karma',
+        theme: ThemeData.dark(useMaterial3: true),
+        home: Text("TEST"),
+      ),
     );
   }
 }
