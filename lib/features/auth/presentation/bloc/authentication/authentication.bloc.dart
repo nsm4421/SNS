@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/auth_state.constant.dart';
@@ -15,8 +17,6 @@ class AuthenticationBloc
   AuthenticationBloc(this.authUseCases)
     : super(const AuthenticationState.checking()) {
     on<AppStartedEvent>(_onAppStarted);
-    on<SignInEvent>(_onSignIn);
-    on<SignUpEvent>(_onSignUp);
     on<SignOutEvent>(_onSignOut);
 
     authUseCases.authStatusStream.listen((status) {
@@ -39,35 +39,12 @@ class AuthenticationBloc
     AppStartedEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    emit(const AuthenticationState.checking());
-    await authUseCases.restoreSession();
-  }
-
-  Future<void> _onSignIn(
-    SignInEvent event,
-    Emitter<AuthenticationState> emit,
-  ) async {
     try {
       emit(const AuthenticationState.checking());
-      await authUseCases.signIn(email: event.email, password: event.password);
-    } catch (e) {
-      emit(AuthenticationState.failure(e.toString()));
-    }
-  }
-
-  Future<void> _onSignUp(
-    SignUpEvent event,
-    Emitter<AuthenticationState> emit,
-  ) async {
-    try {
-      emit(const AuthenticationState.checking());
-      await authUseCases.signUp(
-        email: event.email,
-        password: event.password,
-        username: event.username,
-      );
-    } catch (e) {
-      emit(AuthenticationState.failure(e.toString()));
+      await authUseCases.restoreSession();
+    } catch (error) {
+      log(error.toString());
+      emit(const AuthenticationState.failure('auth fail on starting app'));
     }
   }
 
@@ -75,6 +52,11 @@ class AuthenticationBloc
     SignOutEvent event,
     Emitter<AuthenticationState> emit,
   ) async {
-    await authUseCases.signOut();
+    try {
+      await authUseCases.signOut();
+    } catch (error) {
+      log(error.toString());
+      emit(const AuthenticationState.failure('sign out fails'));
+    }
   }
 }

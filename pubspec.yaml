@@ -32,6 +32,7 @@ dev_dependencies:
   envied_generator: ^1.1.1
   json_annotation: ^4.9.0
   json_serializable: ^6.8.0
+  copy_with_extension_gen: ^6.0.1
 
 flutter:
   uses-material-design: true
