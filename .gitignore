@@ -7,6 +7,7 @@ android/
 **.freezed.dart
 .env
 /supabase
+*.gr.dart
 
 # Miscellaneous
 *.class

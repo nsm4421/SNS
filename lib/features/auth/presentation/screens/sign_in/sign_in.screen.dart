@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'form.fragment.dart';
-import 'submit_button.widget.dart';
+import 'buttons.widget.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+class SignInScreen extends StatelessWidget {
+  const SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(title: const Text('Sign In')),
       body: const SingleChildScrollView(
         child: Column(
           children: [
@@ -22,7 +22,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SubmitButtonWidget(),
+            ButtonsWidget()
           ],
         ),
       ),
