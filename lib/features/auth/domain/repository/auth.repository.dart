@@ -3,6 +3,8 @@ import 'package:sns/core/constant/auth_state.constant.dart';
 abstract class AuthRepository {
   Stream<AuthStatus> get authStatusStream;
 
+  Future<bool> getIsAuth();
+
   Future<void> signUp({
     required String email,
     required String password,

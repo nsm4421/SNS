@@ -1,8 +1,9 @@
+import 'package:sns/core/util/logger/sington_logger.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'remote_auth.datasource.dart';
 
-class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
+class RemoteAuthDataSourceImpl with AppLogger implements RemoteAuthDataSource {
   final GoTrueClient _auth;
 
   RemoteAuthDataSourceImpl(this._auth);

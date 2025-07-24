@@ -14,6 +14,8 @@ class AuthUseCases {
 
   Stream<AuthStatus> get authStatusStream => _repository.authStatusStream;
 
+  Future<bool> get getIsAuth => _repository.getIsAuth();
+
   SignInUseCase get signIn => SignInUseCase(_repository);
 
   SignUpUseCase get signUp => SignUpUseCase(_repository);

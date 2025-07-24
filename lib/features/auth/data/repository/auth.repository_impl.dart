@@ -1,11 +1,12 @@
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/auth_state.constant.dart';
+import 'package:sns/core/util/logger/sington_logger.util.dart';
 import 'package:sns/features/auth/data/datasource/local/local_session.datasource_impl.dart';
 import 'package:sns/features/auth/data/datasource/remote/remote_auth.datasource_impl.dart';
 import 'package:sns/features/auth/domain/repository/auth.repository.dart';
 
 @LazySingleton(as: AuthRepository)
-class AuthRepositoryImpl implements AuthRepository {
+class AuthRepositoryImpl with AppLogger implements AuthRepository {
   final RemoteAuthDataSource _remoteDataSource;
   final LocalSessionDataSource _localDataSource;
 
@@ -18,7 +19,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Stream<AuthStatus> get authStatusStream async* {
     // AuthState(supabase) -> AuthStatus로 전환하기
-    yield AuthStatus.checking;  // 최초상태는 checking(인증상태 체크중)
+    yield AuthStatus.checking; // 최초상태는 checking(인증상태 체크중)
     await for (final event in _remoteDataSource.authStateStream) {
       if (event.session?.user != null) {
         yield AuthStatus.authenticated;
@@ -77,5 +78,12 @@ class AuthRepositoryImpl implements AuthRepository {
     // 발급받은 토큰을 로컬 스토리지에 저장
     await _localDataSource.setAccessToken(session.accessToken);
     await _localDataSource.setRefreshToken(session.refreshToken!);
+  }
+
+  @override
+  Future<bool> getIsAuth() async {
+    return await _localDataSource.getRefreshToken().then(
+      (token) => token != null && token.isNotEmpty,
+    );
   }
 }

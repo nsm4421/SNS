@@ -13,7 +13,7 @@ dependencies:
   either_dart: ^1.0.0
   envied: ^1.1.1
   flutter_bloc: ^9.1.0
-  auto_route: ^10.1.0+1
+  go_router: ^16.0.0
   get_it: ^8.0.3
   injectable: ^2.5.0
   logger: ^2.5.0
@@ -33,7 +33,6 @@ dev_dependencies:
   json_annotation: ^4.9.0
   json_serializable: ^6.8.0
   copy_with_extension_gen: ^6.0.1
-  auto_route_generator: ^10.1.0
 
 flutter:
   uses-material-design: true
