@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sns/features/auth/presentation/bloc/sign_up/sign_up.cubit.dart';
+import 'package:sns/presentation/bloc/auth/sign_in/sign_in.cubit.dart';
 
 class FormFragment extends StatefulWidget {
   const FormFragment({super.key});
@@ -13,15 +13,12 @@ class _FormFragmentState extends State<FormFragment> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _passwordConfirmController;
-  late final TextEditingController _usernameController;
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController()..addListener(_handleEmail);
     _passwordController = TextEditingController()..addListener(_handlePassword);
-    _passwordConfirmController = TextEditingController();
-    _usernameController = TextEditingController()..addListener(_handleUsername);
   }
 
   @override
@@ -33,25 +30,15 @@ class _FormFragmentState extends State<FormFragment> {
     _passwordController
       ..removeListener(_handlePassword)
       ..dispose();
-    _passwordConfirmController.dispose();
-    _usernameController
-      ..removeListener(_handleUsername)
-      ..dispose();
   }
 
   void _handleEmail() {
-    context.read<SignUpCubit>().handleData(email: _emailController.text.trim());
+    context.read<SignInCubit>().handleData(email: _emailController.text.trim());
   }
 
   void _handlePassword() {
-    context.read<SignUpCubit>().handleData(
+    context.read<SignInCubit>().handleData(
       password: _passwordController.text.trim(),
-    );
-  }
-
-  void _handleUsername() {
-    context.read<SignUpCubit>().handleData(
-      username: _usernameController.text.trim(),
     );
   }
 
@@ -71,24 +58,10 @@ class _FormFragmentState extends State<FormFragment> {
     return null;
   }
 
-  String? _validatePasswordConfirm(String? text) {
-    if (text != _passwordController.text) {
-      return 'password is not matched';
-    }
-    return null;
-  }
-
-  String? _validateUsername(String? text) {
-    if (text == null || text.isEmpty) {
-      return 'username not given';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: context.read<SignUpCubit>().formKey,
+      key: context.read<SignInCubit>().formKey,
       child: Column(
         children: [
           Padding(
@@ -111,29 +84,6 @@ class _FormFragmentState extends State<FormFragment> {
               decoration: const InputDecoration(
                 hintText: 'press password',
                 prefixIcon: Icon(Icons.password_outlined),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: TextFormField(
-              controller: _passwordConfirmController,
-              validator: _validatePasswordConfirm,
-              obscureText: true,
-              decoration: const InputDecoration(
-                hintText: 'press password again',
-                prefixIcon: Icon(Icons.password_outlined),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: TextFormField(
-              controller: _usernameController,
-              validator: _validateUsername,
-              decoration: const InputDecoration(
-                hintText: 'press username',
-                prefixIcon: Icon(Icons.face),
               ),
             ),
           ),
