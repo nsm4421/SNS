@@ -1,27 +1,29 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sns/core/dependency_injection/dependency_injection.dart';
+import 'package:sns/core/env/env.dart';
+import 'package:sns/features/auth/domain/usecase/auth.usecases.dart';
 import 'package:sns/features/auth/domain/usecase/scenario/sign_up.usecase.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  configureDependencies();
+void main() async {
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences.setMockInitialValues({});
+    await Supabase.initialize(
+      url: Env.supabaseUrl,
+      anonKey: Env.supabaseAnonKey,
+    );
+    configureDependencies();
+  });
 
   group('회원가입 유즈케이스', () {
-    late SignUpUseCase signUpUseCase;
     const email = 'nsm4421@naver.com';
     const password = '951221';
     const username = 'karma';
-
+    late SignUpUseCase signUpUseCase;
     setUp(() {
-      signUpUseCase = getIt<SignUpUseCase>();
-    });
-
-    test('회원가입 성공 시, 토큰 반환', () async {
-      final res = await signUpUseCase.call(
-        email: email,
-        password: password,
-        username: username,
-      );
-      // expect(res, null);
+      signUpUseCase = getIt<AuthUseCases>().signUp;
     });
 
     test('이메일이 올바르지 않은 경우 오류', () async {

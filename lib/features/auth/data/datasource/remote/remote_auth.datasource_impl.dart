@@ -1,4 +1,8 @@
 import 'package:sns/core/util/logger/sington_logger.util.dart';
+import 'package:sns/features/auth/data/model/auth_user.model.dart';
+import 'package:sns/features/auth/data/model/request/edit_profile_request.model.dart';
+import 'package:sns/features/auth/data/model/request/sign_up_request.model.dart';
+import 'package:sns/features/auth/data/model/user.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'remote_auth.datasource.dart';
@@ -12,19 +16,33 @@ class RemoteAuthDataSourceImpl with AppLogger implements RemoteAuthDataSource {
   Stream<AuthState> get authStateStream => _auth.onAuthStateChange;
 
   @override
-  Future<void> signUp({
-    required String email,
-    required String password,
-    required String username,
-  }) async {
+  Future<AuthUserModel> getAuthUser() async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw const AuthException('not logged in');
+    }
+    return AuthUserModel(
+      id: user.id,
+      email: user.email!,
+      username: user.userMetadata!['username'],
+    );
+  }
+
+  @override
+  Future<String?> signUp(SignUpRequestModel dto) async {
     final response = await _auth.signUp(
-      email: email,
-      password: password,
-      data: {'username': username},
+      email: dto.email,
+      password: dto.password,
+      data: {
+        'username': dto.username,
+        if (dto.sex != null) 'sex': dto.sex,
+        'description': dto.description,
+      },
     );
     if (response.user == null) {
       throw const AuthException('sign up failed');
     }
+    return response.user?.id;
   }
 
   @override
@@ -45,6 +63,21 @@ class RemoteAuthDataSourceImpl with AppLogger implements RemoteAuthDataSource {
     }
 
     return (session.accessToken, session.refreshToken!);
+  }
+
+  @override
+  Future<String?> editProfile(EditProfileRequestModel dto) async {
+    return await _auth
+        .updateUser(
+          UserAttributes(
+            data: {
+              if (dto.username != null) 'username': dto.username,
+              if (dto.sex != null) 'sex': dto.sex,
+              if (dto.description != null) 'description': dto.description,
+            },
+          ),
+        )
+        .then((res) => res.user?.id);
   }
 
   @override

@@ -1,6 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/auth_state.constant.dart';
 import 'package:sns/features/auth/domain/repository/auth.repository.dart';
+import 'scenario/edit_profile.usecase.dart';
+import 'scenario/find_user_by_uid.usecase.dart';
+import 'scenario/get_current_user.usecase.dart';
 import 'scenario/restore_session.usecase.dart';
 import 'scenario/sign_in.usecase.dart';
 import 'scenario/sign_out.usecase.dart';
@@ -24,4 +27,11 @@ class AuthUseCases {
 
   RestoreSessionUseCase get restoreSession =>
       RestoreSessionUseCase(_repository);
+
+  GetCurrentUserUseCase get getCurrentUser =>
+      GetCurrentUserUseCase(_repository);
+
+  FindUserByUidUseCase get findByUid => FindUserByUidUseCase(_repository);
+
+  EditProfileUseCase get editProfile => EditProfileUseCase(_repository);
 }
