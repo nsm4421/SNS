@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sns/features/auth/data/datasource/local/local_session.datasource_impl.dart';
 import 'package:sns/features/auth/data/datasource/remote/remote_auth.datasource_impl.dart';
 import 'package:sns/features/auth/data/datasource/remote/remote_user.datasource_impl.dart';
+import 'package:sns/features/poll/data/datasource/remote/remote_poll.datasource_impl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @module
@@ -14,13 +15,17 @@ abstract class DataSourceModule {
 
   @lazySingleton
   RemoteAuthDataSource get remoteAuth =>
-      RemoteAuthDataSourceImpl(_supabaseClient.auth);
+      RemoteAuthDataSourceImpl(_supabaseClient);
 
   @lazySingleton
   RemoteUserDataSource get remoteUser =>
-      RemoteUserDataSourceImpl(_supabaseClient.rest.from('users'));
+      RemoteUserDataSourceImpl(_supabaseClient);
 
   @lazySingleton
   LocalSessionDataSource get localSession =>
       LocalSessionDataSourceImpl(_flutterSecureStorage);
+
+  @lazySingleton
+  RemotePollDataSource get remotePoll =>
+      RemotePollDataSourceImpl(_supabaseClient);
 }

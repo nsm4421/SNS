@@ -1,5 +1,7 @@
 # Users
 
+### DDL
+
 ```plpgsql
 -- public.users테이블 생성
 create table if not exists public.users (

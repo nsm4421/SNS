@@ -2,15 +2,16 @@ import 'package:sns/core/util/logger/sington_logger.util.dart';
 import 'package:sns/features/auth/data/model/auth_user.model.dart';
 import 'package:sns/features/auth/data/model/request/edit_profile_request.model.dart';
 import 'package:sns/features/auth/data/model/request/sign_up_request.model.dart';
-import 'package:sns/features/auth/data/model/user.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'remote_auth.datasource.dart';
 
 class RemoteAuthDataSourceImpl with AppLogger implements RemoteAuthDataSource {
-  final GoTrueClient _auth;
+  late final GoTrueClient _auth;
 
-  RemoteAuthDataSourceImpl(this._auth);
+  RemoteAuthDataSourceImpl(SupabaseClient supabaseClient) {
+    _auth = supabaseClient.auth;
+  }
 
   @override
   Stream<AuthState> get authStateStream => _auth.onAuthStateChange;

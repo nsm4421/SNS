@@ -5,9 +5,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 part 'remote_user.datasorce.dart';
 
 class RemoteUserDataSourceImpl with AppLogger implements RemoteUserDataSource {
-  final PostgrestQueryBuilder _qb;
+  late final PostgrestQueryBuilder _qb;
 
-  RemoteUserDataSourceImpl(this._qb);
+  RemoteUserDataSourceImpl(SupabaseClient supabaseClient) {
+    _qb = supabaseClient.rest.from('users');
+  }
 
   @override
   Future<UserModel?> findByUId(String uid) async {
