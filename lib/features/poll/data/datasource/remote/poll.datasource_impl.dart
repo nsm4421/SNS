@@ -25,7 +25,7 @@ class RemotePollDataSourceImpl implements RemotePollDataSource {
   }
 
   @override
-  Future<String?> Function(CreateTopicRequestModel dto) get createTopic =>
+  Future<String> Function(CreateTopicRequestModel dto) get createTopic =>
       _pollRpc.createTopic;
 
   @override

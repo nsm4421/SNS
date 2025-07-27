@@ -1,9 +1,12 @@
+import 'package:sns/core/response/datasource_response_wrapper_mixin.dart';
 import 'package:sns/features/poll/data/model/topic.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'remote_topic.datasource.dart';
 
-class $RemoteTopicDataSourceImpl implements $RemoteTopicDataSource {
+class $RemoteTopicDataSourceImpl
+    with DataSourceResponseWrapperMixIn
+    implements $RemoteTopicDataSource {
   late final PostgrestQueryBuilder _qb;
 
   $RemoteTopicDataSourceImpl(SupabaseClient supabaseClient) {
@@ -11,20 +14,21 @@ class $RemoteTopicDataSourceImpl implements $RemoteTopicDataSource {
   }
 
   @override
-  Future<TopicModel> findById(String topicId) async {
-    return await _qb
-        .select('*')
-        .eq('id', topicId)
-        .single()
-        .then(TopicModel.fromJson);
-  }
+  Future<TopicModel> findById(String topicId) async =>
+      await guardApi<TopicModel>(() async {
+        return await _qb
+            .select('*')
+            .eq('id', topicId)
+            .single()
+            .then(TopicModel.fromJson);
+      });
 
   @override
   Future<Iterable<TopicModel>> fetchTopics({
     int limit = 20,
     DateTime? cursor,
     String? search,
-  }) async {
+  }) async => await guardApi<Iterable<TopicModel>>(() async {
     final query = _qb.select('*');
     if (search != null && search.isNotEmpty) {
       query.ilike('title', '%$search%');
@@ -36,10 +40,10 @@ class $RemoteTopicDataSourceImpl implements $RemoteTopicDataSource {
         .order('created_at')
         .limit(limit)
         .then((res) => res.map(TopicModel.fromJson));
-  }
+  });
 
   @override
-  Future<void> delete(String topicId) async {
+  Future<void> delete(String topicId) async => await guardApi<void>(() async {
     await _qb.delete().eq('id', topicId);
-  }
+  });
 }
