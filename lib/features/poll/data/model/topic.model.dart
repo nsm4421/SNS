@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:sns/features/poll/data/model/option.model.dart';
 
 part 'topic.model.g.dart';
 
@@ -11,9 +10,10 @@ class TopicModel with _$TopicModel {
   final String id;
   final String title;
   final String description;
-  final Iterable<OptionModel> options;
   @JsonKey(name: 'created_at')
   final String? createdAt;
+  @JsonKey(name: 'updated_at')
+  final String? updatedAt;
   @JsonKey(name: 'created_by')
   final String createdBy;
 
@@ -21,9 +21,9 @@ class TopicModel with _$TopicModel {
     required this.id,
     required this.title,
     required this.description,
-    required this.options,
     this.createdAt,
-    required this.createdBy
+    this.updatedAt,
+    required this.createdBy,
   });
 
   factory TopicModel.fromJson(Map<String, dynamic> json) =>

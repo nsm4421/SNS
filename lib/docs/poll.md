@@ -1,9 +1,5 @@
 # Poll
 
-## Topics, Options, Votes
-
-### DDL
-
 ```plpgsql
 -- topics
 create table if not exists public.topics (
@@ -19,9 +15,11 @@ create table if not exists public.topics (
 create table if not exists public.options (
     id uuid primary key default gen_random_uuid(),
     topic_id uuid not null references public.topics(id) on delete cascade,
+    seq integer not null default 0,
     content text not null, -- 선택지 내용
     created_at timestamptz default now() not null,
-    updated_at timestamptz default now() not null
+    updated_at timestamptz default now() not null,
+    unique(topic_id, seq)
 );
 
 -- votes
@@ -66,37 +64,34 @@ execute procedure public.set_updated_at();
 
 -- RLS
 alter table public.topics enable row level security;
-create policy "view_topics" on public.topics for select using (auth.role() = 'authenticated');
-create policy "insert_own_topics" on public.topics for insert with check (auth.uid() = created_by);
-create policy "update_own_topics" on public.topics for update using (auth.uid() = created_by) with check (auth.uid() = created_by);
-create policy "delete_own_topics" on public.topics for delete using (auth.uid() = created_by);
+create policy "permit select for authenticated" on public.topics for select using (auth.role() = 'authenticated');
+create policy "can insert own data" on public.topics for insert with check (auth.uid() = created_by);
+create policy "can update own data" on public.topics for update using (auth.uid() = created_by) with check (auth.uid() = created_by);
+create policy "can delete own data" on public.topics for delete using (auth.uid() = created_by);
 
 alter table public.options enable row level security;
-create policy "view_options" on public.options for select using (auth.role() = 'authenticated');
-create policy "insert_options_for_own_topic" on public.options for insert
+create policy "permit select for authenticated" on public.options for select using (auth.role() = 'authenticated');
+create policy "only author can insert" on public.options for insert
   with check (auth.uid() = (select created_by from public.topics where id = topic_id));
-create policy "update_own_options" on public.options for update
+create policy "only author can update" on public.options for update
   using (auth.uid() = (select created_by from public.topics where id = topic_id))
   with check (auth.uid() = (select created_by from public.topics where id = topic_id));
-create policy "delete_own_options" on public.options for delete
+create policy "only author can delete" on public.options for delete
   using (auth.uid() = (select created_by from public.topics where id = topic_id));
 
 alter table public.votes enable row level security;
-create policy "view_votes" on public.votes for select using (auth.role() = 'authenticated');
-create policy "insert_vote" on public.votes for insert with check (auth.uid() = created_by);
-create policy "update_own_vote" on public.votes for update using (auth.uid() = created_by);
-create policy "delete_own_vote" on public.votes for delete using (auth.uid() = created_by);
-```
+create policy "permit select for authenticated" on public.votes for select using (auth.role() = 'authenticated');
+create policy "can insert own data" on public.votes for insert with check (auth.uid() = created_by);
+create policy "can update own data" on public.votes for update using (auth.uid() = created_by);
+create policy "can delete own data" on public.votes for delete using (auth.uid() = created_by);
 
-### RPC
+--- RPC
 
-- Create Topic
-
-```
+-- create topic with options
 create or replace function public.create_topic_with_options(
-  p_title text,
+  p_title       text,
   p_description text,
-  p_options text[]
+  p_options     text[]
 )
 returns uuid
 language plpgsql
@@ -106,66 +101,79 @@ as $$
 declare
   v_topic_id uuid;
 begin
+  -- 인증여부 체크
   if auth.uid() is null then
     raise exception 'Unauthenticated';
   end if;
 
-  -- insert row on topics table
+  -- topics 테이블에 insert
   insert into public.topics (created_by, title, description)
   values (auth.uid(), p_title, p_description)
   returning id into v_topic_id;
 
-  -- insert rows on options table
-  insert into public.options (topic_id, content)
-  select v_topic_id, unnest(p_options);
+  --  options 테이블에 insert (with ordinality 로 seq 부여)
+  insert into public.options (topic_id, content, seq)
+  select
+    v_topic_id,
+    opt,
+    ord
+  from unnest(p_options) with ordinality as t(opt, ord);
 
-  -- return topic id
   return v_topic_id;
 end;
 $$;
 
+-- 권한 설정
 revoke all on function public.create_topic_with_options(text, text, text[]) from public;
 grant execute on function public.create_topic_with_options(text, text, text[]) to authenticated;
-```
 
-- Get Topics With Options
-
-```
--- define return type
-drop type if exists public.topic_with_options_json cascade;
-create type public.topic_with_options_json as (
-  topic_id uuid,
-  created_by uuid,
-  title text,
+-- get_topic_detail
+-- topics, options, votes테이블 join한 결과 가져오기
+drop type if exists public.topic_detail cascade;
+create type public.topic_detail as (
+  topic_id    uuid,
+  created_by  uuid,
+  title       text,
   description text,
-  created_at timestamptz,
-  updated_at timestamptz,
-  options jsonb
+  created_at  timestamptz,
+  updated_at  timestamptz,
+  options     jsonb
 );
 
-create or replace function public.get_topics_with_votes(
-  p_limit int default 20,
-  p_offset int default 0,
-  p_search text default null
+-- 1) 반환 타입 재정의 (options JSON 내 필드 확장)
+drop type if exists public.topic_with_options_json cascade;
+create type public.topic_with_options_json as (
+  topic_id    uuid,
+  created_by  uuid,
+  title       text,
+  description text,
+  created_at  timestamptz,
+  updated_at  timestamptz,
+  options     jsonb
+);
+
+-- 2) topic 단건 + 옵션 조회 RPC
+create or replace function public.get_topic_detail(
+  p_topic_id uuid
 )
-returns setof public.topic_with_options_json
+returns setof public.topic_detail
 language sql
 security definer
 set search_path = public
 as $$
-  with base as (
+  with me as (
+    select auth.uid() as uid
+  ), base as (
     select
-      t.id as topic_id,
+      t.id         as topic_id,
       t.created_by,
       t.title,
       t.description,
       t.created_at,
       t.updated_at
     from public.topics t
-    where auth.role() = 'authenticated'
-      and (p_search is null or t.title ilike '%' || p_search || '%' )
-    order by t.created_at desc
-    limit p_limit offset p_offset
+    where t.id = p_topic_id
+      and auth.role() = 'authenticated'
   )
   select
     b.topic_id,
@@ -174,30 +182,37 @@ as $$
     b.description,
     b.created_at,
     b.updated_at,
-    (
-      select jsonb_agg(
-        jsonb_build_object(
-          'id', o.id,
-          'content', o.content,
-          'vote_count', coalesce(vc.cnt, 0),
-          'voted_by_me', exists (
-            select 1 from public.votes v2
-            where v2.option_id = o.id
-              and v2.created_by = auth.uid()
-          )
+    coalesce(
+      (
+        select jsonb_agg(
+          jsonb_build_object(
+            'id',           o.id,
+            'content',      o.content,
+            'seq',          o.seq,
+            'vote_count',   coalesce(vc.cnt, 0),
+            'voted_by_me',  exists (
+              select 1
+              from public.votes v2
+              cross join me
+              where v2.option_id   = o.id
+                and v2.created_by  = me.uid
+            )
+          ) order by o.seq
         )
-        order by o.created_at
+        from public.options o
+        left join lateral (
+          select count(*)::int as cnt
+          from public.votes v
+          where v.option_id = o.id
+        ) vc on true
+        where o.topic_id = b.topic_id
       )
-      from public.options o
-      left join lateral (
-        select count(*)::bigint as cnt
-        from public.votes v where v.option_id = o.id
-      ) vc on true
-      where o.topic_id = b.topic_id
+    , '[]'::jsonb
     ) as options
   from base b;
 $$;
 
-revoke all on function public.get_topics_with_votes(int, int, text) from public;
-grant execute on function public.get_topics_with_votes(int, int, text) to authenticated;
+-- 권한 재설정
+revoke all on function public.get_topic_detail(uuid) from public;
+grant execute on function public.get_topic_detail(uuid) to authenticated;
 ```
