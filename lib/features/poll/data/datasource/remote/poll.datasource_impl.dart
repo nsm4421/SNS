@@ -26,7 +26,7 @@ class RemotePollDataSourceImpl implements RemotePollDataSource {
 
   @override
   Future<String> Function(CreateTopicRequestModel dto) get createTopic =>
-      _pollRpc.createTopic;
+      _pollRpc.createTopicAndReturnId;
 
   @override
   Future<TopicDetailModel> Function(GetTopicDetailRequestModel dto)
@@ -34,7 +34,7 @@ class RemotePollDataSourceImpl implements RemotePollDataSource {
 
   @override
   Future<void> Function(String topicId) get deleteTopicById =>
-      _topicDataSource.delete;
+      _topicDataSource.deleteById;
 
   @override
   Future<Iterable<TopicModel>> Function({

@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/util/bloc/simple_cubit.dart';
+import 'package:sns/core/util/logger/sington_logger.util.dart';
 import 'package:sns/features/auth/domain/usecase/auth.usecases.dart';
 import 'package:sns/features/auth/domain/usecase/scenario/sign_up.usecase.dart';
 
@@ -13,7 +12,7 @@ part 'sign_up_data.dart';
 part 'sign_up.cubit.g.dart';
 
 @injectable
-class SignUpCubit extends SimpleCubit<SignUpData> {
+class SignUpCubit extends SimpleCubit<SignUpData> with AppLogger {
   late final SignUpUseCase _useCase;
   late final GlobalKey<FormState> _formKey;
 
@@ -43,15 +42,29 @@ class SignUpCubit extends SimpleCubit<SignUpData> {
         return;
       }
       _formKey.currentState?.save();
-      await _useCase.call(
-        email: state.data.email,
-        password: state.data.password,
-        username: state.data.username,
-      );
-      emit(state.copyWith(status: Status.success));
+
+      await _useCase
+          .call(
+            email: state.data.email,
+            password: state.data.password,
+            username: state.data.username,
+          )
+          .then(
+            (res) => res.fold(
+              (l) {
+                logger.e(l);
+                emit(
+                  state.copyWith(status: Status.error, errorMessage: l.message),
+                );
+              },
+              (_) {
+                emit(state.copyWith(status: Status.success));
+              },
+            ),
+          );
     } catch (error) {
-      log(error.toString());
-      emit(state.copyWith(status: Status.error, errorMessage: 'sign up fails'));
+      logger.e(error);
+      emit(state.copyWith(status: Status.error, errorMessage: 'error occurs'));
       await Future.delayed(const Duration(seconds: 1));
       emit(
         state.copyWith(status: Status.initial).copyWithNull(errorMessage: true),

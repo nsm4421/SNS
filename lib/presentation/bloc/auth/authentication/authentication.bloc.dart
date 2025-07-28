@@ -44,12 +44,16 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>
   ) async {
     try {
       emit(const AuthenticationState.checking());
-      await _authUseCases.restoreSession();
-      final isAuth = await _authUseCases.getIsAuth;
-      emit(
-        isAuth
-            ? const AuthenticationState.authenticated()
-            : const AuthenticationState.unauthenticated(),
+      await _authUseCases.restoreSession().then(
+        (res) => res.fold(
+          (l) {
+            logger.e(l);
+            emit(const AuthenticationState.unauthenticated());
+          },
+          (r) {
+            emit(const AuthenticationState.authenticated());
+          },
+        ),
       );
     } catch (error) {
       logger.e(error);
@@ -62,9 +66,17 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>
     Emitter<AuthenticationState> emit,
   ) async {
     try {
-      logger.t('[bloc]sign out called');
-      await _authUseCases.signOut();
-      emit(const AuthenticationState.unauthenticated());
+      await _authUseCases.signOut().then(
+        (res) => res.fold(
+          (l) {
+            logger.e(l);
+            emit(const AuthenticationState.unauthenticated());
+          },
+          (r) {
+            emit(const AuthenticationState.unauthenticated());
+          },
+        ),
+      );
     } catch (error) {
       logger.e(error);
       emit(const AuthenticationState.failure('sign out fails'));

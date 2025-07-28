@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sns/core/dependency_injection/dependency_injection.dart';
 import 'package:sns/core/env/env.dart';
+import 'package:sns/core/response/failure.dart';
 import 'package:sns/features/auth/domain/usecase/auth.usecases.dart';
 import 'package:sns/features/auth/domain/usecase/scenario/sign_up.usecase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,25 +28,23 @@ void main() async {
     });
 
     test('이메일이 올바르지 않은 경우 오류', () async {
-      expect(
-        () async => await signUpUseCase.call(
-          email: '',
-          password: password,
-          username: username,
-        ),
-        throwsA(isA<Exception>()),
+      final res = await signUpUseCase.call(
+        email: '',
+        password: password,
+        username: username,
       );
+      expect(res.isLeft, isTrue);
+      expect(res.left, isA<Failure>());
     });
 
     test('비밀번호가 너무 짧은 경우 오류', () async {
-      expect(
-        () async => await signUpUseCase.call(
-          email: email,
-          password: '123',
-          username: username,
-        ),
-        throwsA(isA<Exception>()),
+      final res = await signUpUseCase.call(
+        email: email,
+        password: '123',
+        username: username,
       );
+      expect(res.isLeft, isTrue);
+      expect(res.left, isA<Failure>());
     });
   });
 }

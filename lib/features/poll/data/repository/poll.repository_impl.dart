@@ -1,7 +1,8 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/response/failure.dart';
-import 'package:sns/core/response/repository_response_wrapper_mixin.dart';
+import 'package:sns/core/response/api_error.dart';
+import 'package:sns/core/response/response_response_wrapper_mixin.dart';
+import 'package:sns/core/util/logger/sington_logger.util.dart';
 import 'package:sns/features/poll/data/datasource/remote/poll.datasource_impl.dart';
 import 'package:sns/features/poll/data/model/request/create_topic_request.model.dart';
 import 'package:sns/features/poll/data/model/request/get_topic_detail_request.model.dart';
@@ -11,7 +12,7 @@ import 'package:sns/features/poll/domain/repository/poll.repository.dart';
 
 @LazySingleton(as: PollRepository)
 class PollRepositoryImpl
-    with ResponseResponseWrapperMixIn
+    with RepositoryResponseWrapperMixIn, AppLogger
     implements PollRepository {
   final RemotePollDataSource _remoteDataSource;
 
@@ -19,7 +20,7 @@ class PollRepositoryImpl
     : _remoteDataSource = remoteDataSource;
 
   @override
-  Future<Either<Failure, String>> createTopic({
+  Future<Either<ApiError, String>> createTopic({
     required String title,
     required String description,
     required List<String> options,
@@ -31,10 +32,10 @@ class PollRepositoryImpl
         options: options,
       ),
     );
-  });
+  }, logger: logger);
 
   @override
-  Future<Either<Failure, List<TopicEntity>>> fetchTopics({
+  Future<Either<ApiError, List<TopicEntity>>> fetchTopics({
     int limit = 20,
     DateTime? cursor,
     String? search,
@@ -45,7 +46,7 @@ class PollRepositoryImpl
   });
 
   @override
-  Future<Either<Failure, TopicDetailEntity>> getTopicDetail(
+  Future<Either<ApiError, TopicDetailEntity>> getTopicDetail(
     String topicId,
   ) async => await guardApi(() async {
     return await _remoteDataSource
@@ -54,19 +55,19 @@ class PollRepositoryImpl
   });
 
   @override
-  Future<Either<Failure, String>> upsertVote(String optionId) async =>
+  Future<Either<ApiError, String>> upsertVote(String optionId) async =>
       await guardApi(() async {
         return await _remoteDataSource.upsertVote(optionId);
       });
 
   @override
-  Future<Either<Failure, void>> deleteTopic(String topicId) async =>
+  Future<Either<ApiError, void>> deleteTopic(String topicId) async =>
       await guardApi(() async {
         await _remoteDataSource.deleteTopicById(topicId);
       });
 
   @override
-  Future<Either<Failure, void>> deleteVote(String voteId) async =>
+  Future<Either<ApiError, void>> deleteVote(String voteId) async =>
       await guardApi(() async {
         await _remoteDataSource.deleteVoteById(voteId);
       });

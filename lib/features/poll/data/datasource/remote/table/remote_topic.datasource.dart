@@ -9,5 +9,5 @@ abstract mixin class $RemoteTopicDataSource {
     String? search,
   });
 
-  Future<void> delete(String topicId);
+  Future<void> deleteById(String topicId);
 }

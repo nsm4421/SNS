@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:sns/core/constant/auth_state.constant.dart';
 import 'package:sns/core/constant/user_profile.constant.dart';
-import 'package:sns/core/response/failure.dart';
+import 'package:sns/core/response/api_error.dart';
 import 'package:sns/features/auth/domain/entity/user.entity.dart';
 
 abstract class AuthRepository {
@@ -9,26 +9,34 @@ abstract class AuthRepository {
 
   Future<bool> getIsAuth();
 
-  Future<Either<Failure, UserEntity>> getCurrentUser();
+  Future<Either<ApiError, UserEntity>> getCurrentUser();
 
-  Future<Either<Failure, UserEntity>> findByUid(String uid);
+  Future<Either<ApiError, UserEntity>> findByUid(String uid);
 
-  Future<Either<Failure, void>> signUp({
+  Future<Either<ApiError, void>> signUp({
     required String email,
     required String password,
     required String username,
   });
 
-  Future<Either<Failure, void>> signIn({
-    required String email,
-    required String password,
+  Future<Either<ApiError, (String accessToken, String refreshToken)>>
+  signInAndReturnTokens({required String email, required String password});
+
+  Future<Either<ApiError, void>> saveTokens({
+    required String accessToken,
+    required String refreshToken,
   });
 
-  Future<Either<Failure, void>> signOut();
+  Future<Either<ApiError, void>> signOut();
 
-  Future<Either<Failure, void>> restoreSession();
+  Future<Either<ApiError, String>> getRefreshToken();
 
-  Future<Either<Failure, void>> editProfile({
+  Future<Either<ApiError, void>> clearTokens();
+
+  Future<Either<ApiError, (String accessToken, String refreshToken)>>
+  getNewTokens(String oldRefreshToken);
+
+  Future<Either<ApiError, void>> editProfile({
     String? username,
     String? description,
     Sex? sex,

@@ -2,8 +2,8 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/auth_state.constant.dart';
 import 'package:sns/core/constant/user_profile.constant.dart';
-import 'package:sns/core/response/failure.dart';
-import 'package:sns/core/response/repository_response_wrapper_mixin.dart';
+import 'package:sns/core/response/api_error.dart';
+import 'package:sns/core/response/response_response_wrapper_mixin.dart';
 import 'package:sns/core/util/logger/sington_logger.util.dart';
 import 'package:sns/features/auth/data/datasource/local/local_session.datasource_impl.dart';
 import 'package:sns/features/auth/data/datasource/remote/remote_auth.datasource_impl.dart';
@@ -15,7 +15,7 @@ import 'package:sns/features/auth/domain/repository/auth.repository.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl
-    with AppLogger, ResponseResponseWrapperMixIn
+    with AppLogger, RepositoryResponseWrapperMixIn
     implements AuthRepository {
   final RemoteAuthDataSource _remoteAuthDataSource;
   final RemoteUserDataSource _remoteUserDataSource;
@@ -48,23 +48,23 @@ class AuthRepositoryImpl
       .then((token) => token != null && token.isNotEmpty);
 
   @override
-  Future<Either<Failure, UserEntity>> getCurrentUser() async =>
+  Future<Either<ApiError, UserEntity>> getCurrentUser() async =>
       await guardApi<UserEntity>(() async {
         return _remoteAuthDataSource.getAuthUser().then(
           UserEntity.fromAuthUserModel,
         );
-      });
+      }, logger: logger);
 
   @override
-  Future<Either<Failure, UserEntity>> findByUid(String uid) async =>
+  Future<Either<ApiError, UserEntity>> findByUid(String uid) async =>
       await guardApi<UserEntity>(() async {
         return await _remoteUserDataSource
             .findByUId(uid)
             .then(UserEntity.fromUserModel);
-      });
+      }, logger: logger);
 
   @override
-  Future<Either<Failure, void>> signUp({
+  Future<Either<ApiError, void>> signUp({
     required String email,
     required String password,
     required String username,
@@ -80,54 +80,67 @@ class AuthRepositoryImpl
         description: description,
       ),
     );
-  });
+  }, logger: logger);
 
   @override
-  Future<Either<Failure, void>> signIn({
+  Future<Either<ApiError, (String accessToken, String refreshToken)>>
+  signInAndReturnTokens({
     required String email,
     required String password,
-  }) async => await guardApi<void>(() async {
-    // 로그인 처리하고 토큰 발급받기
-    final (accessToken, refreshToken) = await _remoteAuthDataSource.signIn(
-      email: email,
-      password: password,
-    );
-    // 발급받은 토큰 저장
-    await _localDataSource.setAccessToken(accessToken);
-    await _localDataSource.setRefreshToken(refreshToken);
-  });
+  }) async => await guardApi<(String, String)>(() async {
+    // 로그인 처리하고, 발급받은 토큰 return
+    return await _remoteAuthDataSource.signIn(email: email, password: password);
+  }, logger: logger);
 
   @override
-  Future<Either<Failure, void>> signOut() async =>
+  Future<Either<ApiError, void>> saveTokens({
+    required String accessToken,
+    required String refreshToken,
+  }) async => guardApi(() async {
+    await _localDataSource.setAccessToken(accessToken);
+    await _localDataSource.setRefreshToken(refreshToken);
+  }, logger: logger);
+
+  @override
+  Future<Either<ApiError, void>> signOut() async =>
       await guardApi<void>(() async {
         await _remoteAuthDataSource.signOut();
+      });
+
+  @override
+  Future<Either<ApiError, String>> getRefreshToken() async =>
+      await guardApi<String>(() async {
+        final token = await _localDataSource.getRefreshToken();
+        if (token == null) {
+          throw ApiException.notFound('refresh token not founded');
+        }
+        return token;
+      }, logger: logger);
+
+  @override
+  Future<Either<ApiError, void>> clearTokens() async =>
+      await guardApi<void>(() async {
         await _localDataSource.clearAccessToken();
         await _localDataSource.clearRefreshToken();
       });
 
   @override
-  Future<Either<Failure, void>> restoreSession() async => await guardApi<void>(
-    () async {
-      // 로컬 스토리지에서 리프레쉬 토큰 꺼내기
-      final refreshToken = await _localDataSource.getRefreshToken();
-      if (refreshToken == null || refreshToken.isEmpty) {
-        throw Exception('refresh token is missing');
-      }
-      // 원격서버로부터 토큰 재발급 받기
-      final session = await _remoteAuthDataSource.restoreSession(refreshToken);
-      if (session == null) {
-        throw Exception('restore session fails');
-      } else if (session.refreshToken == null) {
-        throw Exception('refresh token is invalid');
-      }
-      // 발급받은 토큰을 로컬 스토리지에 저장
-      await _localDataSource.setAccessToken(session.accessToken);
-      await _localDataSource.setRefreshToken(session.refreshToken!);
-    },
-  );
+  Future<Either<ApiError, (String accessToken, String refreshToken)>>
+  getNewTokens(String oldRefreshToken) async =>
+      await guardApi<(String, String)>(() async {
+        final session = await _remoteAuthDataSource.restoreSession(
+          oldRefreshToken,
+        );
+        if (session == null) {
+          throw ApiException.notFound('session is not founded');
+        } else if (session.refreshToken == null) {
+          throw ApiException.notFound('refresh token is not founded');
+        }
+        return (session.accessToken, session.refreshToken!);
+      }, logger: logger);
 
   @override
-  Future<Either<Failure, void>> editProfile({
+  Future<Either<ApiError, void>> editProfile({
     String? username,
     String? description,
     Sex? sex,
@@ -141,5 +154,5 @@ class AuthRepositoryImpl
         sex: sex,
       ),
     );
-  });
+  }, logger: logger);
 }
