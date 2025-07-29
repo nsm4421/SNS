@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/util/bloc/simple_cubit.dart';
-import 'package:sns/presentation/bloc/auth/sign_up/sign_up.cubit.dart';
+import 'package:sns/features/auth/presentation/bloc/sign_up/sign_up.cubit.dart';
 
 class SubmitButtonWidget extends StatelessWidget {
   const SubmitButtonWidget({super.key});

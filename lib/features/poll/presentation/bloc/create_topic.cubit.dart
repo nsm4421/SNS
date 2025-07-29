@@ -1,0 +1,65 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:injectable/injectable.dart';
+import 'package:sns/core/constant/status.constant.dart';
+import 'package:sns/core/util/bloc/simple_cubit.dart';
+import 'package:sns/core/util/logger/sington_logger.util.dart';
+import 'package:sns/features/poll/domain/usecase/poll.usecases.dart';
+import 'package:sns/features/poll/domain/usecase/scenario/create_topic.usecase.dart';
+
+part 'create_topic_data.dart';
+
+part 'create_topic.cubit.g.dart';
+
+@injectable
+class CreateTopicCubit extends SimpleCubit<CreateTopicData> with AppLogger {
+  late final CreateTopicUseCase _useCase;
+
+  CreateTopicCubit(PollUseCases useCase)
+    : super(CreateTopicData(title: '', description: '', options: [])) {
+    _useCase = useCase.createTopic;
+  }
+
+  void updateTitle(String title) {
+    emit(state.copyWith(data: state.data.copyWith(title: title)));
+  }
+
+  void updateDescription(String description) {
+    emit(state.copyWith(data: state.data.copyWith(description: description)));
+  }
+
+  void addOption(String option) {
+    emit(
+      state.copyWith(
+        data: state.data.copyWith(options: [...state.data.options, option]),
+      ),
+    );
+  }
+
+  void removeOptionByIndex(int index) {
+    final temp = [...state.data.options];
+    temp.removeAt(index);
+    emit(state.copyWith(data: state.data.copyWith(options: temp)));
+  }
+
+  Future<void> submit() async {
+    await _useCase
+        .call(
+          title: state.data.title,
+          description: state.data.description,
+          options: state.data.options,
+        )
+        .then(
+          (res) => res.fold(
+            (l) {
+              logger.e(l);
+              emit(
+                state.copyWith(status: Status.error, errorMessage: l.message),
+              );
+            },
+            (r) {
+              emit(state.copyWith(status: Status.success));
+            },
+          ),
+        );
+  }
+}

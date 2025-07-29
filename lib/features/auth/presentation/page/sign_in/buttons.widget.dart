@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/util/bloc/simple_cubit.dart';
-import 'package:sns/presentation/bloc/auth/sign_in/sign_in.cubit.dart';
-import 'package:sns/presentation/route/app_routes.dart';
+import 'package:sns/features/auth/presentation/bloc/sign_in/sign_in.cubit.dart';
+import 'package:sns/core/constant/app_routes.constant.dart';
 
 class ButtonsWidget extends StatelessWidget {
   const ButtonsWidget({super.key});
