@@ -22,5 +22,8 @@ abstract interface class PollRepository {
 
   Future<Either<ApiError, String>> upsertVote(String optionId);
 
+  @Deprecated('use deleteVoteByOption instead')
   Future<Either<ApiError, void>> deleteVote(String voteId);
+
+  Future<Either<ApiError, void>> deleteVoteByOption(String optionId);
 }

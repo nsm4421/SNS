@@ -71,4 +71,10 @@ class PollRepositoryImpl
       await guardApi(() async {
         await _remoteDataSource.deleteVoteById(voteId);
       });
+
+  @override
+  Future<Either<ApiError, void>> deleteVoteByOption(String optionId) async =>
+      await guardApi(() async {
+        await _remoteDataSource.deleteVoteByOption(optionId);
+      });
 }
