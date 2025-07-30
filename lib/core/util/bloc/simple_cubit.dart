@@ -20,4 +20,11 @@ class SimpleCubitState<T> {
 
 abstract class SimpleCubit<T> extends Cubit<SimpleCubitState<T>> {
   SimpleCubit(T initData) : super(SimpleCubitState<T>(data: initData));
+
+  resetStatus({Duration? duration}) async {
+    await Future.delayed(duration ?? const Duration(seconds: 1));
+    emit(
+      state.copyWith(status: Status.initial).copyWithNull(errorMessage: true),
+    );
+  }
 }

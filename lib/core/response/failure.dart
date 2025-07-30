@@ -23,4 +23,7 @@ class Failure {
 
   factory Failure.unknown([String? message]) =>
       Failure(message ?? 'unknown error');
+
+  @override
+  String toString() => 'Failure:$message';
 }

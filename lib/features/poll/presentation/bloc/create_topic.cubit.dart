@@ -1,4 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/util/bloc/simple_cubit.dart';
@@ -13,11 +14,15 @@ part 'create_topic.cubit.g.dart';
 @injectable
 class CreateTopicCubit extends SimpleCubit<CreateTopicData> with AppLogger {
   late final CreateTopicUseCase _useCase;
+  late final GlobalKey<FormState> _formKey;
 
   CreateTopicCubit(PollUseCases useCase)
     : super(CreateTopicData(title: '', description: '', options: [])) {
     _useCase = useCase.createTopic;
+    _formKey = GlobalKey<FormState>(debugLabel: 'create-topic-form-key');
   }
+
+  GlobalKey<FormState> get formKey => _formKey;
 
   void updateTitle(String title) {
     emit(state.copyWith(data: state.data.copyWith(title: title)));
@@ -42,24 +47,38 @@ class CreateTopicCubit extends SimpleCubit<CreateTopicData> with AppLogger {
   }
 
   Future<void> submit() async {
-    await _useCase
-        .call(
-          title: state.data.title,
-          description: state.data.description,
-          options: state.data.options,
-        )
-        .then(
-          (res) => res.fold(
-            (l) {
-              logger.e(l);
-              emit(
-                state.copyWith(status: Status.error, errorMessage: l.message),
-              );
-            },
-            (r) {
-              emit(state.copyWith(status: Status.success));
-            },
-          ),
-        );
+    _formKey.currentState?.save();
+    final ok = _formKey.currentState?.validate();
+    if (ok == null || !ok) {
+      logger.w('validation fails');
+      return;
+    }
+
+    try {
+      await _useCase
+          .call(
+            title: state.data.title,
+            description: state.data.description,
+            options: state.data.options,
+          )
+          .then(
+            (res) => res.fold(
+              (l) async {
+                logger.e(l);
+                emit(
+                  state.copyWith(status: Status.error, errorMessage: l.message),
+                );
+                await resetStatus();
+              },
+              (r) {
+                emit(state.copyWith(status: Status.success));
+              },
+            ),
+          );
+    } catch (error) {
+      logger.e(error);
+      emit(state.copyWith(status: Status.error, errorMessage: 'error occurs'));
+      await resetStatus();
+    }
   }
 }

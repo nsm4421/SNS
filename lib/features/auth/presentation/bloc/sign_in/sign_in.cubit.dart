@@ -46,11 +46,12 @@ class SignInCubit extends SimpleCubit<SignInData> with AppLogger {
           .call(email: state.data.email, password: state.data.password)
           .then(
             (res) => res.fold(
-              (l) {
+              (l) async {
                 logger.e(l);
                 emit(
                   state.copyWith(status: Status.error, errorMessage: l.message),
                 );
+                await resetStatus();
               },
               (_) {
                 emit(state.copyWith(status: Status.success));
@@ -60,10 +61,7 @@ class SignInCubit extends SimpleCubit<SignInData> with AppLogger {
     } catch (error) {
       logger.e(error);
       emit(state.copyWith(status: Status.error, errorMessage: 'error occurs'));
-      await Future.delayed(const Duration(seconds: 1));
-      emit(
-        state.copyWith(status: Status.initial).copyWithNull(errorMessage: true),
-      );
+      await resetStatus();
     }
   }
 }

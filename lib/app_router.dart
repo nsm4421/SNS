@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/auth_state.constant.dart';
 import 'package:sns/features/auth/presentation/bloc/authentication/authentication.bloc.dart';
+import 'package:sns/features/poll/presentation/page/create_topic/create_topic.page.dart';
 
 import 'features/auth/presentation/page/sign_in/sign_in.page.dart';
 import 'features/auth/presentation/page/sign_up/sign_up.page.dart';
@@ -35,7 +36,7 @@ class AppRouter {
         return null;
       }
     },
-    routes: [..._authRoutes, ..._homeRoutes],
+    routes: [..._authRoutes, ..._homeRoutes, ..._topicRoutes],
   );
 
   Iterable<GoRoute> get _authRoutes => [
@@ -53,6 +54,13 @@ class AppRouter {
     GoRoute(
       path: AppRoutes.home.path,
       builder: (context, state) => const HomePage(),
+    ),
+  ];
+
+  Iterable<GoRoute> get _topicRoutes => [
+    GoRoute(
+      path: AppRoutes.createTopic.path,
+      builder: (context, state) => const CreateTopicPage(),
     ),
   ];
 }

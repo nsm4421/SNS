@@ -13,9 +13,9 @@ class CreateTopicUseCase with ApiErrorToFailureMapperMixIn {
     required String description,
     required List<String> options,
   }) async {
-    if (title.isNotEmpty) {
+    if (title.isEmpty) {
       return Left(Failure.validation('title is not given'));
-    } else if (description.isNotEmpty) {
+    } else if (description.isEmpty) {
       return Left(Failure.validation('description is not given'));
     } else if (options.length < 2) {
       return Left(Failure.validation('at least give 2 option'));
