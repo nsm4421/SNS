@@ -1,0 +1,37 @@
+import 'package:either_dart/either.dart';
+import 'package:injectable/injectable.dart';
+import 'package:sns/core/response/failure.dart';
+import 'package:sns/core/util/bloc/simple_display_bloc.dart';
+import 'package:sns/features/poll/domain/entity/topic.entity.dart';
+import 'package:sns/features/poll/domain/usecase/poll.usecases.dart';
+import 'package:sns/features/poll/domain/usecase/scenario/fetch_topics.usecase.dart';
+
+@injectable
+class DisplayTopicBloc extends SimpleDisplayBloc<TopicEntity> {
+  late final FetchTopicsUseCase _useCase;
+
+  DisplayTopicBloc(PollUseCases useCases)
+    : super(SimpleDisplayState<TopicEntity>(data: [])) {
+    _useCase = useCases.fetchTopics;
+  }
+
+  @override
+  DateTime get cursor {
+    final createdAtIter =
+        state.data.map((e) => e.createdAt).where((e) => e != null)
+            as Iterable<DateTime>;
+    if (createdAtIter.isEmpty) {
+      return DateTime.now();
+    }
+    return createdAtIter.reduce((v, e) => e.isAfter(v) ? v : e);
+  }
+
+  @override
+  Future<Either<Failure, List<TopicEntity>>> fetch({
+    DateTime? cursor,
+    int limit = 20,
+  }) async {
+    logger.t('[fetch data] cursor:$cursor | limit:$limit');
+    return _useCase.call(cursor: cursor, limit: limit);
+  }
+}

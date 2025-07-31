@@ -5,7 +5,7 @@ import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/dependency_injection/dependency_injection.dart';
 import 'package:sns/core/extension/build_context.extension.dart';
 import 'package:sns/core/util/bloc/simple_cubit.dart';
-import 'package:sns/features/poll/presentation/bloc/create_topic.cubit.dart';
+import 'package:sns/features/poll/presentation/bloc/create_topic/create_topic.cubit.dart';
 import 'create_topic.screen.dart';
 
 class CreateTopicPage extends StatelessWidget {

@@ -19,6 +19,7 @@ class SignInUseCase with ApiErrorToFailureMapperMixIn {
           return Left(() {
             switch (l.type) {
               case ApiErrorType.unauthorized:
+              case ApiErrorType.validation:
                 return Failure.unAuthorized('invalid credential');
               case ApiErrorType.notFound:
                 return Failure.unAuthorized('user not found');

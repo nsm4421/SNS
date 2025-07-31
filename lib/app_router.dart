@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/auth_state.constant.dart';
 import 'package:sns/features/auth/presentation/bloc/authentication/authentication.bloc.dart';
 import 'package:sns/features/poll/presentation/page/create_topic/create_topic.page.dart';
+import 'package:sns/features/poll/presentation/page/display_topics/display_topics.page.dart';
 
 import 'features/auth/presentation/page/sign_in/sign_in.page.dart';
 import 'features/auth/presentation/page/sign_up/sign_up.page.dart';
@@ -61,6 +62,10 @@ class AppRouter {
     GoRoute(
       path: AppRoutes.createTopic.path,
       builder: (context, state) => const CreateTopicPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.displayTopics.path,
+      builder: (context, state) => const DisplayTopicPage(),
     ),
   ];
 }
