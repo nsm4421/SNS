@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:sns/core/data/model/creator.model.dart';
+import 'package:sns/core/data/model/base.model.dart';
 
 part 'topic_detail.model.g.dart';
 
@@ -6,11 +8,11 @@ part 'topic_detail.model.freezed.dart';
 
 @freezed
 @JsonSerializable()
-class TopicDetailModel with _$TopicDetailModel {
+class TopicDetailModel with _$TopicDetailModel implements BaseModelWithUser {
   @JsonKey(name: 'topic_id')
   final String id;
-  @JsonKey(name: 'created_by')
-  final String createdBy;
+  @JsonKey(name: 'creator')
+  final CreatorModel creator;
   final String title;
   final String description;
   @JsonKey(name: 'created_at')
@@ -21,7 +23,7 @@ class TopicDetailModel with _$TopicDetailModel {
 
   TopicDetailModel({
     required this.id,
-    required this.createdBy,
+    required this.creator,
     required this.title,
     required this.description,
     this.createdAt,

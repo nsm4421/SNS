@@ -1,24 +1,23 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:sns/core/data/model/creator.model.dart';
+import 'package:sns/core/domain/entity/base.entity.dart';
+import 'package:sns/core/domain/entity/creator.entity.dart';
 import 'package:sns/features/poll/data/model/topic.model.dart';
 
 part 'topic.entity.g.dart';
 
 @CopyWith(copyWithNull: true)
-class TopicEntity {
-  final String id;
+class TopicEntity extends BaseEntityWithUser {
   final String title;
   final String description;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final String createdBy;
 
   TopicEntity({
-    required this.id,
+    required super.id,
     required this.title,
     required this.description,
-    this.createdAt,
-    this.updatedAt,
-    required this.createdBy,
+    super.createdAt,
+    super.updatedAt,
+    required super.creator,
   });
 
   factory TopicEntity.fromModel(TopicModel model) {
@@ -32,7 +31,7 @@ class TopicEntity {
       updatedAt: model.updatedAt == null
           ? null
           : DateTime.tryParse(model.updatedAt!),
-      createdBy: model.createdBy,
+      creator: CreatorEntity.from(model.creator),
     );
   }
 }

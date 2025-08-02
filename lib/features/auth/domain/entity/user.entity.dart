@@ -1,9 +1,10 @@
 import 'package:sns/core/constant/user_profile.constant.dart';
+import 'package:sns/core/domain/entity/base.entity.dart';
+import 'package:sns/core/domain/entity/creator.entity.dart';
 import 'package:sns/features/auth/data/model/auth_user.model.dart';
 import 'package:sns/features/auth/data/model/user.model.dart';
 
-class UserEntity {
-  final String id;
+class UserEntity extends BaseEntity implements CreatorEntity {
   final String username;
   final Sex? sex;
   final String? description;
@@ -12,7 +13,7 @@ class UserEntity {
   final DateTime? updatedAt;
 
   UserEntity({
-    required this.id,
+    required super.id,
     required this.username,
     this.sex,
     this.description,
@@ -28,6 +29,7 @@ class UserEntity {
       sex: model.sex,
       description: model.description,
       createdAt: DateTime.tryParse(model.createdAt ?? ''),
+      updatedAt: DateTime.tryParse(model.updatedAt ?? ''),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:sns/core/domain/entity/creator.entity.dart';
 import 'package:sns/features/poll/data/model/topic_detail.model.dart';
 import 'topic.entity.dart';
 
@@ -12,7 +13,7 @@ class TopicDetailEntity extends TopicEntity {
     required super.id,
     required super.title,
     required super.description,
-    required super.createdBy,
+    required super.creator,
     super.createdAt,
     super.updatedAt,
     required this.options,
@@ -29,7 +30,7 @@ class TopicDetailEntity extends TopicEntity {
       updatedAt: model.updatedAt == null
           ? null
           : DateTime.tryParse(model.updatedAt!),
-      createdBy: model.createdBy,
+      creator: CreatorEntity.from(model.creator),
       options: model.options.map($OptionItemEntity.fromModel).toList(),
     );
   }

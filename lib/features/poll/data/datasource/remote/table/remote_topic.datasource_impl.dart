@@ -13,7 +13,7 @@ class $RemoteTopicDataSourceImpl implements $RemoteTopicDataSource {
   @override
   Future<TopicModel> findById(String topicId) async {
     return await _qb
-        .select('*')
+        .select('*, creator:users(*)')
         .eq('id', topicId)
         .single()
         .then(TopicModel.fromJson);
@@ -25,7 +25,7 @@ class $RemoteTopicDataSourceImpl implements $RemoteTopicDataSource {
     DateTime? cursor,
     String? search,
   }) async {
-    final query = _qb.select('*');
+    final query = _qb.select('*, creator:users(*)');
     if (search != null && search.isNotEmpty) {
       query.ilike('title', '%$search%');
     }
