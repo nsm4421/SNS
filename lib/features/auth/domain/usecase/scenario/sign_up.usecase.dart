@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:sns/core/response/api_error.dart';
-import 'package:sns/core/response/api_error_to_failure_mapper_mixin.dart';
-import 'package:sns/core/response/failure.dart';
+import 'package:sns/core/constant/api_error_type.constant.dart';
+import 'package:sns/core/util/exception/api_error_to_failure_mapper_mixin.dart';
+import 'package:sns/core/util/exception/failure.dart';
 import 'package:sns/features/auth/domain/repository/auth.repository.dart';
 
 class SignUpUseCase with ApiErrorToFailureMapperMixIn {

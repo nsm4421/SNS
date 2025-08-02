@@ -1,3 +1,5 @@
+import 'package:sns/core/constant/api_error_type.constant.dart';
+
 import 'api_error.dart';
 import 'failure.dart';
 

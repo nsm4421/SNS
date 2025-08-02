@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
+import 'package:sns/core/constant/api_error_type.constant.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'api_error.dart';
+import '../exception/api_error.dart';
+import '../exception/api_exception.dart';
 
 @lazySingleton
 mixin class RepositoryResponseWrapperMixIn {

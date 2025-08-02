@@ -1,4 +1,4 @@
-part of 'poll.datasource_impl.dart';
+part of 'remote_poll.datasource_impl.dart';
 
 abstract interface class RemotePollDataSource {
   Future<String> Function(CreateTopicRequestModel dto) get createTopic;

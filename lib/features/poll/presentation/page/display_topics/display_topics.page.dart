@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sns/core/constant/status.constant.dart';
-import 'package:sns/core/dependency_injection/dependency_injection.dart';
-import 'package:sns/core/extension/build_context.extension.dart';
+import 'package:sns/core/util/dependency_injection/dependency_injection.dart';
+import 'package:sns/core/util/extension/build_context.extension.dart';
 import 'package:sns/core/util/bloc/simple_display_bloc.dart';
 import 'package:sns/core/util/bloc/simple_display_event.dart';
 import 'package:sns/features/poll/domain/entity/topic.entity.dart';

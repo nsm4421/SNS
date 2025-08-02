@@ -11,7 +11,7 @@ import 'table/remote_topic.datasource_impl.dart';
 
 import 'rpc/poll_rpc.datasource_impl.dart';
 
-part 'poll.datasource.dart';
+part 'remote_poll.datasource.dart';
 
 class RemotePollDataSourceImpl implements RemotePollDataSource {
   late final $PollRpcDataSourceImpl _pollRpc;

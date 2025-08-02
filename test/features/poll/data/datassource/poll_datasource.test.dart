@@ -2,13 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sns/features/auth/data/datasource/remote/remote_auth.datasource_impl.dart';
 import 'package:sns/features/auth/data/model/request/sign_up_request.model.dart';
-import 'package:sns/features/poll/data/datasource/remote/poll.datasource_impl.dart';
+import 'package:sns/features/poll/data/datasource/remote/remote_poll.datasource_impl.dart';
 import 'package:sns/features/poll/data/model/request/create_topic_request.model.dart';
 import 'package:sns/features/poll/data/model/request/get_topic_detail_request.model.dart';
 import 'package:sns/features/poll/data/model/topic_detail.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:sns/core/env/env.dart';
+import 'package:sns/core/util/env/env.dart';
 
 void main() {
   late RemotePollDataSource pollDataSource;

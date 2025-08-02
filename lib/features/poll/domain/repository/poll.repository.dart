@@ -1,5 +1,5 @@
 import 'package:either_dart/either.dart';
-import 'package:sns/core/response/api_error.dart';
+import 'package:sns/core/util/exception/api_error.dart';
 import 'package:sns/features/poll/domain/entity/topic.entity.dart';
 import 'package:sns/features/poll/domain/entity/topic_detail.entity.dart';
 

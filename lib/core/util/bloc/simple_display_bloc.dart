@@ -2,7 +2,7 @@ import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sns/core/constant/status.constant.dart';
-import 'package:sns/core/response/failure.dart';
+import 'package:sns/core/util/exception/failure.dart';
 import 'package:sns/core/util/bloc/simple_display_event.dart';
 import 'package:sns/core/util/logger/sington_logger.util.dart';
 

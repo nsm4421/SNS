@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:sns/core/constant/auth_state.constant.dart';
 import 'package:sns/core/constant/user_profile.constant.dart';
-import 'package:sns/core/response/api_error.dart';
+import 'package:sns/core/util/exception/api_error.dart';
 import 'package:sns/features/auth/domain/entity/user.entity.dart';
 
 abstract class AuthRepository {
