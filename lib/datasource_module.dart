@@ -1,9 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sns/features/auth/data/datasource/local/local_session.datasource_impl.dart';
-import 'package:sns/features/auth/data/datasource/remote/remote_auth.datasource_impl.dart';
-import 'package:sns/features/auth/data/datasource/remote/remote_user.datasource_impl.dart';
-import 'package:sns/features/poll/data/datasource/remote/remote_poll.datasource_impl.dart';
+import 'package:sns/features/auth/auth.export.dart';
+import 'package:sns/features/poll/poll.export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @module

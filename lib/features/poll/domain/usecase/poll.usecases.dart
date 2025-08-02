@@ -1,11 +1,20 @@
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:sns/core/core.export.dart';
+import 'package:sns/features/poll/domain/entity/topic.entity.dart';
 import 'package:sns/features/poll/domain/repository/poll.repository.dart';
-import 'scenario/cancel_vote.usecase.dart';
-import 'scenario/cast_vote.usecase.dart';
-import 'scenario/create_topic.usecase.dart';
-import 'scenario/delete_topic.usecase.dart';
-import 'scenario/fetch_topics.usecase.dart';
-import 'scenario/get_topic_detail.usecase.dart';
+
+part 'scenario/cancel_vote.usecase.dart';
+
+part 'scenario/cast_vote.usecase.dart';
+
+part 'scenario/create_topic.usecase.dart';
+
+part 'scenario/delete_topic.usecase.dart';
+
+part 'scenario/fetch_topics.usecase.dart';
+
+part 'scenario/get_topic_detail.usecase.dart';
 
 @lazySingleton
 class PollUseCases {

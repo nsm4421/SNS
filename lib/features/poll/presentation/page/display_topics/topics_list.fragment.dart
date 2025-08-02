@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sns/core/util/bloc/simple_display_bloc.dart';
-import 'package:sns/core/util/bloc/simple_display_event.dart';
+import 'package:sns/core/core.export.dart';
 import 'package:sns/features/poll/domain/entity/topic.entity.dart';
 import 'package:sns/features/poll/presentation/bloc/display_topics/display_topics.bloc.dart';
 

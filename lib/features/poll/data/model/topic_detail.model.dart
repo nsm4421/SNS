@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:sns/core/data/model/creator.model.dart';
-import 'package:sns/core/data/model/base.model.dart';
+import 'package:sns/core/core.export.dart';
 
 part 'topic_detail.model.g.dart';
 

@@ -1,11 +1,8 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/constant/status.constant.dart';
-import 'package:sns/core/util/bloc/simple_cubit.dart';
-import 'package:sns/core/util/logger/sington_logger.util.dart';
+import 'package:sns/core/core.export.dart';
 import 'package:sns/features/poll/domain/usecase/poll.usecases.dart';
-import 'package:sns/features/poll/domain/usecase/scenario/create_topic.usecase.dart';
 
 part 'create_topic_data.dart';
 

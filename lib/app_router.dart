@@ -1,16 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/constant/auth_state.constant.dart';
-import 'package:sns/features/auth/presentation/bloc/authentication/authentication.bloc.dart';
-import 'package:sns/features/poll/presentation/page/create_topic/create_topic.page.dart';
-import 'package:sns/features/poll/presentation/page/display_topics/display_topics.page.dart';
-
-import 'features/auth/presentation/page/sign_in/sign_in.page.dart';
-import 'features/auth/presentation/page/sign_up/sign_up.page.dart';
-import 'features/home/presentation/page/home.page.dart';
-
-import 'core/constant/app_routes.constant.dart';
-import 'features/auth/presentation/route/auth_status_notifier.dart';
+import 'package:sns/core/core.export.dart';
+import 'features/auth/auth.export.dart';
+import 'features/home/home.export.dart';
+import 'package:sns/features/poll/poll.export.dart';
 
 @lazySingleton
 class AppRouter {

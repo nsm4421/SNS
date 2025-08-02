@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/constant/auth_state.constant.dart';
+import 'package:sns/core/core.export.dart';
 import 'package:sns/features/auth/presentation/bloc/authentication/authentication.bloc.dart';
 
 @lazySingleton

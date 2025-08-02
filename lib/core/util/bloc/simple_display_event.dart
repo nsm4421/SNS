@@ -1,5 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:sns/core/constant/status.constant.dart';
+part of 'simple_display_bloc.dart';
 
 @sealed
 abstract class SimpleDisplayEvent {}

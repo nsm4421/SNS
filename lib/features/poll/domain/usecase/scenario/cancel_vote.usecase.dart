@@ -1,8 +1,4 @@
-import 'package:either_dart/either.dart';
-import 'package:sns/core/constant/api_error_type.constant.dart';
-import 'package:sns/core/util/exception/api_error_to_failure_mapper_mixin.dart';
-import 'package:sns/core/util/exception/failure.dart';
-import 'package:sns/features/poll/domain/repository/poll.repository.dart';
+part of '../poll.usecases.dart';
 
 class CancelVoteUseCase with ApiErrorToFailureMapperMixIn {
   final PollRepository _repository;

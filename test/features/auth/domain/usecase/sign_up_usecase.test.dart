@@ -3,7 +3,6 @@ import 'package:sns/core/util/dependency_injection/dependency_injection.dart';
 import 'package:sns/core/util/env/env.dart';
 import 'package:sns/core/util/exception/failure.dart';
 import 'package:sns/features/auth/domain/usecase/auth.usecases.dart';
-import 'package:sns/features/auth/domain/usecase/scenario/sign_up.usecase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

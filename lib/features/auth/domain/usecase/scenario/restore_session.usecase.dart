@@ -1,7 +1,4 @@
-import 'package:either_dart/either.dart';
-import 'package:sns/core/util/exception/api_error_to_failure_mapper_mixin.dart';
-import 'package:sns/core/util/exception/failure.dart';
-import 'package:sns/features/auth/domain/repository/auth.repository.dart';
+part of '../auth.usecases.dart';
 
 class RestoreSessionUseCase with ApiErrorToFailureMapperMixIn {
   final AuthRepository _repository;

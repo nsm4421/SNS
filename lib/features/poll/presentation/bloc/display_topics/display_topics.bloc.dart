@@ -1,10 +1,8 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/util/exception/failure.dart';
-import 'package:sns/core/util/bloc/simple_display_bloc.dart';
+import 'package:sns/core/core.export.dart';
 import 'package:sns/features/poll/domain/entity/topic.entity.dart';
 import 'package:sns/features/poll/domain/usecase/poll.usecases.dart';
-import 'package:sns/features/poll/domain/usecase/scenario/fetch_topics.usecase.dart';
 
 @injectable
 class DisplayTopicBloc extends SimpleDisplayBloc<TopicEntity> {

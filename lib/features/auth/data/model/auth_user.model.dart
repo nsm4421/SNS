@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:sns/core/constant/user_profile.constant.dart';
-import 'package:sns/core/data/model/base.model.dart';
+import 'package:sns/core/core.export.dart';
 
 part 'auth_user.model.g.dart';
 

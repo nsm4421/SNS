@@ -1,5 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:sns/core/domain/entity/creator.entity.dart';
+import 'package:sns/core/core.export.dart';
 import 'package:sns/features/poll/data/model/topic_detail.model.dart';
 import 'topic.entity.dart';
 
