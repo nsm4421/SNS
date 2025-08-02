@@ -1,7 +1,7 @@
 part of 'simple_display_bloc.dart';
 
 @CopyWith(copyWithNull: true)
-class SimpleDisplayState<T> {
+class SimpleDisplayState<T extends BaseEntity> {
   final DisplayStatus status;
   final bool isEnd;
   final List<T> data;

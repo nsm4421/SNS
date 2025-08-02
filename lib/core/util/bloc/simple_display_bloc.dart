@@ -6,13 +6,15 @@ import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/util/exception/failure.dart';
 import 'package:sns/core/util/logger/sington_logger.util.dart';
 
+import '../../domain/entity/base.entity.dart';
+
 part 'simple_display_state.dart';
 
 part 'simple_display_event.dart';
 
 part 'simple_display_bloc.g.dart';
 
-abstract class SimpleDisplayBloc<T>
+abstract class SimpleDisplayBloc<T extends BaseEntity>
     extends Bloc<SimpleDisplayEvent, SimpleDisplayState<T>>
     with AppLogger {
   SimpleDisplayBloc(super.initialState) {
@@ -22,7 +24,15 @@ abstract class SimpleDisplayBloc<T>
 
   Future<Either<Failure, List<T>>> fetch({DateTime? cursor, int limit = 20});
 
-  DateTime get cursor;
+  DateTime get cursor {
+    final createdAtIter =
+        state.data.map((e) => e.createdAt).where((e) => e != null)
+            as Iterable<DateTime>;
+    if (createdAtIter.isEmpty) {
+      return DateTime.now();
+    }
+    return createdAtIter.reduce((v, e) => e.isAfter(v) ? v : e);
+  }
 
   Future<void> _onRefresh(
     RefreshDisplayEvent event,

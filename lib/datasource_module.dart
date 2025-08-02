@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/features/auth/auth.export.dart';
 import 'package:sns/features/poll/poll.export.dart';
+import 'features/comment/comment.export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @module
@@ -26,4 +27,8 @@ abstract class DataSourceModule {
   @lazySingleton
   RemotePollDataSource get remotePoll =>
       RemotePollDataSourceImpl(_supabaseClient);
+
+  @lazySingleton
+  TopicCommentDataSource get remoteTopicComment =>
+      TopicCommentDataSourceImpl(_supabaseClient);
 }

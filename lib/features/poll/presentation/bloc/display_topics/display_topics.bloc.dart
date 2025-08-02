@@ -14,17 +14,6 @@ class DisplayTopicBloc extends SimpleDisplayBloc<TopicEntity> {
   }
 
   @override
-  DateTime get cursor {
-    final createdAtIter =
-        state.data.map((e) => e.createdAt).where((e) => e != null)
-            as Iterable<DateTime>;
-    if (createdAtIter.isEmpty) {
-      return DateTime.now();
-    }
-    return createdAtIter.reduce((v, e) => e.isAfter(v) ? v : e);
-  }
-
-  @override
   Future<Either<Failure, List<TopicEntity>>> fetch({
     DateTime? cursor,
     int limit = 20,
