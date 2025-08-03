@@ -109,7 +109,7 @@ using (auth.uid() = id);
 -- topics
 create table if not exists public.topics (
     id uuid primary key default gen_random_uuid(),
-    created_by uuid not null default auth.uid() references auth.users(id) on delete cascade,
+    created_by uuid not null default auth.uid() references public.users(id) on delete cascade,
     title text not null,
     description text,
     created_at timestamptz default now() not null,
@@ -131,7 +131,7 @@ create table if not exists public.options (
 create table if not exists public.votes (
     id uuid primary key default gen_random_uuid(),
     option_id uuid not null references public.options(id) on delete cascade,
-    created_by uuid not null default auth.uid() references auth.users(id) on delete cascade,
+    created_by uuid not null default auth.uid() references public.users(id) on delete cascade,
     created_at timestamptz default now() not null,
     updated_at timestamptz default now() not null,
     unique (option_id, created_by)  -- 유저는 해당 옵션에 한 번만 투표 가능
@@ -272,17 +272,20 @@ as $$
     select
       t.id         as topic_id,
       t.created_by,
+      u.username,
       t.title,
       t.description,
       t.created_at,
       t.updated_at
-    from public.topics t
+    from public.topics t left join public.users u
+    on t.created_by = u.id
     where t.id = p_topic_id
       and auth.role() = 'authenticated'
   )
   select
     b.topic_id,
     b.created_by,
+    b.username,
     b.title,
     b.description,
     b.created_at,
@@ -329,7 +332,7 @@ grant execute on function public.get_topic_detail(uuid) to authenticated;
 create table if not exists public.topic_comments (
     id uuid primary key default gen_random_uuid(),
     topic_id uuid not null,
-    created_by uuid not null default auth.uid() references auth.users(id) on delete cascade,
+    created_by uuid not null default auth.uid() references public.users(id) on delete cascade,
     content text not null,
     created_at timestamptz default now() not null,
     updated_at timestamptz default now() not null
