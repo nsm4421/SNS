@@ -23,12 +23,8 @@ class TopicEntity extends BaseEntityWithUser {
       id: model.id,
       title: model.title,
       description: model.description,
-      createdAt: model.createdAt == null
-          ? null
-          : DateTime.tryParse(model.createdAt!),
-      updatedAt: model.updatedAt == null
-          ? null
-          : DateTime.tryParse(model.updatedAt!),
+      createdAt: DateTime.tryParse(model.createdAt ?? ''),
+      updatedAt: DateTime.tryParse(model.updatedAt ?? ''),
       creator: CreatorEntity.from(model.creator),
     );
   }

@@ -2,6 +2,7 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/core.export.dart';
 import 'package:sns/features/poll/domain/entity/topic.entity.dart';
+import 'package:sns/features/poll/domain/entity/topic_detail.entity.dart';
 import 'package:sns/features/poll/domain/repository/poll.repository.dart';
 
 part 'scenario/cancel_vote.usecase.dart';

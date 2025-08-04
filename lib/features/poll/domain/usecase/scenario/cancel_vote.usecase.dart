@@ -5,13 +5,17 @@ class CancelVoteUseCase with ApiErrorToFailureMapperMixIn {
 
   CancelVoteUseCase(this._repository);
 
-  Future<Either<Failure, void>> call(String optionId) async {
+  Future<Either<Failure, TopicDetailEntity?>> call({
+    required String topicId,
+    required String optionId,
+  }) async {
     final deleteVoteRes = await _repository.deleteVoteByOption(optionId);
-    if (deleteVoteRes.isLeft &&
-        deleteVoteRes.left.type != ApiErrorType.notFound) {
+    if (deleteVoteRes.isLeft) {
       return Left(handleFailure(deleteVoteRes.left));
     }
-
-    return const Right(null);
+    // 업데이트 된 topic detail 조회
+    return await _repository
+        .getTopicDetail(topicId)
+        .then((res) => res.fold((l) => const Right(null), (r) => Right(r)));
   }
 }

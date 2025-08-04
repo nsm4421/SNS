@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sns/core/core.export.dart';
+import 'option.model.dart';
 
 part 'topic_detail.model.g.dart';
 
@@ -10,19 +11,22 @@ part 'topic_detail.model.freezed.dart';
 class TopicDetailModel with _$TopicDetailModel implements BaseModelWithUser {
   @JsonKey(name: 'topic_id')
   final String id;
-  @JsonKey(name: 'creator')
-  final CreatorModel creator;
+  @JsonKey(name: 'created_by')
+  final String uid;
+  @JsonKey(name: 'username')
+  final String username;
   final String title;
   final String description;
   @JsonKey(name: 'created_at')
   final String? createdAt;
   @JsonKey(name: 'updated_at')
   final String? updatedAt;
-  final Iterable<$OptionItemModel> options;
+  final Iterable<OptionModel> options;
 
   TopicDetailModel({
     required this.id,
-    required this.creator,
+    required this.uid,
+    required this.username,
     required this.title,
     required this.description,
     this.createdAt,
@@ -32,27 +36,7 @@ class TopicDetailModel with _$TopicDetailModel implements BaseModelWithUser {
 
   factory TopicDetailModel.fromJson(Map<String, dynamic> json) =>
       _$TopicDetailModelFromJson(json);
-}
 
-@freezed
-@JsonSerializable()
-class $OptionItemModel with _$$OptionItemModel {
-  final String id;
-  final String content;
-  final int seq;
-  @JsonKey(name: 'vote_count')
-  final int voteCount;
-  @JsonKey(name: 'vote_by_me')
-  final bool voteByMe;
-
-  $OptionItemModel({
-    required this.id,
-    required this.content,
-    required this.seq,
-    this.voteCount = 0,
-    this.voteByMe = false,
-  });
-
-  factory $OptionItemModel.fromJson(Map<String, dynamic> json) =>
-      _$$OptionItemModelFromJson(json);
+  @override
+  CreatorModel get creator => CreatorModel(id: uid, username: username);
 }

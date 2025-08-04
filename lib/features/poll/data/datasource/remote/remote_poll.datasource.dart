@@ -19,6 +19,7 @@ abstract interface class RemotePollDataSource {
 
   Future<String> Function(String optionId) get upsertVote;
 
+  @Deprecated('use deleteVoteByOption instead')
   Future<void> Function(String voteId) get deleteVoteById;
 
   Future<void> Function(String optionId) get deleteVoteByOption;

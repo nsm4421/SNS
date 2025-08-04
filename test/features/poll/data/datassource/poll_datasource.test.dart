@@ -103,7 +103,7 @@ void main() {
       );
       expect(topic.options.first.voteCount, equals(0)); // 투표수가 0으로 감소
       expect(
-        topic.options.first.voteByMe,
+        topic.options.first.votedByMe,
         equals(false),
       ); // vote-by-me 필드 false
     });

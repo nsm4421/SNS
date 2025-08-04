@@ -238,6 +238,7 @@ drop type if exists public.topic_detail cascade;
 create type public.topic_detail as (
   topic_id    uuid,
   created_by  uuid,
+  username    text,
   title       text,
   description text,
   created_at  timestamptz,
@@ -245,19 +246,6 @@ create type public.topic_detail as (
   options     jsonb
 );
 
--- 1) 반환 타입 재정의 (options JSON 내 필드 확장)
-drop type if exists public.topic_with_options_json cascade;
-create type public.topic_with_options_json as (
-  topic_id    uuid,
-  created_by  uuid,
-  title       text,
-  description text,
-  created_at  timestamptz,
-  updated_at  timestamptz,
-  options     jsonb
-);
-
--- 2) topic 단건 + 옵션 조회 RPC
 create or replace function public.get_topic_detail(
   p_topic_id uuid
 )
@@ -277,7 +265,7 @@ as $$
       t.description,
       t.created_at,
       t.updated_at
-    from public.topics t left join public.users u
+    from public.topics t inner join public.users u
     on t.created_by = u.id
     where t.id = p_topic_id
       and auth.role() = 'authenticated'
@@ -303,7 +291,7 @@ as $$
               from public.votes v2
               cross join me
               where v2.option_id   = o.id
-                and v2.created_by  = me.uid
+                and v2.created_by  = me.id
             )
           ) order by o.seq
         )

@@ -41,7 +41,7 @@ class PollRepositoryImpl
     return await _remoteDataSource
         .fetchTopics(limit: limit, cursor: cursor, search: search)
         .then((res) => res.map(TopicEntity.fromModel).toList());
-  });
+  }, logger: logger);
 
   @override
   Future<Either<ApiError, TopicDetailEntity>> getTopicDetail(
@@ -50,29 +50,29 @@ class PollRepositoryImpl
     return await _remoteDataSource
         .getTopicDetail(GetTopicDetailRequestModel(topicId: topicId))
         .then(TopicDetailEntity.fromModel);
-  });
+  }, logger: logger);
 
   @override
   Future<Either<ApiError, String>> upsertVote(String optionId) async =>
       await guardApi(() async {
         return await _remoteDataSource.upsertVote(optionId);
-      });
+      }, logger: logger);
 
   @override
   Future<Either<ApiError, void>> deleteTopic(String topicId) async =>
       await guardApi(() async {
         await _remoteDataSource.deleteTopicById(topicId);
-      });
+      }, logger: logger);
 
   @override
   Future<Either<ApiError, void>> deleteVote(String voteId) async =>
       await guardApi(() async {
         await _remoteDataSource.deleteVoteById(voteId);
-      });
+      }, logger: logger);
 
   @override
   Future<Either<ApiError, void>> deleteVoteByOption(String optionId) async =>
       await guardApi(() async {
         await _remoteDataSource.deleteVoteByOption(optionId);
-      });
+      }, logger: logger);
 }

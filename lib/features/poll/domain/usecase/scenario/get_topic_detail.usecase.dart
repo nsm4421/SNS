@@ -5,7 +5,7 @@ class GetTopicDetailUseCase with ApiErrorToFailureMapperMixIn {
 
   GetTopicDetailUseCase(this._repository);
 
-  Future<Either<Failure, void>> call(String topicId) async {
+  Future<Either<Failure, TopicDetailEntity>> call(String topicId) async {
     return await _repository.getTopicDetail(topicId).thenLeft((l) {
       return Left(() {
         switch (l.type) {
