@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/core.export.dart';
+import 'package:sns/features/poll/domain/entity/topic.entity.dart';
+import 'package:sns/features/poll/presentation/page/topic_detail/topic_detail.page.dart';
 import 'features/auth/auth.export.dart';
 import 'features/home/home.export.dart';
 import 'package:sns/features/poll/poll.export.dart';
@@ -59,6 +61,17 @@ class AppRouter {
     GoRoute(
       path: AppRoutes.displayTopics.path,
       builder: (context, state) => const DisplayTopicPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.topicDetail.path,
+      builder: (context, state) {
+        try {
+          final topicId = state.extra as String;
+          return TopicDetailPage(topicId);
+        } catch (error) {
+          return const HomePage();
+        }
+      },
     ),
   ];
 }

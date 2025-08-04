@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sns/core/core.export.dart';
 import 'package:sns/features/poll/domain/entity/topic.entity.dart';
 import 'package:sns/features/poll/presentation/bloc/display_topics/display_topics.bloc.dart';
@@ -53,6 +54,10 @@ class _TopicsListFragmentState extends State<TopicsListFragment> {
             itemBuilder: (context, index) {
               final item = state.data[index];
               return ListTile(
+                onTap: () {
+                  // 상세 페이지 라우팅
+                  context.push(AppRoutes.topicDetail.path, extra: item.id);
+                },
                 title: Text(
                   item.title,
                   overflow: TextOverflow.ellipsis,

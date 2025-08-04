@@ -19,6 +19,6 @@ class DisplayTopicBloc extends SimpleDisplayBloc<TopicEntity> {
     int limit = 20,
   }) async {
     logger.t('[fetch data] cursor:$cursor | limit:$limit');
-    return _useCase.call(cursor: cursor, limit: limit);
+    return await _useCase.call(cursor: cursor, limit: limit);
   }
 }

@@ -12,5 +12,4 @@ enum CastVoteStatus {
   idle, // 아직 topic detail을 가져오지 않은 상태
   unVoted,
   voted,
-  loading,
 }
