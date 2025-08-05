@@ -41,7 +41,7 @@ abstract class AbsRemoteCommentDataSourceImpl<T extends AbsCommentModel>
     required String refId,
     DateTime? cursor,
   }) async {
-    final query = _qb.select('*, creator:users(*)').eq('ref_id', refId);
+    final query = _qb.select('*, creator:users(*)').eq(refCol, refId);
     if (cursor != null) {
       query.lt('created_at', cursor.toIso8601String());
     }

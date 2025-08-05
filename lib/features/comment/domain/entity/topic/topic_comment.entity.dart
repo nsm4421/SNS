@@ -21,7 +21,7 @@ class TopicCommentEntity extends AbsCommentEntity {
   factory TopicCommentEntity.from(TopicCommentModel model) {
     return TopicCommentEntity(
       id: model.id,
-      topicId: model.topicId,
+      topicId: model.refId,
       content: model.content,
       creator: CreatorEntity.from(model.creator),
       createdAt: DateTime.tryParse(model.createdAt ?? ''),

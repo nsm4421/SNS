@@ -43,11 +43,11 @@ class AbsCommentRepositoryImpl<
     return await _remoteDataSource
         .fetchCommentsByRef(refId: refId, limit: limit, cursor: cursor)
         .then((res) => res.map(_convert).toList());
-  });
+  }, logger: logger);
 
   @override
   Future<Either<ApiError, S>> findById(String commentId) async =>
       await guardApi<S>(() async {
         return await _remoteDataSource.findById(commentId).then(_convert);
-      });
+      }, logger: logger);
 }

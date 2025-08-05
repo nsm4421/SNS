@@ -1,30 +1,31 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:sns/core/core.export.dart';
 import 'package:sns/features/comment/data/model/abs/abs_comment.model.dart';
 
-class TopicCommentModel extends AbsCommentModel {
+part 'topic_comment.model.freezed.dart';
+
+part 'topic_comment.model.g.dart';
+
+@freezed
+@JsonSerializable()
+class TopicCommentModel with _$TopicCommentModel implements AbsCommentModel {
+  final String id;
   @JsonKey(name: 'topic_id')
-  final String topicId;
+  final String refId;
+  final String content;
+  final String? createdAt;
+  final String? updatedAt;
+  final CreatorModel creator;
 
   TopicCommentModel({
-    required super.id,
-    required this.topicId,
-    required super.content,
-    required super.creator,
-    super.createdAt,
-    super.updatedAt,
-  }) : super(refId: topicId);
-
-  factory TopicCommentModel.from(AbsCommentModel base) {
-    return TopicCommentModel(
-      id: base.id,
-      topicId: base.refId,
-      content: base.content,
-      creator: base.creator,
-      createdAt: base.createdAt,
-      updatedAt: base.updatedAt,
-    );
-  }
+    required this.id,
+    required this.refId,
+    required this.content,
+    required this.creator,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   factory TopicCommentModel.fromJson(Map<String, dynamic> json) =>
-      TopicCommentModel.from(AbsCommentModel.fromJson(json));
+      _$TopicCommentModelFromJson(json);
 }

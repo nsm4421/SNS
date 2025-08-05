@@ -74,8 +74,8 @@ mixin class RepositoryResponseWrapperMixIn {
           statusCode: int.tryParse(e.statusCode ?? ''),
         ),
       );
-    } catch (e, _) {
-      logger?.e(e);
+    } catch (e, st) {
+      logger?.e(st);
       return Left(ApiError(type: ApiErrorType.unknown, message: e.toString()));
     }
   }
