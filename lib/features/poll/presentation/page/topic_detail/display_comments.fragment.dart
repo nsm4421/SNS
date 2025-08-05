@@ -9,20 +9,36 @@ class DisplayCommentFragment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<
-      DisplayTopicCommentsBloc,
-      SimpleDisplayState<TopicCommentEntity>
-    >(
-      builder: (context, state) {
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: state.data.length,
-          itemBuilder: (context, index) {
-            final comment = state.data[index];
-            return ListTile(title: Text(comment.content));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("COMMENTS"),
+        BlocBuilder<
+          DisplayTopicCommentsBloc,
+          SimpleDisplayState<TopicCommentEntity>
+        >(
+          builder: (context, state) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height / 3,
+              ),
+              child: Card(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: state.data.length,
+                  itemBuilder: (context, index) {
+                    final comment = state.data[index];
+                    return ListTile(title: Text(comment.content));
+                  },
+                  separatorBuilder: (_, __) {
+                    return const Divider();
+                  },
+                ),
+              ),
+            );
           },
-        );
-      },
+        ),
+      ],
     );
   }
 }

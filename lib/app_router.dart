@@ -1,11 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/core.export.dart';
-import 'package:sns/features/poll/domain/entity/topic.entity.dart';
-import 'package:sns/features/poll/presentation/page/topic_detail/topic_detail.page.dart';
+import 'package:sns/features/poll/poll.export.dart';
 import 'features/auth/auth.export.dart';
 import 'features/home/home.export.dart';
-import 'package:sns/features/poll/poll.export.dart';
 
 @lazySingleton
 class AppRouter {

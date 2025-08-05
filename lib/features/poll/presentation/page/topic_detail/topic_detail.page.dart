@@ -20,6 +20,9 @@ class TopicDetailPage extends StatelessWidget {
                 ..add(RefreshDisplayEvent()),
         ),
         BlocProvider(
+          create: (_) => getIt<CreateTopicCommentCubit>(param1: _topicId),
+        ),
+        BlocProvider(
           create: (_) =>
               getIt<VoteBloc>(param1: _topicId)..add(MountVoteEvent()),
         ),
