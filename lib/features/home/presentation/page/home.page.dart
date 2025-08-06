@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:sns/features/poll/poll.export.dart';
+import 'package:go_router/go_router.dart';
+
+import 'home.screen.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage(this._shell, {super.key});
+
+  final StatefulNavigationShell _shell;
 
   @override
   Widget build(BuildContext context) {
-    return DisplayTopicPage();
+    return HomeScreen(_shell);
   }
 }

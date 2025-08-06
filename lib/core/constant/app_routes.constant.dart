@@ -1,10 +1,10 @@
 enum AppRoutes {
   signIn('$authPrefix/sign-in', isEntry: true),
   signUp('$authPrefix/sign-up'),
-  home('/home'),
+  entry('/topic/display'),
   createTopic('/topic/create'),
-  displayTopics('/topic/display'),
-  topicDetail('/topic/detail');
+  topicDetail('/topic/detail'),
+  settings('/settings');
 
   final String path;
   final bool isEntry;

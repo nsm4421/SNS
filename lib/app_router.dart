@@ -1,7 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/core.export.dart';
-import 'package:sns/features/poll/poll.export.dart';
+import 'core/core.export.dart';
+import 'features/poll/poll.export.dart';
+import 'features/setting/setting.export.dart';
 import 'features/auth/auth.export.dart';
 import 'features/home/home.export.dart';
 
@@ -25,12 +26,12 @@ class AppRouter {
       if (!isAuth && !isGoingToAuth) {
         return AppRoutes.signIn.path;
       } else if (isAuth && isGoingToAuth) {
-        return AppRoutes.home.path;
+        return AppRoutes.entry.path;
       } else {
         return null;
       }
     },
-    routes: [..._authRoutes, ..._homeRoutes, ..._topicRoutes],
+    routes: [..._authRoutes, _homeShellRoute, ..._topicRoutes],
   );
 
   Iterable<GoRoute> get _authRoutes => [
@@ -44,12 +45,29 @@ class AppRouter {
     ),
   ];
 
-  Iterable<GoRoute> get _homeRoutes => [
-    GoRoute(
-      path: AppRoutes.home.path,
-      builder: (context, state) => const HomePage(),
-    ),
-  ];
+  StatefulShellRoute get _homeShellRoute => StatefulShellRoute.indexedStack(
+    builder: (context, state, navigationShell) {
+      return HomePage(navigationShell);
+    },
+    branches: [
+      StatefulShellBranch(
+        routes: [
+          GoRoute(
+            path: AppRoutes.entry.path,
+            builder: (context, state) => const DisplayTopicPage(),
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        routes: [
+          GoRoute(
+            path: AppRoutes.settings.path,
+            builder: (context, state) => const SettingPage(),
+          ),
+        ],
+      ),
+    ],
+  );
 
   Iterable<GoRoute> get _topicRoutes => [
     GoRoute(
@@ -57,18 +75,10 @@ class AppRouter {
       builder: (context, state) => const CreateTopicPage(),
     ),
     GoRoute(
-      path: AppRoutes.displayTopics.path,
-      builder: (context, state) => const DisplayTopicPage(),
-    ),
-    GoRoute(
       path: AppRoutes.topicDetail.path,
       builder: (context, state) {
-        try {
-          final topicId = state.extra as String;
-          return TopicDetailPage(topicId);
-        } catch (error) {
-          return const HomePage();
-        }
+        final topicId = state.extra as String;
+        return TopicDetailPage(topicId);
       },
     ),
   ];

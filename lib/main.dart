@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sns/core/util/dependency_injection/dependency_injection.dart';
-import 'package:sns/features/auth/presentation/bloc/authentication/authentication.bloc.dart';
-import 'package:sns/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'core/util/env/env.dart';
+import 'core/core.export.dart';
+import 'features/auth/auth.export.dart';
+import 'app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

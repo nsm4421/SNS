@@ -122,12 +122,12 @@ class _CreateTopicFragmentState extends State<CreateTopicFragment> {
                 hintText: 'Option',
                 errorText: _optionErrorText,
                 prefixIcon: const Icon(Icons.how_to_vote_outlined),
-                suffixIcon: IconButton(
-                  onPressed: _options.length < _maxOptionLength
-                      ? _handleAddOption
-                      : null,
-                  icon: const Icon(Icons.add_circle_outline),
-                ),
+                suffixIcon: _options.length < _maxOptionLength
+                    ? IconButton(
+                        onPressed: _handleAddOption,
+                        icon: const Icon(Icons.add_circle_outline),
+                      )
+                    : null,
               ),
             ),
           ),

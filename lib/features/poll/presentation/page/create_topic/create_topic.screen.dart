@@ -11,7 +11,7 @@ class CreateTopicScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Create Topic")),
       body: const CreateTopicFragment(),
-      floatingActionButton: SubmitButtonWidget(),
+      floatingActionButton: const SubmitButtonWidget(),
     );
   }
 }
