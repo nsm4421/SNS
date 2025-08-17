@@ -1,5 +1,5 @@
 **.export.dart
-
+layers/data/.env.codegen
 pubspec.lock
 .metadata
 ios/
@@ -7,7 +7,7 @@ android/
 **.config.dart
 **.g.dart
 **.freezed.dart
-.env
+layers/shared/.env
 /supabase
 *.gr.dart
 

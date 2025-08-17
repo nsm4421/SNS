@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'core/core.export.dart';
-import 'features/auth/auth.export.dart';
-import 'app_router.dart';
+import 'package:presentation/core/di/di.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnonKey);
-
-  configureDependencies();
+  await configureDependencies();
 
   runApp(const MainApp());
 }
@@ -20,15 +14,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<AuthenticationBloc>()..add(AppStartedEvent()),
-      child: MaterialApp(
-        title: 'Karma',
-        theme: ThemeData.dark(useMaterial3: true),
-        home: MaterialApp.router(
-          routerConfig: getIt<AppRouter>().routeConfig,
-          debugShowCheckedModeBanner: false,
-        ),
+    return MaterialApp(
+      title: 'Karma',
+      theme: ThemeData.dark(useMaterial3: true),
+      home: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(appBar: AppBar(title: Text("TEST"))),
       ),
     );
   }

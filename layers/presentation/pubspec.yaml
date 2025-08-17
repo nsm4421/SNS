@@ -1,35 +1,34 @@
-name: sns
-description: "sns project"
-publish_to: 'none'
-version: 1.0.0+1
+name: presentation
+description: presentation
+version: 0.1.0+1
+publish_to: none
+
 environment:
-  sdk: ^3.8.1
+  sdk: ^3.8.0
+  flutter: ^3.32.0
+
 dependencies:
   flutter:
     sdk: flutter
-  data:
-    path: layers/data
-  domain:
-    path: layers/domain
   shared:
-    path: layers/shared
-  presentation:
-    path: layers/presentation
-
+    path: ../shared
+  domain:
+    path: ../domain
+  data:
+    path: ../data
+  either_dart: ^1.0.0
   get_it: ^8.0.3
   injectable: ^2.5.0
+  logger: ^2.5.0
+  copy_with_extension: ^6.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
   build_runner: ^2.4.11
   injectable_generator: ^2.6.2
   json_annotation: ^4.9.0
   json_serializable: ^6.8.0
   copy_with_extension_gen: ^6.0.1
   mocktail: ^1.0.4
-  melos: ^3.0.0
-
-flutter:
-  uses-material-design: true
+  very_good_analysis: ^9.0.0
