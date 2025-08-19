@@ -1,29 +1,5 @@
-# Project Setting
+# SNS
 
-layers
-- data (package)
-  - core
-    - di
-  - model
-  - datasource
-  - repository(implementation)
-- domain (package)
-  - core
-    - di
-  - entity
-  - repository(interface)
-  - usecases
-- shared (package)
-- lib (presentation layer)
-  - core 
-    - di
-  - provider(bloc)
-  - page
-  - theme
-  - router
+`flutter pub run melos run build:all`
 
-### Code Gen
-
-`
-flutter pub  run melos run build:all
-`
+`flutter pub run build_runner build`

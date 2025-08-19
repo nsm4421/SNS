@@ -1,7 +1,7 @@
 # melos.yaml
-name: flutter_layers_workspace
+name: flutter_packages_workspace
 packages:
-  - layers/**
+  - packages/**
 
 scripts:
   get:

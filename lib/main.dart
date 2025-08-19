@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:presentation/core/di/di.dart';
+import 'package:supabase_datasource/core/dependency_injection.dart';
+
+import 'core/dependency_injection/dependency_injection.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await initSupabaseDataSourceMicroPackage();
   await configureDependencies();
 
   runApp(const MainApp());

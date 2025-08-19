@@ -10,6 +10,7 @@ android/
 layers/shared/.env
 /supabase
 *.gr.dart
+.env.local
 
 # Miscellaneous
 *.class
