@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:response_wrapper/api_exception/api_error.dart';
+import 'package:shared/response_wrapper/api_response/api_error.dart';
 import 'package:sns/data/model/mapper/user_model.extension.dart';
 import 'package:sns/domain/entity/user/user.entity.dart';
 import 'package:sns/domain/repository/user.repository.dart';

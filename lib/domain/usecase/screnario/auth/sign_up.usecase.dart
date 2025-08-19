@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:either_dart/either.dart';
-import 'package:response_wrapper/response_wrapper.dart';
+import 'package:logger/logger.dart';
+import 'package:shared/response_wrapper/api_response/api_error_type.dart';
+import 'package:shared/response_wrapper/failure/failure.dart';
+import 'package:sns/core/extension/logger.extension.dart';
 import 'package:sns/domain/repository/auth.repository.dart';
 
 class SignUpUseCase {
   final AuthRepository _repository;
+  final Logger? logger;
 
-  const SignUpUseCase(this._repository);
+  const SignUpUseCase(this._repository, {this.logger});
 
   Future<Either<Failure, void>> call({
     required String email,
@@ -28,8 +32,9 @@ class SignUpUseCase {
       final message = switch (signUpRes.left.type) {
         ApiErrorType.validation => '이메일이나 비밀번호가 유효하지 않습니다',
         ApiErrorType.conflict => '이메일이나 유저명이 중복되었습니다',
-        (_) => '회원가입 도중 오류가 발생했습니다',
+        (_) => signUpRes.left.message,
       };
+      logger?.logApiError(signUpRes.left);
       return Left(Failure(message));
     }
 

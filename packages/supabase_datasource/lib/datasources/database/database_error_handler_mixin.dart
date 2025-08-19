@@ -1,5 +1,5 @@
-import 'package:response_wrapper/api_exception/api_error_type.dart';
-import 'package:response_wrapper/api_exception/api_exception.dart';
+import 'package:shared/response_wrapper/api_response/api_error_type.dart';
+import 'package:shared/response_wrapper/api_response/api_exception.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 mixin class DatabaseErrorHandlerMixIn {

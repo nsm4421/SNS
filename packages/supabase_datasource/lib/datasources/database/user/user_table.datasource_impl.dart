@@ -1,4 +1,4 @@
-import 'package:response_wrapper/api_exception/api_exception.dart';
+import 'package:shared/response_wrapper/api_response/api_exception.dart';
 import 'package:supabase_datasource/datasources/database/database_error_handler_mixin.dart';
 import 'package:supabase_datasource/datasources/database/generated/tables/users.dart';
 import 'package:supabase_datasource/datasources/database/user/user_table.datasource.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sns/presentation/page/auth/sign_up/sign_up.page.dart';
 import 'package:supabase_datasource/core/dependency_injection.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
@@ -22,7 +23,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData.dark(useMaterial3: true),
       home: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(appBar: AppBar(title: Text("TEST"))),
+        home: SignUpPage(),
       ),
     );
   }

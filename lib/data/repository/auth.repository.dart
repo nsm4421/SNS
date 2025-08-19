@@ -1,8 +1,8 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:local_storage_datasource/datasource/local_storage.datasource.dart';
-import 'package:response_wrapper/api_exception/api_error.dart';
-import 'package:sns/core/constant/status.costant.dart';
+import 'package:shared/response_wrapper/api_response/api_error.dart';
+import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/data/model/mapper/auth_user_model.extension.dart';
 import 'package:sns/domain/entity/user/user.entity.dart';
 import 'package:sns/domain/repository/auth.repository.dart';

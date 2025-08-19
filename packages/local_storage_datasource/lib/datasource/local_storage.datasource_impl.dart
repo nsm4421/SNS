@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_storage_datasource/datasource/local_storage.datasource.dart';
-import 'package:response_wrapper/api_exception/api_exception.dart';
+import 'package:shared/response_wrapper/api_response/api_exception.dart';
 
 class LocalStorageDataSourceImpl implements LocalStorageDataSource {
   LocalStorageDataSourceImpl(this._flutterSecureStorage);

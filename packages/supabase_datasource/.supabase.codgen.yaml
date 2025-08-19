@@ -1,4 +1,4 @@
-env: .env.codegen # Overrides default: .env
+env: .env # Overrides default: .env
 output: lib/datasources/database/generated # Overrides default: supabase/types
 tag: v1 # Overrides default: ''
 debug: true # Overrides default: false

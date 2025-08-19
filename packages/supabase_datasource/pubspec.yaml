@@ -10,10 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  response_wrapper:
-    path: ../response_wrapper
-  env:
-    path: ../env
+  shared:
+    path: ../shared
 
   freezed: ^3.0.4
   freezed_annotation: ^3.0.0
@@ -32,3 +30,10 @@ dev_dependencies:
   json_annotation: ^4.9.0
   json_serializable: ^6.8.0
   copy_with_extension_gen: ^6.0.1
+
+supabse_codgen:
+  env: .env
+  output: lib/datasources/database/generated # Overrides default: supabase/types
+  tag: v1 # Overrides default: ''
+  debug: true # Overrides default: false
+  skipFooter: true # Overrides default: false
