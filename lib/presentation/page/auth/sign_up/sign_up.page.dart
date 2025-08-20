@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -8,6 +9,7 @@ import 'package:sns/core/extension/string.extension.dart';
 import 'package:sns/core/provider/simple_data_cubit/simple_data.cubit.dart';
 import 'package:sns/presentation/component/loading_overlay.widget.dart';
 import 'package:sns/presentation/provider/auth/sign_up/sign_up.cubit.dart';
+import 'package:sns/presentation/router/app_router.dart';
 
 part 'sign_up.screen.dart';
 
@@ -26,8 +28,8 @@ class SignUpPage extends StatelessWidget {
       child: BlocListener<SignUpCubit, SimpleDataState<SignUpData>>(
         listener: (context, state) {
           if (state.status == Status.success) {
-            // TODO : 회원가입 성공시
-            context.showSuccessSnackBar('success');
+            context.showSuccessSnackBar('회원가입 성공!');
+            context.pop();
           } else if (state.status == Status.error) {
             context.showErrorSnackBar(state.errorMessage);
           }

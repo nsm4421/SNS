@@ -6,6 +6,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(title: const Text("회원가입")),
       body: const SingleChildScrollView(
         child: Column(
@@ -15,10 +16,13 @@ class SignUpScreen extends StatelessWidget {
               padding: EdgeInsets.only(top: 24, left: 16, right: 16),
               child: SignUpFormFragment(),
             ),
+            Padding(
+              padding: EdgeInsets.only(top: 24, left: 16, right: 16),
+              child: SignUpSubmitButton(),
+            ),
           ],
         ),
       ),
-      floatingActionButton: const SignUpSubmitButton(),
     );
   }
 }

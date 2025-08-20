@@ -27,6 +27,8 @@ class AuthenticationBloc
     });
   }
 
+  Stream<AuthStatus> get authStatusStream => _authUseCase.authStatusStream;
+
   Future<void> _onAppStarted(
     AppStartedEvent event,
     Emitter<AuthenticationState> emit,
@@ -53,18 +55,9 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     try {
-      await _authUseCase.signOut().then(
-        (res) => res.fold(
-          (l) {
-            emit(const AuthenticationState.unauthenticated());
-          },
-          (r) {
-            emit(const AuthenticationState.unauthenticated());
-          },
-        ),
-      );
-    } catch (error) {
-      emit(const AuthenticationState.failure('로그아웃 중 오류가 발생했습니다'));
+      await _authUseCase.signOut();
+    } finally {
+      emit(const AuthenticationState.unauthenticated());
     }
   }
 

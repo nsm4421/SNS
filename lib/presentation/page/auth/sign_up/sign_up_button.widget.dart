@@ -5,32 +5,26 @@ class SignUpSubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double size = 40;
 
     return BlocBuilder<SignUpCubit, SimpleDataState<SignUpData>>(
       builder: (context, state) {
-        return GestureDetector(
-          onTap: () async {
-            await Future.delayed(const Duration(microseconds: 100));
-            FocusScope.of(context).unfocus();
-            context.read<SignUpCubit>().submit();
-          },
-          child: Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.primaryContainer,
-            ),
-            child: state.status == Status.initial
-                ? Icon(
-                    Icons.chevron_right,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  )
-                : Transform.scale(
-                    scale: 0.5,
-                    child: const CircularProgressIndicator(),
-                  ),
+        final tappable = state.status == Status.initial;
+
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            foregroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+          ),
+          onPressed: tappable
+              ? () async {
+                  FocusScope.of(context).unfocus();
+                  await Future.delayed(Duration(microseconds: 100));
+                  await context.read<SignUpCubit>().submit();
+                }
+              : null,
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text("회원가입")],
           ),
         );
       },
