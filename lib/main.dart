@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:sns/presentation/page/auth/sign_up/sign_up.page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:sns/core/theme/theme_data/app_theme_data.dart';
+import 'package:sns/presentation/provider/auth/authentication/authentication.bloc.dart';
+import 'package:sns/presentation/router/app_router.dart';
+import 'package:sns/presentation/router/auth_listenable.dart';
 import 'package:supabase_datasource/core/dependency_injection.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
+import 'core/theme/color_scheme/app_color.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,12 +24,16 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Karma',
-      theme: ThemeData.dark(useMaterial3: true),
-      home: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SignUpPage(),
+    return BlocProvider(
+      create: (_) =>
+          GetIt.instance<AuthenticationBloc>()..add(AppStartedEvent()),
+      child: MaterialApp.router(
+        title: 'Karma',
+        theme: GetIt.instance<LightAppThemeData>().themeData,
+        darkTheme: GetIt.instance<DarkAppThemeData>().themeData,
+        routerConfig: GetIt.instance<AppRouter>().config(
+          reevaluateListenable: GetIt.instance<AuthListenable>(),
+        ),
       ),
     );
   }
