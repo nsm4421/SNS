@@ -30,7 +30,7 @@ class SignInPage extends StatelessWidget {
             context
               ..showSuccessSnackBar('로그인 성공!')
               ..read<SignInCubit>().updateState(status: Status.initial)
-              ..router.replace(const EntryRoute());
+              ..router.replace(const HomeRoute());
           } else if (state.status == Status.error) {
             context.showErrorSnackBar(state.errorMessage);
           }

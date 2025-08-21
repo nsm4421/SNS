@@ -12,12 +12,18 @@ class AuthRouteGuard extends AutoRouteGuard {
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
-    if (_authBloc.state.status == AuthStatus.authenticated) {
-      resolver.next(true);
-    } else {
-      router.replace<bool>(const SignInRoute()).then((ok) {
-        resolver.next(ok == true);
-      });
+    final isInAuthRoute = router.current.path.startsWith('/auth');
+    final isAuth = _authBloc.state.status == AuthStatus.authenticated;
+
+    bool continueNavigation = true;
+    if (isAuth && isInAuthRoute) {
+      continueNavigation =
+          await router.replace<bool>(const HomeRoute()) ?? false;
+    } else if (!isAuth && !isInAuthRoute) {
+      continueNavigation =
+          await router.replace<bool>(const SignInRoute()) ?? false;
     }
+
+    resolver.next(continueNavigation);
   }
 }
