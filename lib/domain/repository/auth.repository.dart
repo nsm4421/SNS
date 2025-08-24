@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
+import 'package:shared/constant/auth_status.constant.dart';
 import 'package:shared/response_wrapper/api_response/api_error.dart';
-import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/domain/entity/user/user.entity.dart';
 
 abstract interface class AuthRepository {

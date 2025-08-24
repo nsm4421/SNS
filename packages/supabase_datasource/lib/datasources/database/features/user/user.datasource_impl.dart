@@ -1,12 +1,13 @@
 import 'package:shared/response_wrapper/api_response/api_exception.dart';
-import 'package:supabase_datasource/datasources/database/database_error_handler_mixin.dart';
+import 'package:supabase_datasource/datasources/database/features/database_error_handler_mixin.dart';
 import 'package:supabase_datasource/datasources/database/generated/tables/users.dart';
-import 'package:supabase_datasource/datasources/database/user/user_table.datasource.dart';
 
-class UserTableDataSourceImpl
+part 'user.datasource.dart';
+
+class UserDataSourceImpl
     with DatabaseErrorHandlerMixIn
-    implements UserTableDataSource {
-  UserTableDataSourceImpl(this._usersTable);
+    implements UserDataSource {
+  UserDataSourceImpl(this._usersTable);
 
   final UsersTable _usersTable;
 

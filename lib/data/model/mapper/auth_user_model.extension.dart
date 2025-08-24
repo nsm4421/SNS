@@ -1,5 +1,5 @@
 import 'package:sns/domain/entity/user/user.entity.dart';
-import 'package:supabase_datasource/datasources/auth/model/auth_user.model.dart';
+import 'package:supabase_datasource/datasources/model/auth/auth_user.model.dart';
 
 extension AuthUserModelExtension on AuthUserModel {
   AuthUserEntity toEntity() {

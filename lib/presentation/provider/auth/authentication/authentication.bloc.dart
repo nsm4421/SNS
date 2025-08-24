@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/constant/status.constant.dart';
+import 'package:shared/constant/auth_status.constant.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sns/domain/usecase/auth_usecases.dart';
 

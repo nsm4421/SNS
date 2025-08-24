@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/constant/status.constant.dart';
+import 'package:shared/constant/auth_status.constant.dart';
 import 'package:sns/presentation/provider/auth/authentication/authentication.bloc.dart';
 import 'package:sns/presentation/router/app_router.dart';
 

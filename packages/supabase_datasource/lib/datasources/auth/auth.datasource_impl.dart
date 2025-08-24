@@ -1,8 +1,10 @@
+import 'package:shared/constant/auth_status.constant.dart';
 import 'package:shared/response_wrapper/api_response/api_error_type.dart';
 import 'package:shared/response_wrapper/api_response/api_exception.dart';
-import 'package:supabase_datasource/datasources/auth/auth.datasource.dart';
-import 'package:supabase_datasource/datasources/auth/model/auth_user.model.dart';
+import 'package:supabase_datasource/datasources/model/auth/auth_user.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+part 'package:supabase_datasource/datasources/auth/auth.datasource.dart';
 
 class SupabaseAuthDataSourceImpl implements SupabaseAuthDataSource {
   SupabaseAuthDataSourceImpl(this._auth);
@@ -10,7 +12,16 @@ class SupabaseAuthDataSourceImpl implements SupabaseAuthDataSource {
   final GoTrueClient _auth;
 
   @override
-  Stream<AuthState> get authStateStream => _auth.onAuthStateChange;
+  Stream<AuthStatus> get authStatusStream async* {
+    yield AuthStatus.checking; // 최초상태는 checking(인증상태 체크중)
+    await for (final event in _auth.onAuthStateChange) {
+      if (event.session?.user != null) {
+        yield AuthStatus.authenticated;
+      } else {
+        yield AuthStatus.unauthenticated;
+      }
+    }
+  }
 
   @override
   Future<AuthUserModel> getCurrentAuthUser() async {

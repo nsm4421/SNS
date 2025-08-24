@@ -4,14 +4,14 @@ import 'package:shared/response_wrapper/api_response/api_error.dart';
 import 'package:sns/data/model/mapper/user_model.extension.dart';
 import 'package:sns/domain/entity/user/user.entity.dart';
 import 'package:sns/domain/repository/user.repository.dart';
-import 'package:supabase_datasource/datasources/database/user/user_table.datasource.dart';
+import 'package:supabase_datasource/datasources/database/features/user/user.datasource_impl.dart';
 
 @LazySingleton(as: UserRepository)
 class UserRepositoryImpl implements UserRepository {
-  UserRepositoryImpl({required UserTableDataSource userTableDataSource})
+  UserRepositoryImpl({required UserDataSource userTableDataSource})
     : _userTableDataSource = userTableDataSource;
 
-  final UserTableDataSource _userTableDataSource;
+  final UserDataSource _userTableDataSource;
 
   @override
   Future<Either<ApiError, UserEntity>> findByUid(String uid) async {

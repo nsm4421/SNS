@@ -1,8 +1,7 @@
-import 'package:supabase_datasource/datasources/auth/model/auth_user.model.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+part of 'auth.datasource_impl.dart';
 
 abstract interface class SupabaseAuthDataSource {
-  Stream<AuthState> get authStateStream;
+  Stream<AuthStatus> get authStatusStream;
 
   Future<AuthUserModel> getCurrentAuthUser();
 

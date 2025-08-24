@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:sns/core/constant/status.constant.dart';
+import 'package:shared/constant/auth_status.constant.dart';
 import 'package:sns/core/logger/app_logger.dart';
 import 'package:sns/domain/repository/auth.repository.dart';
 import 'package:sns/domain/repository/user.repository.dart';

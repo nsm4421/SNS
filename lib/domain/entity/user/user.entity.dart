@@ -1,6 +1,6 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 
-import 'creator.entity.dart';
+import '../base/creator.entity.dart';
 
 part 'user.entity.g.dart';
 
