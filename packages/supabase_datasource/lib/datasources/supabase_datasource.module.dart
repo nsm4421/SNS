@@ -7,6 +7,7 @@ import 'package:supabase_datasource/datasources/database/features/feed/like/feed
 import 'package:supabase_datasource/datasources/database/features/feed/post/feed_posts.datasource_impl.dart';
 import 'package:supabase_datasource/datasources/database/features/user/user.datasource_impl.dart';
 import 'package:supabase_datasource/datasources/database/generated/database.dart';
+import 'package:supabase_datasource/datasources/storage/storage.datasource_impl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @module
@@ -17,6 +18,11 @@ abstract class SupabaeDataSourceModule {
   @lazySingleton
   SupabaseAuthDataSource get authDataSource =>
       SupabaseAuthDataSourceImpl(_client.auth);
+
+  /// storage
+  @lazySingleton
+  SupabaseStorageDataSource get storageDataSource =>
+      SupabaseStorageDataSourceImpl(_client.storage);
 
   /// user
   @lazySingleton
@@ -67,7 +73,7 @@ abstract class SupabaeDataSourceModule {
       FeedPostImageDataSourceImpl(_feedPostImagesTable);
 
   @lazySingleton
-  FeedDataSource get feedTable => FeedDataSourceImpl(
+  FeedDatabaseDataSource get feedTable => FeedDataSourceImpl(
     feedPostDataSource: _feedPostDataSource,
     feedLikeDataSource: _feedLikeDataSource,
     feedCommentDataSource: _feedCommentDataSource,

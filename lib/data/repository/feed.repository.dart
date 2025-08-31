@@ -1,0 +1,109 @@
+import 'dart:io';
+
+import 'package:either_dart/either.dart';
+import 'package:injectable/injectable.dart';
+import 'package:shared/pagination/page.dart';
+import 'package:shared/response_wrapper/api_response/api_error.dart';
+import 'package:sns/core/logger/app_logger.dart';
+import 'package:sns/data/datasource/feed/feed_storage.dastasource_impl.dart';
+import 'package:sns/data/model/mapper/feed_posts_with_counts_row_model.extension.dart';
+import 'package:sns/domain/entity/feed/feed_post.entity.dart';
+import 'package:sns/domain/repository/feed.repository.dart';
+import 'package:supabase_datasource/datasources/database/features/feed/feed.datasource_impl.dart';
+import 'package:supabase_datasource/datasources/model/feed/image/insert_feed_post_image_request.model.dart';
+import 'package:supabase_datasource/datasources/model/feed/post/create_feed_post_request.model.dart';
+
+@LazySingleton(as: FeedRepository)
+class FeedRepositoryImpl with AppLogger implements FeedRepository {
+  final FeedDatabaseDataSource _feedDatabaseDataSource;
+  final FeedStorageDataSource _feedStorageDataSource;
+
+  FeedRepositoryImpl({
+    required FeedDatabaseDataSource feedDatabaseDataSource,
+    required FeedStorageDataSource feedStorageDataSource,
+  }) : _feedDatabaseDataSource = feedDatabaseDataSource,
+       _feedStorageDataSource = feedStorageDataSource;
+
+  @override
+  Future<Either<ApiError, void>> createFeed({
+    required String feedId,
+    required String content,
+    bool isPublic = true,
+    required List<String> imageUrls,
+    required List<int?> widths,
+    required List<int?> heights,
+  }) async {
+    try {
+      if (imageUrls.isNotEmpty) {
+        await _feedDatabaseDataSource.image.insertImages(
+          imageUrls.indexed.map(
+            (e) => InsertFeedPostImageRequestModel(
+              objectPath: e.$2,
+              width: widths[e.$1],
+              height: heights[e.$1],
+              orderIndex: e.$1,
+            ),
+          ),
+        );
+      }
+
+      await _feedDatabaseDataSource.post.createPost(
+        CreateFeedPostRequestModel(
+          feedId: feedId,
+          content: content,
+          isPublic: isPublic,
+        ),
+      );
+
+      return const Right(null);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, void>> deletePost(String postId) async {
+    try {
+      return await _feedDatabaseDataSource.post
+          .deletePostById(postId)
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, Page<FeedPostEntity>>> fetchPosts({
+    String? cursor,
+    int limit = 20,
+  }) async {
+    try {
+      return await _feedDatabaseDataSource.post
+          .fetchPosts(cursor: cursor, limit: limit)
+          .then((res) => res.convert((e) => e.toEntity()))
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, List<String>>> saveFeedImages({
+    required String feedId,
+    required List<File> images,
+  }) async {
+    assert(images.isNotEmpty);
+    try {
+      return await _feedStorageDataSource
+          .uploadFeedImages(feedId: feedId, images: images)
+          .then((res) => res.toList())
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+}

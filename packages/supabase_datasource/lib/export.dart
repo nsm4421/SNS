@@ -13,3 +13,4 @@ export 'datasources/model/feed/image/insert_feed_post_image_request.model.dart';
 export 'datasources/model/feed/like/toggle_feed_like_response.model.dart';
 export 'datasources/model/feed/post/create_feed_post_request.model.dart';
 export 'datasources/model/feed/post/feed_post.model.dart';
+export 'datasources/storage/storage.datasource_impl.dart';

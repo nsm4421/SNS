@@ -1,6 +1,6 @@
 import 'base.entity.dart';
 
-abstract class CreatorEntity extends BaseEntity {
+class CreatorEntity extends BaseEntity {
   CreatorEntity({
     required super.id,
     super.createdAt,

@@ -10,7 +10,7 @@ class FeedPostImageDataSourceImpl implements FeedPostImageDataSource {
 
   @override
   Future<void> insertImages(
-    List<InsertFeedPostImageRequestModel> request,
+    Iterable<InsertFeedPostImageRequestModel> request,
   ) async {
     await Future.wait(
       request.indexed.map(

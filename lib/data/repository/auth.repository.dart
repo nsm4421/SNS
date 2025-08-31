@@ -2,13 +2,14 @@ import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared/constant/auth_status.constant.dart';
 import 'package:shared/response_wrapper/api_response/api_error.dart';
+import 'package:sns/core/logger/app_logger.dart';
 import 'package:sns/data/datasource/auth/auth.datasource_impl.dart';
 import 'package:sns/data/model/mapper/auth_user_model.extension.dart';
 import 'package:sns/domain/entity/user/user.entity.dart';
 import 'package:sns/domain/repository/auth.repository.dart';
 
 @LazySingleton(as: AuthRepository)
-class AuthRepositoryImpl implements AuthRepository {
+class AuthRepositoryImpl with AppLogger implements AuthRepository {
   AuthRepositoryImpl(this._authDataSource);
 
   final AuthDataSource _authDataSource;
@@ -24,6 +25,7 @@ class AuthRepositoryImpl implements AuthRepository {
           .then((res) => res.toEntity())
           .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ApiError.fromError(error));
     }
   }
@@ -37,6 +39,7 @@ class AuthRepositoryImpl implements AuthRepository {
           .getNewTokensByRefreshToken(oldRefreshToken)
           .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ApiError.fromError(error));
     }
   }
@@ -51,6 +54,7 @@ class AuthRepositoryImpl implements AuthRepository {
           .signInAndReturnTokens(email: email, password: password)
           .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ApiError.fromError(error));
     }
   }
@@ -60,6 +64,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       return await _authDataSource.signOut().then((_) => const Right(null));
     } catch (error) {
+      logger.e(error);
       return Left(ApiError.fromError(error));
     }
   }
@@ -81,6 +86,7 @@ class AuthRepositoryImpl implements AuthRepository {
           )
           .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ApiError.fromError(error));
     }
   }
@@ -98,6 +104,7 @@ class AuthRepositoryImpl implements AuthRepository {
           )
           .then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ApiError.fromError(error));
     }
   }
@@ -107,6 +114,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       return await _authDataSource.deleteTokensInLocalStorage().then(Right.new);
     } catch (error) {
+      logger.e(error);
       return Left(ApiError.fromError(error));
     }
   }

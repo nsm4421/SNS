@@ -1,6 +1,6 @@
 part of 'feed.datasource_impl.dart';
 
-abstract interface class FeedDataSource {
+abstract interface class FeedDatabaseDataSource {
   FeedPostDataSource get post;
 
   FeedPostImageDataSource get image;

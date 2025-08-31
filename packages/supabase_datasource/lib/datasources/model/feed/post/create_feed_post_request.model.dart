@@ -6,12 +6,15 @@ part 'create_feed_post_request.model.g.dart';
 @freezed
 @JsonSerializable()
 class CreateFeedPostRequestModel with _$CreateFeedPostRequestModel {
+  @JsonKey(name: 'id')
+  final String feedId;
   final String content;
   @JsonKey(name: 'is_public')
   @Default(true)
   final bool isPublic;
 
   CreateFeedPostRequestModel({
+    required this.feedId,
     required this.content,
     this.isPublic = true,
   });
