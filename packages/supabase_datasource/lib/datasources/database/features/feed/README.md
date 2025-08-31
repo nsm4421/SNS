@@ -173,15 +173,16 @@ execute function public.set_updated_at(); -- 미리 만들어둔 set_updated_at�
 ```
 
 - View
-  - feed_posts_with_counts 
+  - feed_with_images_and_counts 
 
 ```
-create or replace view public.feed_posts_with_counts as
+create or replace view public.feed_with_images_and_counts as
 select
     p.*,
     coalesce(l.like_count, 0)     as likes_count,
     coalesce(c.comment_count, 0)  as comments_count,
-    username                      as username
+    username                      as username,
+    coalesce(imgs.images, '{}'::text[]) as images   -- 이미지 배열(JSONB)
 from public.feed_posts p
 left join (
     -- 좋아요 개수
@@ -201,7 +202,12 @@ left join (
     -- 작성자
     select id, username
     from public.users
-) u on u.id = p.author_id;
+) u on u.id = p.author_id
+left join lateral (
+    select array_agg(fpi.object_path order by fpi.order_index, fpi.created_at) as images
+    from public.feed_post_images fpi
+    where fpi.post_id = p.id
+) imgs on true;
 ```
 
 - RPC Function

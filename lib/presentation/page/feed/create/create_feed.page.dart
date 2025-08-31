@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/extension/build_context.extension.dart';
-import 'package:sns/core/provider/simple_data_cubit/simple_data.cubit.dart';
+import 'package:sns/presentation/provider/base/simple_data_cubit/simple_data.cubit.dart';
 import 'package:sns/presentation/provider/feed/create/create_feed.cubit.dart';
 
 part 'create_feed.screen.dart';

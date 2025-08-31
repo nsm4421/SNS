@@ -8,12 +8,12 @@ part 'feed_posts.datasource.dart';
 class FeedPostDataSourceImpl implements FeedPostDataSource {
   const FeedPostDataSourceImpl({
     required FeedPostsTable feedPostsTable,
-    required FeedPostsWithCountsTable feedPostsWithCountsTable,
+    required FeedWithImagesAndCountsTable feedWithImagesWithCountsTable,
   }) : _feedPostsTable = feedPostsTable,
-       _feedPostsWithCountsTable = feedPostsWithCountsTable;
+       _feedWithImagesWithCountsTable = feedWithImagesWithCountsTable;
 
   final FeedPostsTable _feedPostsTable;
-  final FeedPostsWithCountsTable _feedPostsWithCountsTable;
+  final FeedWithImagesAndCountsTable _feedWithImagesWithCountsTable;
 
   @override
   Future<FeedPostsRow> createPost(CreateFeedPostRequestModel request) async {
@@ -26,8 +26,8 @@ class FeedPostDataSourceImpl implements FeedPostDataSource {
   }
 
   @override
-  Future<FeedPostsWithCountsRow> getPostWithCountById(String postId) async {
-    final res = await _feedPostsWithCountsTable.querySingleRow(
+  Future<FeedWithImagesAndCountsRow> getPostWithCountById(String postId) async {
+    final res = await _feedWithImagesWithCountsTable.querySingleRow(
       queryFn: (q) => q.eq('id', postId),
     );
     if (res == null) {
@@ -37,11 +37,11 @@ class FeedPostDataSourceImpl implements FeedPostDataSource {
   }
 
   @override
-  Future<Page<FeedPostsWithCountsRow>> fetchPosts({
+  Future<Page<FeedWithImagesAndCountsRow>> fetchPosts({
     String? cursor,
     int limit = 20,
   }) async {
-    return await _feedPostsWithCountsTable
+    return await _feedWithImagesWithCountsTable
         .queryRows(
           queryFn: (q) => q
               .lt('created_at', cursor ?? DateTime.now().toUtc())
@@ -49,7 +49,7 @@ class FeedPostDataSourceImpl implements FeedPostDataSource {
           limit: limit,
         )
         .then(
-          (res) => Page<FeedPostsWithCountsRow>(
+          (res) => Page<FeedWithImagesAndCountsRow>(
             items: res,
             nextCursor: res.length < limit
                 ? null

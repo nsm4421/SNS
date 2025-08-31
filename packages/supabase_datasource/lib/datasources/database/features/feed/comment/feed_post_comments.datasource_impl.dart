@@ -7,12 +7,12 @@ part 'feed_post_comments.datasource.dart';
 class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
   FeedPostCommentDataSourceImpl({
     required FeedPostCommentsTable feedPostCommentsTable,
-    required FeedPostsWithCountsTable feedPostsWithCountsTable,
+    required FeedWithImagesAndCountsTable feedWithImagesWithCountsTable,
   }) : _feedPostCommentsTable = feedPostCommentsTable,
-       _feedPostsWithCountsTable = feedPostsWithCountsTable;
+       _feedWithImagesWithCountsTable = feedWithImagesWithCountsTable;
 
   final FeedPostCommentsTable _feedPostCommentsTable;
-  final FeedPostsWithCountsTable _feedPostsWithCountsTable;
+  final FeedWithImagesAndCountsTable _feedWithImagesWithCountsTable;
 
   @override
   Future<FeedPostCommentsRow> createParentComment(
@@ -86,7 +86,7 @@ class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
 
   @override
   Future<int> getCommentCount(String postId) async {
-    return _feedPostsWithCountsTable
+    return _feedWithImagesWithCountsTable
         .querySingleRow(queryFn: (q) => q.eq('post_id', postId))
         .then((res) => res?.commentsCount ?? 0);
   }

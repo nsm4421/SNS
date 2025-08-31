@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/status.constant.dart';
-import 'package:sns/core/provider/simple_data_cubit/simple_data.cubit.dart';
+import 'package:sns/domain/usecase/scenario/auth/sign_in.usecase.dart';
+import 'package:sns/presentation/provider/base/simple_data_cubit/simple_data.cubit.dart';
 import 'package:sns/domain/usecase/auth_usecases.dart';
-import 'package:sns/domain/usecase/screnario/auth/sign_in.usecase.dart';
-
 part 'sign_in_data.dart';
 
 part 'sign_in.cubit.g.dart';

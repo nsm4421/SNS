@@ -1,3 +1,3 @@
 enum Status { initial, loading, error, success }
 
-enum DisplayStatus { initial, fetching, loaded, error }
+enum DisplayStatus { unMounted, fetching, loaded, error }

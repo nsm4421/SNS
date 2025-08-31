@@ -36,8 +36,8 @@ abstract class SupabaeDataSourceModule {
   FeedPostsTable get _feedPostsTable => FeedPostsTable();
 
   @lazySingleton
-  FeedPostsWithCountsTable get _feedPostsWithCountsTable =>
-      FeedPostsWithCountsTable();
+  FeedWithImagesAndCountsTable get _feedWithImagesWithCountsTable =>
+      FeedWithImagesAndCountsTable();
 
   @lazySingleton
   FeedPostLikesTable get _feedPostLikesTable => FeedPostLikesTable();
@@ -51,21 +51,21 @@ abstract class SupabaeDataSourceModule {
   @lazySingleton
   FeedPostDataSource get _feedPostDataSource => FeedPostDataSourceImpl(
     feedPostsTable: _feedPostsTable,
-    feedPostsWithCountsTable: _feedPostsWithCountsTable,
+    feedWithImagesWithCountsTable: _feedWithImagesWithCountsTable,
   );
 
   @lazySingleton
   FeedPostLikeDataSource get _feedLikeDataSource => FeedPostLikeDataSourceImpl(
     client: _client,
     feedPostLikesTable: _feedPostLikesTable,
-    feedPostsWithCountsTable: _feedPostsWithCountsTable,
+    feedWithImagesWithCountsTable: _feedWithImagesWithCountsTable,
   );
 
   @lazySingleton
   FeedPostCommentDataSource get _feedCommentDataSource =>
       FeedPostCommentDataSourceImpl(
         feedPostCommentsTable: _feedPostCommentsTable,
-        feedPostsWithCountsTable: _feedPostsWithCountsTable,
+        feedWithImagesWithCountsTable: _feedWithImagesWithCountsTable,
       );
 
   @lazySingleton

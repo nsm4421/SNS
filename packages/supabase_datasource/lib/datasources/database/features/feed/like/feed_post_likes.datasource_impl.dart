@@ -8,14 +8,14 @@ class FeedPostLikeDataSourceImpl implements FeedPostLikeDataSource {
   FeedPostLikeDataSourceImpl({
     required SupabaseClient client,
     required FeedPostLikesTable feedPostLikesTable,
-    required FeedPostsWithCountsTable feedPostsWithCountsTable,
+    required FeedWithImagesAndCountsTable feedWithImagesWithCountsTable,
   }) : _client = client,
        _feedPostLikesTable = feedPostLikesTable,
-       _feedPostsWithCountsTable = feedPostsWithCountsTable;
+       _feedWithImagesWithCountsTable = feedWithImagesWithCountsTable;
 
   final SupabaseClient _client;
   final FeedPostLikesTable _feedPostLikesTable;
-  final FeedPostsWithCountsTable _feedPostsWithCountsTable;
+  final FeedWithImagesAndCountsTable _feedWithImagesWithCountsTable;
 
   @override
   Future<bool> getIsLike(String postId) async {
@@ -32,7 +32,7 @@ class FeedPostLikeDataSourceImpl implements FeedPostLikeDataSource {
 
   @override
   Future<int> getLikeCount(String postId) async {
-    return _feedPostsWithCountsTable
+    return _feedWithImagesWithCountsTable
         .querySingleRow(queryFn: (q) => q.eq('post_id', postId))
         .then((res) => res?.likesCount)
         .then((cnt) => cnt ?? 0);

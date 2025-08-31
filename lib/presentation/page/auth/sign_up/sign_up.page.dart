@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/extension/build_context.extension.dart';
 import 'package:sns/core/extension/string.extension.dart';
-import 'package:sns/core/provider/simple_data_cubit/simple_data.cubit.dart';
+import 'package:sns/presentation/provider/base/simple_data_cubit/simple_data.cubit.dart';
 import 'package:sns/presentation/component/loading_overlay.widget.dart';
 import 'package:sns/presentation/provider/auth/sign_up/sign_up.cubit.dart';
 

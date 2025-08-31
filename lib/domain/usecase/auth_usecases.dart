@@ -2,12 +2,12 @@ import 'package:injectable/injectable.dart';
 import 'package:shared/constant/auth_status.constant.dart';
 import 'package:sns/domain/repository/auth.repository.dart';
 import 'package:sns/domain/repository/user.repository.dart';
-import 'package:sns/domain/usecase/screnario/auth/find_by_uid.usecase.dart';
-import 'package:sns/domain/usecase/screnario/auth/get_current_user.usecase.dart';
-import 'package:sns/domain/usecase/screnario/auth/restore_session.usecase.dart';
-import 'package:sns/domain/usecase/screnario/auth/sign_in.usecase.dart';
-import 'package:sns/domain/usecase/screnario/auth/sign_out.usecase.dart';
-import 'package:sns/domain/usecase/screnario/auth/sign_up.usecase.dart';
+import 'scenario/auth/find_by_uid.usecase.dart';
+import 'scenario/auth/get_current_user.usecase.dart';
+import 'scenario/auth/restore_session.usecase.dart';
+import 'scenario/auth/sign_in.usecase.dart';
+import 'scenario/auth/sign_out.usecase.dart';
+import 'scenario/auth/sign_up.usecase.dart';
 
 @lazySingleton
 class AuthUseCases {

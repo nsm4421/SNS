@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:either_dart/either.dart';
 import 'package:shared/pagination/page.dart';
 import 'package:shared/response_wrapper/api_response/api_error.dart';
-import 'package:sns/domain/entity/feed/feed_post.entity.dart';
+import 'package:sns/domain/entity/feed/feed.entity.dart';
 
 abstract interface class FeedRepository {
   Future<Either<ApiError, void>> createFeed({
@@ -15,8 +15,8 @@ abstract interface class FeedRepository {
     required List<int?> heights,
   });
 
-  Future<Either<ApiError, Page<FeedPostEntity>>> fetchPosts({
-    String? cursor,
+  Future<Either<ApiError, Page<FeedEntity>>> fetchPosts({
+    required String cursor,
     int limit = 20,
   });
 

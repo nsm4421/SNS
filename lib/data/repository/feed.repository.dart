@@ -8,7 +8,7 @@ import 'package:sns/core/logger/app_logger.dart';
 import 'package:sns/data/datasource/auth/auth.datasource_impl.dart';
 import 'package:sns/data/datasource/feed/feed_storage.dastasource_impl.dart';
 import 'package:sns/data/model/mapper/feed_posts_with_counts_row_model.extension.dart';
-import 'package:sns/domain/entity/feed/feed_post.entity.dart';
+import 'package:sns/domain/entity/feed/feed.entity.dart';
 import 'package:sns/domain/repository/feed.repository.dart';
 import 'package:supabase_datasource/datasources/database/features/feed/feed.datasource_impl.dart';
 import 'package:supabase_datasource/datasources/model/feed/image/insert_feed_post_image_request.model.dart';
@@ -50,7 +50,7 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
         await _feedDatabaseDataSource.image.insertImages(
           imageUrls.indexed.map(
             (e) => InsertFeedPostImageRequestModel(
-              feedId:feedId,
+              feedId: feedId,
               objectPath: e.$2,
               width: widths[e.$1],
               height: heights[e.$1],
@@ -80,8 +80,8 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
   }
 
   @override
-  Future<Either<ApiError, Page<FeedPostEntity>>> fetchPosts({
-    String? cursor,
+  Future<Either<ApiError, Page<FeedEntity>>> fetchPosts({
+    required String cursor,
     int limit = 20,
   }) async {
     try {

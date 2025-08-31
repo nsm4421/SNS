@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/status.constant.dart';
-import 'package:sns/core/provider/simple_data_cubit/simple_data.cubit.dart';
+import 'package:sns/domain/usecase/scenario/feed/create_feed.usecase.dart';
+import 'package:sns/presentation/provider/base/simple_data_cubit/simple_data.cubit.dart';
 import 'package:sns/domain/usecase/feed_usecases.dart';
-import 'package:sns/domain/usecase/screnario/feed/create_feed.usecase.dart';
 
 part 'create_feed_data.dart';
 
