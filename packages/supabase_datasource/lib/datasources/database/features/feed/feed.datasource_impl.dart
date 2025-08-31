@@ -5,7 +5,7 @@ import 'package:supabase_datasource/datasources/database/features/feed/post/feed
 
 part 'feed.datasource.dart';
 
-class FeedDataSourceImpl implements FeedDataSoruce {
+class FeedDataSourceImpl implements FeedDataSource {
   FeedDataSourceImpl({
     required FeedPostDataSource feedPostDataSource,
     required FeedPostLikeDataSource feedLikeDataSource,

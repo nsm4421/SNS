@@ -8,3 +8,9 @@ class Page<T> {
 
   bool get isEnd => nextCursor == null;
 }
+
+extension PageExtension<T> on Page<T> {
+  Page<S> convert<S>(S Function(T) cb) {
+    return Page<S>(items: items.map(cb).toList(), nextCursor: nextCursor);
+  }
+}

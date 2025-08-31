@@ -37,7 +37,7 @@ class FeedPostDataSourceImpl implements FeedPostDataSource {
   }
 
   @override
-  Future<Page<FeedPostsWithCountsRow>> fetchFeeds({
+  Future<Page<FeedPostsWithCountsRow>> fetchPosts({
     String? cursor,
     int limit = 20,
   }) async {

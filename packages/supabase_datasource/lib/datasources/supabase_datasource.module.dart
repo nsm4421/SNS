@@ -67,7 +67,7 @@ abstract class SupabaeDataSourceModule {
       FeedPostImageDataSourceImpl(_feedPostImagesTable);
 
   @lazySingleton
-  FeedDataSoruce get feedTable => FeedDataSourceImpl(
+  FeedDataSource get feedTable => FeedDataSourceImpl(
     feedPostDataSource: _feedPostDataSource,
     feedLikeDataSource: _feedLikeDataSource,
     feedCommentDataSource: _feedCommentDataSource,

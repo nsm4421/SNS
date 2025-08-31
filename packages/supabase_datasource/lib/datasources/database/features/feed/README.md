@@ -16,7 +16,7 @@ create extension if not exists "pg_trgm";    -- 해시태그/검색용 트라이
 ```
 create table if not exists public.feed_posts (
     id            uuid primary key default gen_random_uuid(),
-    author_id     uuid not null references public.users(id) on delete cascade,
+    author_id     uuid not null references public.users(id) on delete cascade default auth.uid(),
     content       text,
     is_public     boolean not null default true,
     created_at    timestamptz not null default now(),
@@ -96,7 +96,7 @@ with check (exists (
 ```
 create table if not exists public.feed_post_likes (
     post_id     uuid not null references public.feed_posts(id) on delete cascade,
-    user_id     uuid not null references public.users(id) on delete cascade,
+    user_id     uuid not null references public.users(id) on delete cascade default auth.uid(),
     created_at  timestamptz not null default now(),
     primary key (post_id, user_id)  -- 한 유저가 한 번만 좋아요
 );
@@ -128,7 +128,7 @@ using (auth.uid() = user_id);
 create table if not exists public.feed_post_comments (
     id             uuid primary key default gen_random_uuid(),
     post_id        uuid not null references public.feed_posts(id) on delete cascade,
-    user_id        uuid not null references public.users(id) on delete cascade,
+    user_id        uuid not null references public.users(id) on delete cascade default auth.uid(),
     parent_id      uuid references public.feed_post_comments(id) on delete cascade,
     content        text not null,
     created_at     timestamptz not null default now(),
@@ -186,7 +186,8 @@ create or replace view public.feed_posts_with_counts as
 select
     p.*,
     coalesce(l.like_count, 0)     as likes_count,
-    coalesce(c.comment_count, 0)  as comments_count
+    coalesce(c.comment_count, 0)  as comments_count,
+    username                      as username
 from public.feed_posts p
 left join (
     -- 좋아요 개수
@@ -201,7 +202,12 @@ left join (
     where deleted_at is null    -- 삭제된 댓글 제외
         and parent_id is null   -- 부모댓글만 카운팅
     group by post_id
-) c on c.post_id = p.id;
+) c on c.post_id = p.id
+left join (
+    -- 작성자
+    select id, username
+    from public.users
+) u on u.id = p.author_id;
 ```
 
 - RPC Function

@@ -5,7 +5,7 @@ abstract mixin class FeedPostDataSource {
 
   Future<FeedPostsWithCountsRow> getPostWithCountById(String postId);
 
-  Future<Page<FeedPostsWithCountsRow>> fetchFeeds({
+  Future<Page<FeedPostsWithCountsRow>> fetchPosts({
     String? cursor,
     int limit = 20,
   });
