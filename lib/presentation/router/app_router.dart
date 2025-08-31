@@ -7,6 +7,7 @@ import 'package:sns/presentation/page/auth/sign_up/sign_up.page.dart'
 import 'package:sns/presentation/page/feed/create/create_feed.page.dart';
 import 'package:sns/presentation/page/feed/display/display_feed.page.dart';
 import 'package:sns/presentation/page/home/home.page.dart' show HomePage;
+import 'package:sns/presentation/page/home/splash.page.dart' show SplashPage;
 import 'package:sns/presentation/page/reels/create/create_reels.page.dart'
     show CreateReelsPage;
 import 'package:sns/presentation/page/reels/display/display_reels.page.dart'
@@ -30,11 +31,12 @@ class AppRouter extends RootStackRouter {
 
   @override
   List<AutoRoute> get routes => [
+    AutoRoute(page: SplashRoute.page, path: '/', initial: true),
     AutoRoute(page: SignUpRoute.page, path: '/auth/sign-up'),
-    AutoRoute(page: SignInRoute.page, path: '/auth/sign-in', initial: true),
+    AutoRoute(page: SignInRoute.page, path: '/auth/sign-in'),
     AutoRoute(
       page: HomeRoute.page,
-      path: '/',
+      path: '/home',
       guards: [_authRouteGuard],
       children: [
         AutoRoute(
