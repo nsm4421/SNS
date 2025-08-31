@@ -14,12 +14,15 @@ class InsertFeedPostImageRequestModel with _$InsertFeedPostImageRequestModel {
   @JsonKey(name: 'order_index')
   @Default(0)
   final int orderIndex;
+  @JsonKey(name: 'post_id')
+  final String feedId;
 
   InsertFeedPostImageRequestModel({
     required this.objectPath,
     this.width,
     this.height,
     this.orderIndex = 0,
+    required this.feedId,
   });
 
   factory InsertFeedPostImageRequestModel.fromJson(

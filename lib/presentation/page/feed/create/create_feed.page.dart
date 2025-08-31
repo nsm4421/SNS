@@ -1,5 +1,19 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sns/core/constant/status.constant.dart';
+import 'package:sns/core/extension/build_context.extension.dart';
+import 'package:sns/core/provider/simple_data_cubit/simple_data.cubit.dart';
+import 'package:sns/presentation/provider/feed/create/create_feed.cubit.dart';
+
+part 'create_feed.screen.dart';
+part 'feed_post.fragment.dart';
+part 'select_image.fragment.dart';
+part 'submit_button.widget.dart';
 
 @RoutePage()
 class CreateFeedPage extends StatelessWidget {
@@ -7,6 +21,20 @@ class CreateFeedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text("Create Page")));
+    return BlocProvider(
+      create: (_) => GetIt.instance<CreateFeedCubit>(),
+      child: BlocListener<CreateFeedCubit, SimpleDataState<CreateFeedData>>(
+        listener: (context, state) {
+          if (state.status == Status.success) {
+            context
+              ..showSuccessSnackBar('피드 작성 성공')
+              ..pop();
+          } else if (state.status == Status.error) {
+            context.showErrorSnackBar(state.errorMessage);
+          }
+        },
+        child: const CreateFeedScreen(),
+      ),
+    );
   }
 }

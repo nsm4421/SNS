@@ -9,7 +9,6 @@ import 'package:sns/core/extension/string.extension.dart';
 import 'package:sns/core/provider/simple_data_cubit/simple_data.cubit.dart';
 import 'package:sns/presentation/component/loading_overlay.widget.dart';
 import 'package:sns/presentation/provider/auth/sign_up/sign_up.cubit.dart';
-import 'package:sns/presentation/router/app_router.dart';
 
 part 'sign_up.screen.dart';
 

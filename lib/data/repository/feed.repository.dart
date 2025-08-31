@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:shared/pagination/page.dart';
 import 'package:shared/response_wrapper/api_response/api_error.dart';
 import 'package:sns/core/logger/app_logger.dart';
+import 'package:sns/data/datasource/auth/auth.datasource_impl.dart';
 import 'package:sns/data/datasource/feed/feed_storage.dastasource_impl.dart';
 import 'package:sns/data/model/mapper/feed_posts_with_counts_row_model.extension.dart';
 import 'package:sns/domain/entity/feed/feed_post.entity.dart';
@@ -15,13 +16,16 @@ import 'package:supabase_datasource/datasources/model/feed/post/create_feed_post
 
 @LazySingleton(as: FeedRepository)
 class FeedRepositoryImpl with AppLogger implements FeedRepository {
+  final AuthDataSource _authDataSource;
   final FeedDatabaseDataSource _feedDatabaseDataSource;
   final FeedStorageDataSource _feedStorageDataSource;
 
   FeedRepositoryImpl({
+    required AuthDataSource authDataSource,
     required FeedDatabaseDataSource feedDatabaseDataSource,
     required FeedStorageDataSource feedStorageDataSource,
-  }) : _feedDatabaseDataSource = feedDatabaseDataSource,
+  }) : _authDataSource = authDataSource,
+       _feedDatabaseDataSource = feedDatabaseDataSource,
        _feedStorageDataSource = feedStorageDataSource;
 
   @override
@@ -34,10 +38,19 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
     required List<int?> heights,
   }) async {
     try {
+      await _feedDatabaseDataSource.post.createPost(
+        CreateFeedPostRequestModel(
+          feedId: feedId,
+          content: content,
+          isPublic: isPublic,
+        ),
+      );
+
       if (imageUrls.isNotEmpty) {
         await _feedDatabaseDataSource.image.insertImages(
           imageUrls.indexed.map(
             (e) => InsertFeedPostImageRequestModel(
+              feedId:feedId,
               objectPath: e.$2,
               width: widths[e.$1],
               height: heights[e.$1],
@@ -46,14 +59,6 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
           ),
         );
       }
-
-      await _feedDatabaseDataSource.post.createPost(
-        CreateFeedPostRequestModel(
-          feedId: feedId,
-          content: content,
-          isPublic: isPublic,
-        ),
-      );
 
       return const Right(null);
     } catch (error) {
@@ -98,7 +103,11 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
     assert(images.isNotEmpty);
     try {
       return await _feedStorageDataSource
-          .uploadFeedImages(feedId: feedId, images: images)
+          .uploadFeedImages(
+            currentUid: _authDataSource.currentUid!,
+            feedId: feedId,
+            images: images,
+          )
           .then((res) => res.toList())
           .then(Right.new);
     } catch (error) {

@@ -9,10 +9,11 @@ class FeedStorageDataSourceImpl implements FeedStorageDataSource {
 
   FeedStorageDataSourceImpl(this._supabaseStorageDataSource);
 
-  static const String _bucketId = 'feed_images';
+  static const String _bucketId = 'FEED_IMAGE';
 
   @override
   Future<Iterable<String>> uploadFeedImages({
+    required String currentUid,
     required String feedId,
     required List<File> images,
   }) async {
@@ -21,7 +22,7 @@ class FeedStorageDataSourceImpl implements FeedStorageDataSource {
         (e) async =>
             await _supabaseStorageDataSource.uploadImageAndReturnPublicUrl(
               bucketId: _bucketId,
-              objectPath: '$feedId/${e.$1}',
+              objectPath: '$currentUid/$feedId/${e.$1}.jpg',
               file: e.$2,
             ),
       ),

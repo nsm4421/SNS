@@ -21,7 +21,7 @@ class SignInButtonsWidget extends StatelessWidget {
               onPressed: tappable
                   ? () async {
                       FocusScope.of(context).unfocus();
-                      await Future.delayed(Duration(microseconds: 100));
+                      await Future.delayed(const Duration(microseconds: 100));
                       await context.read<SignInCubit>().submit();
                     }
                   : null,

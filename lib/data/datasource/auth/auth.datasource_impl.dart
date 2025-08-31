@@ -19,6 +19,9 @@ class AuthDataSourceImpl implements AuthDataSource {
        _localStorageDataSource = localStorageDataSource;
 
   @override
+  String? get currentUid => _supabaseAuthDataSource.currentUid;
+
+  @override
   Stream<AuthStatus> get authStatusStream =>
       _supabaseAuthDataSource.authStatusStream;
 

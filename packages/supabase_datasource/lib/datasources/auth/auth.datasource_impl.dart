@@ -24,6 +24,9 @@ class SupabaseAuthDataSourceImpl implements SupabaseAuthDataSource {
   }
 
   @override
+  String? get currentUid => _auth.currentUser?.id;
+
+  @override
   Future<AuthUserModel> getCurrentAuthUser() async {
     try {
       final data = _auth.currentUser?.userMetadata;
@@ -134,4 +137,5 @@ class SupabaseAuthDataSourceImpl implements SupabaseAuthDataSource {
       return ApiException.unknown(message);
     }
   }
+
 }

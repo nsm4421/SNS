@@ -5,6 +5,8 @@ abstract interface class SupabaseAuthDataSource {
 
   Future<AuthUserModel> getCurrentAuthUser();
 
+  String? get currentUid;
+
   Future<(String accessToken, String? refreshToken)> signUpAndReturnTokens({
     required String email,
     required String password,

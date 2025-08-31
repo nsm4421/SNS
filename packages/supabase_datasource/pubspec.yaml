@@ -17,7 +17,7 @@ dependencies:
   freezed_annotation: ^3.0.0
   logger: ^2.5.0
   supabase_flutter: ^2.9.1
-
+  supabase_codegen: ^1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -30,10 +30,9 @@ dev_dependencies:
   json_annotation: ^4.9.0
   json_serializable: ^6.8.0
   copy_with_extension_gen: ^6.0.1
-  supabase_codegen: ^1.4.0
   test: ^1.25.15
 
-supabse_codegen:
+supabase_codegen:
   env: .env
   output: lib/datasources/database/generated # Overrides default: supabase/types
   tag: v1 # Overrides default: ''

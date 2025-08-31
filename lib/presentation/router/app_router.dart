@@ -46,5 +46,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: SettingRoute.page, path: 'setting'),
       ],
     ),
+    AutoRoute(page: CreateFeedRoute.page, path: '/feed/create'),
+    AutoRoute(page: CreateReelsRoute.page, path: '/reels/create'),
   ];
 }

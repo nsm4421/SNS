@@ -8,7 +8,6 @@ import 'package:sns/presentation/router/auth_listenable.dart';
 import 'package:supabase_datasource/core/dependency_injection.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
-import 'core/theme/color_scheme/app_color.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
