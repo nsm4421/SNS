@@ -182,7 +182,9 @@ select
     coalesce(l.like_count, 0)     as likes_count,
     coalesce(c.comment_count, 0)  as comments_count,
     username                      as username,
-    coalesce(imgs.images, '{}'::text[]) as images   -- 이미지 배열(JSONB)
+    coalesce(imgs.images, '{}'::text[]) as images,   -- 이미지 배열(JSONB)
+    coalesce(widths.widths, '{}'::int[]) as widths,
+    coalesce(heights.heights, '{}'::int[]) as heights
 from public.feed_posts p
 left join (
     -- 좋아요 개수
@@ -207,7 +209,17 @@ left join lateral (
     select array_agg(fpi.object_path order by fpi.order_index, fpi.created_at) as images
     from public.feed_post_images fpi
     where fpi.post_id = p.id
-) imgs on true;
+) imgs on true
+left join lateral (
+    select array_agg(fpi.width order by fpi.order_index, fpi.created_at) as widths
+    from public.feed_post_images fpi
+    where fpi.post_id = p.id
+) widths on true
+left join lateral (
+    select array_agg(fpi.height order by fpi.order_index, fpi.created_at) as heights
+    from public.feed_post_images fpi
+    where fpi.post_id = p.id
+) heights on true;
 ```
 
 - RPC Function

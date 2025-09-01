@@ -13,12 +13,16 @@ class FeedEntity extends BaseEntityWithCreator {
     required super.creator,
     this.content = '',
     required this.images,
+    required this.widths,
+    required this.heights,
     this.commentsCount = 0,
     this.likesCount = 0,
   });
 
   final String content;
   final List<String> images;
+  final List<int> widths;
+  final List<int> heights;
   final int commentsCount;
   final int likesCount;
 }

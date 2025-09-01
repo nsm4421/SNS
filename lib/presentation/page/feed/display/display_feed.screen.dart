@@ -17,6 +17,7 @@ class DisplayFeedScreen extends StatelessWidget {
           ),
         ],
       ),
+      body: const FeedListFragment(),
     );
   }
 }

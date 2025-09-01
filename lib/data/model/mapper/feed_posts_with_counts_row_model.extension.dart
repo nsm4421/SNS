@@ -13,6 +13,8 @@ extension FeedPostsWithCountsRowExtension on FeedWithImagesAndCountsRow {
       likesCount: likesCount ?? 0,
       commentsCount: commentsCount ?? 0,
       images: images,
+      widths: widths,
+      heights: heights
     );
   }
 }
