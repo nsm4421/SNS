@@ -5,7 +5,7 @@ class SubmitButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateFeedCubit, SimpleDataState<CreateFeedData>>(
+    return BlocBuilder<CreateFeedCubit, SimpleDataState<CreatePostData>>(
       builder: (context, state) {
         return IconButton(
           onPressed: state.status == Status.initial

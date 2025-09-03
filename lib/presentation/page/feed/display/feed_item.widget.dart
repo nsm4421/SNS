@@ -28,6 +28,7 @@ class FeedItemWidget extends StatelessWidget {
             softWrap: true,
           ),
         ),
+        LikePostIconWidget(_feed),
       ],
     );
   }

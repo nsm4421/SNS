@@ -39,10 +39,10 @@ class FeedPostLikeDataSourceImpl implements FeedPostLikeDataSource {
   }
 
   @override
-  Future<void> toggleLike(String postId) async {
-    await _client.rpc<Map<String, dynamic>?>(
+  Future<int?> toggleLike(String postId) async {
+    return await _client.rpc<int?>(
       'toggle_post_like',
-      params: {'post_id': postId},
+      params: {'p_post_id': postId},
     );
   }
 }

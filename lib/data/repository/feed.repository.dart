@@ -29,8 +29,8 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
        _feedStorageDataSource = feedStorageDataSource;
 
   @override
-  Future<Either<ApiError, void>> createFeed({
-    required String feedId,
+  Future<Either<ApiError, void>> createPost({
+    required String postId,
     required String content,
     bool isPublic = true,
     required List<String> imageUrls,
@@ -40,7 +40,7 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
     try {
       await _feedDatabaseDataSource.post.createPost(
         CreateFeedPostRequestModel(
-          feedId: feedId,
+          postId: postId,
           content: content,
           isPublic: isPublic,
         ),
@@ -50,7 +50,7 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
         await _feedDatabaseDataSource.image.insertImages(
           imageUrls.indexed.map(
             (e) => InsertFeedPostImageRequestModel(
-              feedId: feedId,
+              postId: postId,
               objectPath: e.$2,
               width: widths[e.$1],
               height: heights[e.$1],
@@ -96,8 +96,8 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
   }
 
   @override
-  Future<Either<ApiError, List<String>>> saveFeedImages({
-    required String feedId,
+  Future<Either<ApiError, List<String>>> savePostImages({
+    required String postId,
     required List<File> images,
   }) async {
     assert(images.isNotEmpty);
@@ -105,10 +105,22 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
       return await _feedStorageDataSource
           .uploadFeedImages(
             currentUid: _authDataSource.currentUid!,
-            feedId: feedId,
+            postId: postId,
             images: images,
           )
           .then((res) => res.toList())
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, int?>> togglePostLike(String postId) async {
+    try {
+      return await _feedDatabaseDataSource.like
+          .toggleLike(postId)
           .then(Right.new);
     } catch (error) {
       logger.e(error);

@@ -7,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sns/domain/entity/feed/feed.entity.dart';
 import 'package:sns/presentation/provider/base/simple_display_bloc/simple_display.bloc.dart';
-import 'package:sns/presentation/provider/feed/display/display_feed.bloc.dart';
+import 'package:sns/presentation/provider/feed/display/display_post.bloc.dart';
+import 'package:sns/presentation/provider/feed/like/like_post.cubit.dart';
 import 'package:sns/presentation/router/app_router.dart';
 
 part 'display_feed.screen.dart';
@@ -18,6 +19,8 @@ part 'feed_item.widget.dart';
 
 part 'feed_image_carousel.widget.dart';
 
+part 'like_post_icon.widget.dart';
+
 @RoutePage()
 class DisplayFeedPage extends StatelessWidget {
   const DisplayFeedPage({super.key});
@@ -26,7 +29,7 @@ class DisplayFeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          GetIt.instance<DisplayFeedBloc>()..add(RefreshDisplayEvent()),
+          GetIt.instance<DisplayPostBloc>()..add(RefreshDisplayEvent()),
       child: const DisplayFeedScreen(),
     );
   }

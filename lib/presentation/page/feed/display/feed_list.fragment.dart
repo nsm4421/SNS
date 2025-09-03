@@ -5,7 +5,7 @@ class FeedListFragment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DisplayFeedBloc, SimpleDisplayState<FeedEntity>>(
+    return BlocBuilder<DisplayPostBloc, SimpleDisplayState<FeedEntity>>(
       builder: (context, state) {
         if (state.data.isEmpty) {
           return const Text('Nothing Fetched');

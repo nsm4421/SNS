@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/extension/build_context.extension.dart';
 import 'package:sns/presentation/provider/base/simple_data_cubit/simple_data.cubit.dart';
-import 'package:sns/presentation/provider/feed/create/create_feed.cubit.dart';
+import 'package:sns/presentation/provider/feed/create/create_post.cubit.dart';
 
 part 'create_feed.screen.dart';
 part 'feed_post.fragment.dart';
@@ -23,7 +23,7 @@ class CreateFeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => GetIt.instance<CreateFeedCubit>(),
-      child: BlocListener<CreateFeedCubit, SimpleDataState<CreateFeedData>>(
+      child: BlocListener<CreateFeedCubit, SimpleDataState<CreatePostData>>(
         listener: (context, state) {
           if (state.status == Status.success) {
             context

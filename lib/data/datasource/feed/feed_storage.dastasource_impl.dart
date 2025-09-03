@@ -14,7 +14,7 @@ class FeedStorageDataSourceImpl implements FeedStorageDataSource {
   @override
   Future<Iterable<String>> uploadFeedImages({
     required String currentUid,
-    required String feedId,
+    required String postId,
     required List<File> images,
   }) async {
     return await Future.wait(
@@ -22,7 +22,7 @@ class FeedStorageDataSourceImpl implements FeedStorageDataSource {
         (e) async =>
             await _supabaseStorageDataSource.uploadImageAndReturnPublicUrl(
               bucketId: _bucketId,
-              objectPath: '$currentUid/$feedId/${e.$1}.jpg',
+              objectPath: '$currentUid/$postId/${e.$1}.jpg',
               file: e.$2,
             ),
       ),

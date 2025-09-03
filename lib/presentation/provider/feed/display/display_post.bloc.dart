@@ -4,15 +4,15 @@ import 'package:shared/pagination/page.dart';
 import 'package:shared/response_wrapper/failure/failure.dart';
 import 'package:sns/domain/entity/feed/feed.entity.dart';
 import 'package:sns/domain/usecase/feed_usecases.dart';
-import 'package:sns/domain/usecase/scenario/feed/fetch_feeds.usecase.dart';
+import 'package:sns/domain/usecase/scenario/feed/fetch_posts.usecase.dart';
 import 'package:sns/presentation/provider/base/simple_display_bloc/simple_display.bloc.dart';
 
 @injectable
-class DisplayFeedBloc extends SimpleDisplayBloc<FeedEntity> {
-  late final FetchFeedsUseCase _useCase;
+class DisplayPostBloc extends SimpleDisplayBloc<FeedEntity> {
+  late final FetchPostsUseCase _useCase;
 
-  DisplayFeedBloc(FeedUseCases useCases) : super() {
-    _useCase = useCases.fetchFeeds;
+  DisplayPostBloc(FeedUseCases useCases) : super() {
+    _useCase = useCases.fetchPosts;
   }
 
   @override

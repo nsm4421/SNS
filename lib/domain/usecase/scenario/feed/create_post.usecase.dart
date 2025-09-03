@@ -9,25 +9,25 @@ import 'package:sns/core/media/image_util_mixin.dart';
 import 'package:sns/domain/repository/feed.repository.dart';
 import 'package:uuid/uuid.dart';
 
-class CreateFeedUseCase with ImageUtilMixIn {
-  final FeedRepository _feedRepository;
+class CreatePostUseCase with ImageUtilMixIn {
+  final FeedRepository _repository;
   final Logger? logger;
 
-  CreateFeedUseCase(this._feedRepository, {this.logger});
+  CreatePostUseCase(this._repository, {this.logger});
 
   Future<Either<Failure, String>> call({
     required String content,
     required List<XFile> images,
     bool isPublic = true,
   }) async {
-    final feedId = const Uuid().v4();
+    final postId = const Uuid().v4();
     List<String> imageUrls = [];
     List<(int, int)> sizes = [];
 
     // save images in storage
     if (images.isNotEmpty) {
-      final uploadImageRes = await _feedRepository.saveFeedImages(
-        feedId: feedId,
+      final uploadImageRes = await _repository.savePostImages(
+        postId: postId,
         images: images.map((e) => File(e.path)).toList(),
       );
       if (uploadImageRes.isLeft) {
@@ -40,8 +40,8 @@ class CreateFeedUseCase with ImageUtilMixIn {
     }
 
     // save feed data in database
-    final createPostRes = await _feedRepository.createFeed(
-      feedId: feedId,
+    final createPostRes = await _repository.createPost(
+      postId: postId,
       content: content,
       isPublic: isPublic,
       imageUrls: imageUrls,
@@ -53,6 +53,6 @@ class CreateFeedUseCase with ImageUtilMixIn {
       return Left(Failure('포스팅 작성 중 오류가 발생했습니다'));
     }
 
-    return Right(feedId);
+    return Right(postId);
   }
 }

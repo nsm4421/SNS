@@ -6,8 +6,8 @@ import 'package:shared/response_wrapper/api_response/api_error.dart';
 import 'package:sns/domain/entity/feed/feed.entity.dart';
 
 abstract interface class FeedRepository {
-  Future<Either<ApiError, void>> createFeed({
-    required String feedId,
+  Future<Either<ApiError, void>> createPost({
+    required String postId,
     required String content,
     bool isPublic = true,
     required List<String> imageUrls,
@@ -22,8 +22,10 @@ abstract interface class FeedRepository {
 
   Future<Either<ApiError, void>> deletePost(String postId);
 
-  Future<Either<ApiError, List<String>>> saveFeedImages({
-    required String feedId,
+  Future<Either<ApiError, List<String>>> savePostImages({
+    required String postId,
     required List<File> images,
   });
+
+  Future<Either<ApiError, int?>> togglePostLike(String postId);
 }

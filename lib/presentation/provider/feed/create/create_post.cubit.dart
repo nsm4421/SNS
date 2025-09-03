@@ -3,22 +3,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sns/core/constant/status.constant.dart';
-import 'package:sns/domain/usecase/scenario/feed/create_feed.usecase.dart';
+import 'package:sns/domain/usecase/scenario/feed/create_post.usecase.dart';
 import 'package:sns/presentation/provider/base/simple_data_cubit/simple_data.cubit.dart';
 import 'package:sns/domain/usecase/feed_usecases.dart';
 
-part 'create_feed_data.dart';
+part 'create_post_data.dart';
 
-part 'create_feed.cubit.g.dart';
+part 'create_post.cubit.g.dart';
 
 @injectable
-class CreateFeedCubit extends SimpleDataCubit<CreateFeedData> {
+class CreateFeedCubit extends SimpleDataCubit<CreatePostData> {
   static const int _maxImageCount = 3;
-  late final CreateFeedUseCase _useCase;
+  late final CreatePostUseCase _useCase;
   late final GlobalKey<FormState> _formKey;
 
-  CreateFeedCubit(FeedUseCases useCases) : super(CreateFeedData(images: [])) {
-    _useCase = useCases.createFeed;
+  CreateFeedCubit(FeedUseCases useCases) : super(CreatePostData(images: [])) {
+    _useCase = useCases.createPost;
     _formKey = GlobalKey<FormState>();
   }
 

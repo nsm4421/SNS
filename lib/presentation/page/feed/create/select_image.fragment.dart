@@ -42,7 +42,7 @@ class _SelectImageFragmentState extends State<SelectImageFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateFeedCubit, SimpleDataState<CreateFeedData>>(
+    return BlocBuilder<CreateFeedCubit, SimpleDataState<CreatePostData>>(
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
