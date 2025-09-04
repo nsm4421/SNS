@@ -9,13 +9,13 @@ abstract interface class FeedPostCommentDataSource {
     CreatePostChildCommentRequestModel request,
   );
 
-  Future<Page<FeedPostCommentsRow>> fetchParentComments({
+  Future<Page<FeedPostCommentsWithAuthorRow>> fetchParentComments({
     required String postId,
     int limit = 20,
     String? cursor,
   });
 
-  Future<Page<FeedPostCommentsRow>> fetchChildComments({
+  Future<Page<FeedPostCommentsWithAuthorRow>> fetchChildComments({
     required String postId,
     required String parentId,
     int limit = 20,

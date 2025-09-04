@@ -30,6 +30,7 @@ class FeedPostLikeDataSourceImpl implements FeedPostLikeDataSource {
         .then((res) => res == null);
   }
 
+  @Deprecated('use likes count field on feed_posts table instead')
   @override
   Future<int> getLikeCount(String postId) async {
     return _feedWithImagesWithCountsTable

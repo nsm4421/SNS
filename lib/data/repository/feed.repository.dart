@@ -7,10 +7,13 @@ import 'package:shared/response_wrapper/api_response/api_error.dart';
 import 'package:sns/core/logger/app_logger.dart';
 import 'package:sns/data/datasource/auth/auth.datasource_impl.dart';
 import 'package:sns/data/datasource/feed/feed_storage.dastasource_impl.dart';
+import 'package:sns/data/model/mapper/feed_post_comment_with_author_row_model.extension.dart';
 import 'package:sns/data/model/mapper/feed_posts_with_counts_row_model.extension.dart';
-import 'package:sns/domain/entity/feed/feed.entity.dart';
+import 'package:sns/domain/entity/feed/post.entity.dart';
+import 'package:sns/domain/entity/feed/post_comment.entity.dart';
 import 'package:sns/domain/repository/feed.repository.dart';
 import 'package:supabase_datasource/datasources/database/features/feed/feed.datasource_impl.dart';
+import 'package:supabase_datasource/datasources/model/feed/comment/create_post_comment_request.model.dart';
 import 'package:supabase_datasource/datasources/model/feed/image/insert_feed_post_image_request.model.dart';
 import 'package:supabase_datasource/datasources/model/feed/post/create_feed_post_request.model.dart';
 
@@ -80,7 +83,7 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
   }
 
   @override
-  Future<Either<ApiError, Page<FeedEntity>>> fetchPosts({
+  Future<Either<ApiError, Page<PostEntity>>> fetchPosts({
     required String cursor,
     int limit = 20,
   }) async {
@@ -121,6 +124,102 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
     try {
       return await _feedDatabaseDataSource.like
           .toggleLike(postId)
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, void>> deletePostComment(String commentId) async {
+    try {
+      return await _feedDatabaseDataSource.comment
+          .deleteCommentById(commentId)
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, void>> createParentPostComment({
+    required String postId,
+    required String content,
+  }) async {
+    try {
+      return await _feedDatabaseDataSource.comment
+          .createParentComment(
+            CreatePostParentCommentRequestModel(
+              postId: postId,
+              content: content,
+            ),
+          )
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, void>> createChildPostComment({
+    required String postId,
+    required String parentId,
+    required String content,
+  }) async {
+    try {
+      return await _feedDatabaseDataSource.comment
+          .createChildComment(
+            CreatePostChildCommentRequestModel(
+              postId: postId,
+              parentId: parentId,
+              content: content,
+            ),
+          )
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, Page<ParentPostCommentEntity>>>
+  fetchParentPostComments({
+    required String postId,
+    required String cursor,
+    int limit = 20,
+  }) async {
+    try {
+      return await _feedDatabaseDataSource.comment
+          .fetchParentComments(postId: postId, cursor: cursor, limit: limit)
+          .then((res) => res.convert((e) => e.toParentEntity()))
+          .then(Right.new);
+    } catch (error) {
+      logger.e(error);
+      return Left(ApiError.fromError(error));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, Page<ChildPostCommentEntity>>>
+  fetchChildPostComments({
+    required String postId,
+    required String parentId,
+    required String cursor,
+    int limit = 20,
+  }) async {
+    try {
+      return await _feedDatabaseDataSource.comment
+          .fetchChildComments(
+            postId: postId,
+            parentId: parentId,
+            cursor: cursor,
+            limit: limit,
+          )
+          .then((res) => res.convert((e) => e.toChildEntity()))
           .then(Right.new);
     } catch (error) {
       logger.e(error);

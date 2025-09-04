@@ -3,7 +3,7 @@ part of 'display_feed.page.dart';
 class FeedImageCarouselWidget extends StatefulWidget {
   const FeedImageCarouselWidget(this._feed, {super.key});
 
-  final FeedEntity _feed;
+  final PostEntity _feed;
 
   @override
   State<FeedImageCarouselWidget> createState() =>

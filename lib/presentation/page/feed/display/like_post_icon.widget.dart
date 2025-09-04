@@ -3,7 +3,7 @@ part of 'display_feed.page.dart';
 class LikePostIconWidget extends StatelessWidget {
   const LikePostIconWidget(this._feed, {super.key});
 
-  final FeedEntity _feed;
+  final PostEntity _feed;
 
   @override
   Widget build(BuildContext context) {

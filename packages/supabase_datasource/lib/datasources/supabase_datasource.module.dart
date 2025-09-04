@@ -49,6 +49,10 @@ abstract class SupabaeDataSourceModule {
   FeedPostImagesTable get _feedPostImagesTable => FeedPostImagesTable();
 
   @lazySingleton
+  FeedPostCommentsWithAuthorTable get _feedPostCommentsWithAuthorTable =>
+      FeedPostCommentsWithAuthorTable();
+
+  @lazySingleton
   FeedPostDataSource get _feedPostDataSource => FeedPostDataSourceImpl(
     feedPostsTable: _feedPostsTable,
     feedWithImagesWithCountsTable: _feedWithImagesWithCountsTable,
@@ -66,6 +70,7 @@ abstract class SupabaeDataSourceModule {
       FeedPostCommentDataSourceImpl(
         feedPostCommentsTable: _feedPostCommentsTable,
         feedWithImagesWithCountsTable: _feedWithImagesWithCountsTable,
+        feedCommentsWithAuthorTable: _feedPostCommentsWithAuthorTable,
       );
 
   @lazySingleton

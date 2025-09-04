@@ -5,30 +5,31 @@
 ```
 create table if not exists public.feed_post_likes (
     post_id     uuid not null references public.feed_posts(id) on delete cascade,
-    user_id     uuid not null references public.users(id) on delete cascade default auth.uid(),
+    created_by     uuid not null references public.users(id) on delete cascade default auth.uid(),
     created_at  timestamptz not null default now(),
-    primary key (post_id, user_id)  -- 한 유저가 한 번만 좋아요
+    primary key (post_id, created_by)  -- 한 유저가 한 번만 좋아요
 );
 
 create index if not exists idx_feed_post_likes_post on public.feed_post_likes(post_id);
-create index if not exists idx_feed_post_likes_user on public.feed_post_likes(user_id);
+create index if not exists idx_feed_post_likes_user on public.feed_post_likes(created_by);
 
 alter table public.feed_post_likes enable row level security;
 
-drop policy if exists "feed_post_likes_select_authenticated" on public.feed_post_likes;
-create policy "feed_post_likes_select_authenticated"
-on public.feed_post_likes for select to authenticated
-using (true);
+drop policy if exists feed_post_likes_select_own on public.feed_post_likes;
+create policy feed_post_likes_select_own
+on public.feed_post_likes
+for select to authenticated
+using (created_by = auth.uid());
 
 drop policy if exists "feed_post_likes_insert_own" on public.feed_post_likes;
 create policy "feed_post_likes_insert_own"
 on public.feed_post_likes for insert
-with check (auth.uid() = user_id);
+with check (auth.uid() = created_by);
 
 drop policy if exists "feed_post_likes_delete_own" on public.feed_post_likes;
 create policy "feed_post_likes_delete_own"
 on public.feed_post_likes for delete
-using (auth.uid() = user_id);
+using (auth.uid() = created_by);
 ```
 
 ## Trigger
@@ -80,10 +81,10 @@ begin
     end if;
     
     -- 이미 좋아요면 취소, 아니면 추가
-    if exists (select 1 from public.feed_post_likes where post_id = p_post_id and user_id = v_user) then
-        delete from public.feed_post_likes where post_id = p_post_id and user_id = v_user;
+    if exists (select 1 from public.feed_post_likes where post_id = p_post_id and created_by = v_user) then
+        delete from public.feed_post_likes where post_id = p_post_id and created_by = v_user;
     else
-        insert into public.feed_post_likes(post_id, user_id) values (p_post_id, v_user)
+        insert into public.feed_post_likes(post_id, created_by) values (p_post_id, v_user)
         on conflict do nothing;
     end if;
     

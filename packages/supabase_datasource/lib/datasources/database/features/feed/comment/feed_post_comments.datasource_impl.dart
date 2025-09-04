@@ -8,11 +8,14 @@ class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
   FeedPostCommentDataSourceImpl({
     required FeedPostCommentsTable feedPostCommentsTable,
     required FeedWithImagesAndCountsTable feedWithImagesWithCountsTable,
+    required FeedPostCommentsWithAuthorTable feedCommentsWithAuthorTable,
   }) : _feedPostCommentsTable = feedPostCommentsTable,
-       _feedWithImagesWithCountsTable = feedWithImagesWithCountsTable;
+       _feedWithImagesWithCountsTable = feedWithImagesWithCountsTable,
+       _feedPostCommentsWithAuthorTable = feedCommentsWithAuthorTable;
 
   final FeedPostCommentsTable _feedPostCommentsTable;
   final FeedWithImagesAndCountsTable _feedWithImagesWithCountsTable;
+  final FeedPostCommentsWithAuthorTable _feedPostCommentsWithAuthorTable;
 
   @override
   Future<FeedPostCommentsRow> createParentComment(
@@ -36,13 +39,13 @@ class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
   }
 
   @override
-  Future<Page<FeedPostCommentsRow>> fetchChildComments({
+  Future<Page<FeedPostCommentsWithAuthorRow>> fetchChildComments({
     required String postId,
     required String parentId,
     int limit = 20,
     String? cursor,
   }) {
-    return _feedPostCommentsTable
+    return _feedPostCommentsWithAuthorTable
         .queryRows(
           queryFn: (q) => q
               .eq('post_id', postId)
@@ -55,22 +58,21 @@ class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
             items: res,
             nextCursor: res.length < limit
                 ? null
-                : res.first.createdAt.toUtc().toString(),
+                : res.first.createdAt!.toUtc().toString(),
           );
         });
   }
 
   @override
-  Future<Page<FeedPostCommentsRow>> fetchParentComments({
+  Future<Page<FeedPostCommentsWithAuthorRow>> fetchParentComments({
     required String postId,
     int limit = 20,
     String? cursor,
   }) async {
-    return _feedPostCommentsTable
+    return _feedPostCommentsWithAuthorTable
         .queryRows(
           queryFn: (q) => q
               .eq('post_id', postId)
-              .isFilter('parent_id', null)
               .lt('created_at', cursor ?? DateTime.now().toUtc())
               .order('created_at'),
         )
@@ -79,11 +81,12 @@ class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
             items: res,
             nextCursor: res.length < limit
                 ? null
-                : res.first.createdAt.toUtc().toString(),
+                : res.first.createdAt!.toUtc().toString(),
           );
         });
   }
 
+  @Deprecated('use comments count field on feed_posts table instead')
   @override
   Future<int> getCommentCount(String postId) async {
     return _feedWithImagesWithCountsTable

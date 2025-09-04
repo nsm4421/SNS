@@ -23,16 +23,15 @@ execute function public.set_updated_at(); -- 미리 만들어둔 set_updated_at�
 create or replace view public.feed_with_images_and_counts as
 select
     p.*,
-    coalesce(c.comment_count, 0)  as comments_count,
-    u.username                    as author_username,
+    u.username,
     coalesce(i.images, '{}'::text[]) as images,   -- 이미지 배열(JSONB)
-    l.user_id is not null as liked_by_me
+    (l.created_by is not null) as liked_by_me
 from public.feed_posts p
 left join (
     -- 작성자
     select id, username
     from public.users
-) u on u.id = p.author_id
+) u on u.id = p.created_by
 left join (
     -- 댓글 개수
     select post_id, count(*)::int as comment_count
@@ -42,19 +41,13 @@ left join (
     group by post_id
 ) c on c.post_id = p.id
 left join lateral (
+    -- 이미지 경로
     select array_agg(fpi.object_path order by fpi.order_index, fpi.created_at) as images
     from public.feed_post_images fpi
     where fpi.post_id = p.id
 ) i on true
 left join public.feed_post_likes l
+  -- 좋아요 여부
   on l.post_id = p.id
- and l.user_id = auth.uid();
- 
-alter table public.feed_post_likes enable row level security;
-
-drop policy if exists feed_post_likes_select_own on public.feed_post_likes;
-create policy feed_post_likes_select_own
-on public.feed_post_likes
-for select to authenticated
-using (user_id = auth.uid());
+ and l.created_by = auth.uid();
 ```

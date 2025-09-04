@@ -2,13 +2,13 @@ import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared/pagination/page.dart';
 import 'package:shared/response_wrapper/failure/failure.dart';
-import 'package:sns/domain/entity/feed/feed.entity.dart';
+import 'package:sns/domain/entity/feed/post.entity.dart';
 import 'package:sns/domain/usecase/feed_usecases.dart';
 import 'package:sns/domain/usecase/scenario/feed/fetch_posts.usecase.dart';
 import 'package:sns/presentation/provider/base/simple_display_bloc/simple_display.bloc.dart';
 
 @injectable
-class DisplayPostBloc extends SimpleDisplayBloc<FeedEntity> {
+class DisplayPostBloc extends SimpleDisplayBloc<PostEntity> {
   late final FetchPostsUseCase _useCase;
 
   DisplayPostBloc(FeedUseCases useCases) : super() {
@@ -16,7 +16,7 @@ class DisplayPostBloc extends SimpleDisplayBloc<FeedEntity> {
   }
 
   @override
-  Future<Either<Failure, Page<FeedEntity>>> fetch({
+  Future<Either<Failure, Page<PostEntity>>> fetch({
     String? cursor,
     int limit = 20,
   }) async {

@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:shared/pagination/page.dart';
 import 'package:shared/response_wrapper/failure/failure.dart';
 import 'package:sns/core/media/image_util_mixin.dart';
-import 'package:sns/domain/entity/feed/feed.entity.dart';
+import 'package:sns/domain/entity/feed/post.entity.dart';
 import 'package:sns/domain/repository/feed.repository.dart';
 
 class FetchPostsUseCase with ImageUtilMixIn {
@@ -12,7 +12,7 @@ class FetchPostsUseCase with ImageUtilMixIn {
 
   FetchPostsUseCase(this._repository, {this.logger});
 
-  Future<Either<Failure, Page<FeedEntity>>> call({
+  Future<Either<Failure, Page<PostEntity>>> call({
     required String cursor,
     int limit = 20,
   }) async {

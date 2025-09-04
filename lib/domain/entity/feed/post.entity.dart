@@ -1,12 +1,11 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:sns/domain/entity/base/creator.entity.dart';
 
-import '../base/creator.entity.dart';
-
-part 'feed.entity.g.dart';
+part 'post.entity.g.dart';
 
 @CopyWith(copyWithNull: true)
-class FeedEntity extends BaseEntityWithCreator {
-  FeedEntity({
+class PostEntity extends BaseEntityWithCreator {
+  PostEntity({
     required super.id,
     super.createdAt,
     super.updatedAt,
@@ -15,7 +14,7 @@ class FeedEntity extends BaseEntityWithCreator {
     required this.images,
     this.commentsCount = 0,
     this.likesCount = 0,
-    this.likedByMe = false
+    this.likedByMe = false,
   });
 
   final String content;
