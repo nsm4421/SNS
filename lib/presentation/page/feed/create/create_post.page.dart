@@ -8,16 +8,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sns/core/constant/status.constant.dart';
 import 'package:sns/core/extension/build_context.extension.dart';
 import 'package:sns/presentation/provider/base/simple_data_cubit/simple_data.cubit.dart';
-import 'package:sns/presentation/provider/feed/create/create_post.cubit.dart';
+import 'package:sns/presentation/provider/feed/post/create_post.cubit.dart';
 
-part 'create_feed.screen.dart';
+part 'create_post.screen.dart';
+
 part 'feed_post.fragment.dart';
+
 part 'select_image.fragment.dart';
+
 part 'submit_button.widget.dart';
 
 @RoutePage()
-class CreateFeedPage extends StatelessWidget {
-  const CreateFeedPage({super.key});
+class CreatePostPage extends StatelessWidget {
+  const CreatePostPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class CreateFeedPage extends StatelessWidget {
             context.showErrorSnackBar(state.errorMessage);
           }
         },
-        child: const CreateFeedScreen(),
+        child: const CreatePostScreen(),
       ),
     );
   }

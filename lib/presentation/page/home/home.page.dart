@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsRouter(
-      routes: const [DisplayFeedRoute(), DisplayReelsRoute(), SettingRoute()],
+      routes: const [DisplayPostsRoute(), DisplayReelsRoute(), SettingRoute()],
       transitionBuilder: (context, child, animation) =>
           FadeTransition(opacity: animation, child: child),
       builder: (context, child) {

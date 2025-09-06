@@ -1,9 +1,9 @@
-part of 'display_feed.page.dart';
+part of 'display_posts.page.dart';
 
 class FeedImageCarouselWidget extends StatefulWidget {
-  const FeedImageCarouselWidget(this._feed, {super.key});
+  const FeedImageCarouselWidget(this._post, {super.key});
 
-  final PostEntity _feed;
+  final PostEntity _post;
 
   @override
   State<FeedImageCarouselWidget> createState() =>
@@ -25,7 +25,7 @@ class _FeedImageCarouselWidgetState extends State<FeedImageCarouselWidget> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.width,
       child: PageView.builder(
-        itemCount: widget._feed.images.length,
+        itemCount: widget._post.images.length,
         onPageChanged: _onPageChanged,
         itemBuilder: (context, index) {
           return ClipRRect(
@@ -34,7 +34,7 @@ class _FeedImageCarouselWidgetState extends State<FeedImageCarouselWidget> {
                 color: Colors.black,
                 image: DecorationImage(
                   fit: BoxFit.contain,
-                  image: CachedNetworkImageProvider(widget._feed.images[index]),
+                  image: CachedNetworkImageProvider(widget._post.images[index]),
                 ),
               ),
             ),

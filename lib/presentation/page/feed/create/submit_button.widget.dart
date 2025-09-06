@@ -1,4 +1,4 @@
-part of 'create_feed.page.dart';
+part of 'create_post.page.dart';
 
 class SubmitButtonWidget extends StatelessWidget {
   const SubmitButtonWidget({super.key});

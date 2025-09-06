@@ -1,7 +1,7 @@
-part of 'create_feed.page.dart';
+part of 'create_post.page.dart';
 
-class CreateFeedScreen extends StatelessWidget {
-  const CreateFeedScreen({super.key});
+class CreatePostScreen extends StatelessWidget {
+  const CreatePostScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -9,8 +9,9 @@ extension FeedPostCommentsRowExtension on FeedPostCommentsRow {
     List<ChildPostCommentEntity>? children,
   }) {
     return ParentPostCommentEntity(
-      id: id!,
+      id: id,
       creator: CreatorEntity(id: createdBy, username: ''),
+      postId: postId,
       content: content ?? '',
       createdAt: createdAt,
       children: children ?? [],
@@ -19,8 +20,9 @@ extension FeedPostCommentsRowExtension on FeedPostCommentsRow {
 
   ChildPostCommentEntity toChildEntity() {
     return ChildPostCommentEntity(
-      id: id!,
+      id: id,
       parentId: parentId!,
+      postId: postId,
       creator: CreatorEntity(id: createdBy, username: ''),
       content: content ?? '',
       createdAt: createdAt,

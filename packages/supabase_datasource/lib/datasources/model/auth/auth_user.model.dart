@@ -7,6 +7,7 @@ part 'auth_user.model.freezed.dart';
 @freezed
 @JsonSerializable()
 class AuthUserModel with _$AuthUserModel {
+  @JsonKey(name: 'sub')
   final String id;
   final String email;
   final String username;

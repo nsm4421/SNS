@@ -1,11 +1,15 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:sns/domain/entity/feed/post.entity.dart';
 import 'package:sns/presentation/page/auth/sign_in/sign_in.page.dart'
     show SignInPage;
 import 'package:sns/presentation/page/auth/sign_up/sign_up.page.dart'
     show SignUpPage;
-import 'package:sns/presentation/page/feed/create/create_feed.page.dart';
-import 'package:sns/presentation/page/feed/display/display_feed.page.dart';
+import 'package:sns/presentation/page/feed/create/create_post.page.dart'
+    show CreatePostPage;
+import 'package:sns/presentation/page/feed/display/display_posts.page.dart'
+    show DisplayPostsPage;
 import 'package:sns/presentation/page/home/home.page.dart' show HomePage;
 import 'package:sns/presentation/page/home/splash.page.dart' show SplashPage;
 import 'package:sns/presentation/page/reels/create/create_reels.page.dart'
@@ -40,7 +44,7 @@ class AppRouter extends RootStackRouter {
       guards: [_authRouteGuard],
       children: [
         AutoRoute(
-          page: DisplayFeedRoute.page,
+          page: DisplayPostsRoute.page,
           path: 'feed/display',
           initial: true,
         ),
@@ -48,7 +52,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: SettingRoute.page, path: 'setting'),
       ],
     ),
-    AutoRoute(page: CreateFeedRoute.page, path: '/feed/create'),
+    AutoRoute(page: CreatePostRoute.page, path: '/feed/post/create'),
     AutoRoute(page: CreateReelsRoute.page, path: '/reels/create'),
   ];
 }

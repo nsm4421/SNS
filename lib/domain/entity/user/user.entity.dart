@@ -13,6 +13,16 @@ class UserEntity extends CreatorEntity {
     super.updatedAt,
     super.profileImage,
   });
+
+  factory UserEntity.from(AuthUserEntity a) {
+    return UserEntity(
+      id: a.id,
+      username: a.username,
+      createdAt: a.createdAt,
+      updatedAt: a.updatedAt,
+      profileImage: a.profileImage,
+    );
+  }
 }
 
 @CopyWith(copyWithNull: true)

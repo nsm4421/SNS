@@ -30,9 +30,12 @@ class SupabaseAuthDataSourceImpl implements SupabaseAuthDataSource {
   Future<AuthUserModel> getCurrentAuthUser() async {
     try {
       final data = _auth.currentUser?.userMetadata;
+      print(data);
       if (data == null) {
         throw ApiException.auth("can't find current authenticated user");
       }
+
+      print(_tryParseAuthUser(data));
       return _tryParseAuthUser(data);
     } catch (e) {
       throw _toApiException(e);

@@ -144,7 +144,7 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
   }
 
   @override
-  Future<Either<ApiError, void>> createParentPostComment({
+  Future<Either<ApiError, String>> createParentPostComment({
     required String postId,
     required String content,
   }) async {
@@ -156,6 +156,7 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
               content: content,
             ),
           )
+          .then((comment) => comment.id)
           .then(Right.new);
     } catch (error) {
       logger.e(error);
@@ -164,7 +165,7 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
   }
 
   @override
-  Future<Either<ApiError, void>> createChildPostComment({
+  Future<Either<ApiError, String>> createChildPostComment({
     required String postId,
     required String parentId,
     required String content,
@@ -178,6 +179,7 @@ class FeedRepositoryImpl with AppLogger implements FeedRepository {
               content: content,
             ),
           )
+          .then((comment) => comment.id)
           .then(Right.new);
     } catch (error) {
       logger.e(error);

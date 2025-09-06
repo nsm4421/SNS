@@ -27,8 +27,11 @@ class FeedUseCases with AppLogger {
   CreatePostCommentUseCase get createComment =>
       CreatePostCommentUseCase(_feedRepository, logger: logger);
 
-  FetchPostCommentsUseCase get fetchComments =>
-      FetchPostCommentsUseCase(_feedRepository, logger: logger);
+  FetchParentPostCommentsUseCase get fetchParentComments =>
+      FetchParentPostCommentsUseCase(_feedRepository, logger: logger);
+
+  FetchChildPostCommentsUseCase get fetchChildComments =>
+      FetchChildPostCommentsUseCase(_feedRepository, logger: logger);
 
   DeletePostCommentUseCase get deleteComment =>
       DeletePostCommentUseCase(_feedRepository, logger: logger);

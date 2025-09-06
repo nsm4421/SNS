@@ -1,6 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:shared/constant/auth_status.constant.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sns/core/logger/app_logger.dart';
+import 'package:sns/domain/entity/user/user.entity.dart';
 import 'package:sns/domain/usecase/auth_usecases.dart';
 
 part 'authentication.state.dart';
@@ -8,9 +10,10 @@ part 'authentication.state.dart';
 part 'authentication.event.dart';
 
 @lazySingleton
-class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState>
+    with AppLogger {
   final AuthUseCases _authUseCase;
+  AuthUserEntity? _currentAuthUser;
 
   AuthenticationBloc(this._authUseCase)
     : super(const AuthenticationState.checking()) {
@@ -28,6 +31,11 @@ class AuthenticationBloc
   }
 
   Stream<AuthStatus> get authStatusStream => _authUseCase.authStatusStream;
+
+  Future<UserEntity> getCurrentUser() async {
+    _currentAuthUser ??= await _authUseCase.getAuthUser();
+    return UserEntity.from(_currentAuthUser!);
+  }
 
   Future<void> _onAppStarted(
     AppStartedEvent event,

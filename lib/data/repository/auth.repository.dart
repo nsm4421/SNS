@@ -18,16 +18,10 @@ class AuthRepositoryImpl with AppLogger implements AuthRepository {
   Stream<AuthStatus> get authStatusStream => _authDataSource.authStatusStream;
 
   @override
-  Future<Either<ApiError, AuthUserEntity>> getCurrentUser() async {
-    try {
-      return await _authDataSource
-          .getCurrentAuthUser()
-          .then((res) => res.toEntity())
-          .then(Right.new);
-    } catch (error) {
-      logger.e(error);
-      return Left(ApiError.fromError(error));
-    }
+  Future<AuthUserEntity> getCurrentUser() async {
+    return await _authDataSource.getCurrentAuthUser().then(
+      (res) => res.toEntity(),
+    );
   }
 
   @override

@@ -6,7 +6,7 @@ import 'package:sns/domain/entity/user/user.entity.dart';
 abstract interface class AuthRepository {
   Stream<AuthStatus> get authStatusStream;
 
-  Future<Either<ApiError, AuthUserEntity>> getCurrentUser();
+  Future<AuthUserEntity> getCurrentUser();
 
   Future<Either<ApiError, (String accessToken, String? refreshToken)>>
   signUpAndReturnTokens({

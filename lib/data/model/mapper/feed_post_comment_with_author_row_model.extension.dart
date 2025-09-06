@@ -10,6 +10,7 @@ extension FeedPostCommentsWithAuthorRowExtension on FeedPostCommentsWithAuthorRo
       id: id!,
       creator: CreatorEntity(id: createdBy!, username: username!),
       content: content ?? '',
+      postId: postId!,
       createdAt: createdAt,
       children: children ?? [],
     );
@@ -18,6 +19,7 @@ extension FeedPostCommentsWithAuthorRowExtension on FeedPostCommentsWithAuthorRo
   ChildPostCommentEntity toChildEntity() {
     return ChildPostCommentEntity(
       id: id!,
+      postId: postId!,
       parentId: parentId!,
       creator: CreatorEntity(id: createdBy!, username: username!),
       content: content ?? '',

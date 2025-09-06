@@ -30,25 +30,25 @@ abstract interface class FeedRepository {
 
   Future<Either<ApiError, int?>> togglePostLike(String postId);
 
-  Future<Either<ApiError, Page<PostCommentEntity>>> fetchParentPostComments({
+  Future<Either<ApiError, Page<ParentPostCommentEntity>>> fetchParentPostComments({
     required String postId,
     required String cursor,
     int limit = 20,
   });
 
-  Future<Either<ApiError, Page<PostCommentEntity>>> fetchChildPostComments({
+  Future<Either<ApiError, Page<ChildPostCommentEntity>>> fetchChildPostComments({
     required String postId,
     required String parentId,
     required String cursor,
     int limit = 20,
   });
 
-  Future<Either<ApiError, void>> createParentPostComment({
+  Future<Either<ApiError, String>> createParentPostComment({
     required String postId,
     required String content,
   });
 
-  Future<Either<ApiError, void>> createChildPostComment({
+  Future<Either<ApiError, String>> createChildPostComment({
     required String postId,
     required String parentId,
     required String content,

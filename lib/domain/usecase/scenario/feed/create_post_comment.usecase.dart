@@ -9,7 +9,7 @@ class CreatePostCommentUseCase {
 
   CreatePostCommentUseCase(this._repository, {this.logger});
 
-  Future<Either<Failure, void>> call({
+  Future<Either<Failure, String>> call({
     required String postId,
     String? parentId,
     required String content,

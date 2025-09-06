@@ -10,9 +10,11 @@ class PostCommentEntity extends BaseEntityWithCreator {
     super.createdAt,
     super.updatedAt,
     required super.creator,
+    required this.postId,
     this.content = '',
   });
 
+  final String postId;
   final String content;
 }
 
@@ -25,6 +27,7 @@ class ChildPostCommentEntity extends PostCommentEntity {
     super.createdAt,
     super.updatedAt,
     required super.creator,
+    required super.postId,
     super.content,
     required this.parentId,
   });
@@ -39,6 +42,7 @@ class ParentPostCommentEntity extends PostCommentEntity {
     super.createdAt,
     super.updatedAt,
     required super.creator,
+    required super.postId,
     super.content,
     required this.children,
   });
