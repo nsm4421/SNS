@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:supabase_datasource/datasources/auth/auth.datasource_impl.dart';
+import 'package:supabase_datasource/datasources/database/features/chat/dm/dm.datasource_impl.dart';
 import 'package:supabase_datasource/datasources/database/features/feed/comment/feed_post_comments.datasource_impl.dart';
 import 'package:supabase_datasource/datasources/database/features/feed/feed.datasource_impl.dart';
 import 'package:supabase_datasource/datasources/database/features/feed/image/feed_post_images.datasource_impl.dart';
@@ -83,5 +84,24 @@ abstract class SupabaeDataSourceModule {
     feedLikeDataSource: _feedLikeDataSource,
     feedCommentDataSource: _feedCommentDataSource,
     feedPostImagesDataSource: _feedPostImagesDataSource,
+  );
+
+  /// chats
+  @lazySingleton
+  DmMessagesTable get _dmMessage => DmMessagesTable();
+
+  @lazySingleton
+  DmConversationsTable get _dmConversation => DmConversationsTable();
+
+  @lazySingleton
+  DmConversationsWithUserTable get _dmConversationWithUser =>
+      DmConversationsWithUserTable();
+
+  @lazySingleton
+  SupabaseDirectMessageDataSource get dm => SupabaseDirectMessageDataSourceImpl(
+    dmMessagesTable: _dmMessage,
+    dmConversationsTable: _dmConversation,
+    dmConversationsWithUserTable: _dmConversationWithUser,
+    client: _client,
   );
 }

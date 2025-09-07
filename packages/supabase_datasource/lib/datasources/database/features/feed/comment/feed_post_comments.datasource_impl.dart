@@ -35,6 +35,7 @@ class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
   Future<void> deleteCommentById(String commentId) async {
     await _feedPostCommentsTable.delete(
       matchingRows: (q) => q.eq('id', commentId),
+      returnRows: false,
     );
   }
 
@@ -52,6 +53,7 @@ class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
               .eq('parent_id', parentId)
               .lt('created_at', cursor ?? DateTime.now().toUtc())
               .order('created_at'),
+          limit: limit,
         )
         .then((res) {
           return Page(
@@ -75,6 +77,7 @@ class FeedPostCommentDataSourceImpl implements FeedPostCommentDataSource {
               .eq('post_id', postId)
               .lt('created_at', cursor ?? DateTime.now().toUtc())
               .order('created_at'),
+          limit: limit,
         )
         .then((res) {
           return Page(

@@ -2,6 +2,7 @@ library;
 
 export 'core/dependency_injection.module.dart';
 export 'datasources/auth/auth.datasource_impl.dart';
+export 'datasources/database/features/chat/dm/dm.datasource_impl.dart';
 export 'datasources/database/features/feed/feed.datasource_impl.dart';
 export 'datasources/database/features/user/user.datasource_impl.dart';
 export 'datasources/database/generated/database.dart';

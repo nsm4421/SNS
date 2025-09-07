@@ -1,5 +1,3 @@
-
-
 import 'package:shared/response_wrapper/api_response/api_error_type.dart';
 
 class ApiException implements Exception {
@@ -12,6 +10,11 @@ class ApiException implements Exception {
   final String message;
   final String? code;
   final ApiErrorType type;
+
+  @override
+  String toString() {
+    return 'type:$type|code:$code|message:$message';
+  }
 
   factory ApiException.network([String? message, String? code]) {
     final type = ApiErrorType.network;
