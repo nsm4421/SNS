@@ -1,9 +1,11 @@
 part of '../display_posts.page.dart';
 
 class PostLikeIconWidget extends StatelessWidget {
-  const PostLikeIconWidget(this._post, {super.key});
+  const PostLikeIconWidget(this._post, {super.key, double iconSize = 18})
+    : _iconSize = iconSize;
 
   final PostEntity _post;
+  final double _iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +24,22 @@ class PostLikeIconWidget extends StatelessWidget {
                     onPressed: state.tappable
                         ? context.read<LikePostCubit>().handleToggle
                         : null,
-                    icon: state.likedByMe
-                        ? Icon(
-                            Icons.favorite,
-                            color: Theme.of(context).colorScheme.primary,
-                          )
-                        : const Icon(Icons.favorite_border),
+                    isSelected: state.likedByMe,
+                    icon: Icon(Icons.favorite_border, size: _iconSize),
+                    selectedIcon: Icon(
+                      Icons.favorite,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: _iconSize,
+                    ),
                   ),
-                  const SizedBox(width: 8),
-                  Text(state.likesCount.toString()),
+                  Text(
+                    state.likesCount.toString(),
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
                 ],
               );
             },
           ),
-
-          // 댓글 아이콘
-
         ],
       ),
     );

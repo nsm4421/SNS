@@ -1,9 +1,11 @@
 part of '../display_posts.page.dart';
 
 class PostCommentIconWidget extends StatelessWidget {
-  const PostCommentIconWidget(this._post, {super.key});
+  const PostCommentIconWidget(this._post, {super.key, double iconSize = 18})
+    : _iconSize = iconSize;
 
   final PostEntity _post;
+  final double _iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +43,8 @@ class PostCommentIconWidget extends StatelessWidget {
               );
             });
           },
-          icon: const Icon(Icons.comment_outlined),
+          icon: Icon(Icons.comment_outlined, size: _iconSize),
         ),
-        const SizedBox(width: 8),
         Text(_post.commentsCount.toString()),
       ],
     );
