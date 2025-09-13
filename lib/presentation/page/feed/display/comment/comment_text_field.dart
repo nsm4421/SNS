@@ -9,18 +9,25 @@ class CommentTextField extends StatefulWidget {
 
 class _CommentTextFieldState extends State<CommentTextField> {
   late final TextEditingController _tec;
+  late final GlobalKey<FormState> _formKey;
+  late final FocusNode _focusNode;
   String? _errorText;
 
   @override
   void initState() {
     super.initState();
     _tec = TextEditingController();
+    _formKey = GlobalKey<FormState>();
+    _focusNode = FocusNode()..addListener(_handleFocus);
   }
 
   @override
   void dispose() {
     super.dispose();
     _tec.dispose();
+    _focusNode
+      ..removeListener(_handleFocus)
+      ..dispose();
   }
 
   String? _handleValidate(String? text) {
@@ -31,7 +38,17 @@ class _CommentTextFieldState extends State<CommentTextField> {
   }
 
   _handleSubmit() async {
+    _formKey.currentState?.save();
+    final ok = _formKey.currentState?.validate();
+    if (ok == null || !ok) return;
     await context.read<CreateParentPostCommentCubit>().submit(_tec.text.trim());
+  }
+
+  _handleFocus() {
+    if (_focusNode.hasFocus) return;
+    setState(() {
+      _errorText = null;
+    });
   }
 
   @override
@@ -78,10 +95,12 @@ class _CommentTextFieldState extends State<CommentTextField> {
             builder: (context, state) {
               final tappable = state.status == Status.initial;
               return Form(
+                key: _formKey,
                 child: TextFormField(
                   validator: _handleValidate,
                   readOnly: !tappable,
                   controller: _tec,
+                  focusNode: _focusNode,
                   decoration: InputDecoration(
                     errorText: _errorText,
                     suffixIcon: IconButton(

@@ -9,44 +9,38 @@ class PostCommentScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12, top: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12, top: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            context.pop();
-                          },
-                          icon: const Icon(Icons.clear),
-                        ),
-                        // 댓글 개수
-                        BlocBuilder<
-                          CreateParentPostCommentCubit,
-                          SimpleDataState<CreateParentPostCommentData>
-                        >(
-                          builder: (context, state) {
-                            return Text(
-                              "댓글 (${state.data.commentsCount})",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            );
-                          },
-                        ),
-                      ],
+                    IconButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      icon: const Icon(Icons.clear),
                     ),
-
-                    // 댓글 목록
-                    const DisplayCommentsFragment(),
+                    // 댓글 개수
+                    BlocBuilder<
+                      CreateParentPostCommentCubit,
+                      SimpleDataState<CreateParentPostCommentData>
+                    >(
+                      builder: (context, state) {
+                        return Text(
+                          "댓글 (${state.data.commentsCount})",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        );
+                      },
+                    ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          // 댓글 목록
+          const Expanded(child: DisplayCommentsFragment()),
         ],
       ),
       bottomNavigationBar: AnimatedPadding(

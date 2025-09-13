@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sns/core/constant/status.constant.dart';
+import 'package:sns/core/extension/datetime.extension.dart';
 import 'package:sns/domain/entity/feed/post.entity.dart';
 import 'package:sns/domain/entity/feed/post_comment.entity.dart';
 import 'package:sns/presentation/component/expandable_text.widget.dart';
@@ -15,6 +16,7 @@ import 'package:sns/presentation/provider/feed/comment/display_post_comments.blo
 import 'package:sns/presentation/provider/feed/post/display_posts.bloc.dart';
 import 'package:sns/presentation/provider/feed/like/like_post.cubit.dart';
 import 'package:sns/presentation/router/app_router.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 part 'display_posts.screen.dart';
 

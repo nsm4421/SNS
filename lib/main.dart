@@ -6,14 +6,19 @@ import 'package:sns/presentation/provider/auth/authentication/authentication.blo
 import 'package:sns/presentation/router/app_router.dart';
 import 'package:sns/presentation/router/auth_listenable.dart';
 import 'package:supabase_datasource/core/dependency_injection.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'core/dependency_injection/dependency_injection.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 의존성 주입
   await initSupabaseDataSourceMicroPackage();
   await configureDependencies();
+
+  // timeago 한국어 세팅
+  timeago.setLocaleMessages('ko', timeago.KoMessages());
 
   runApp(const MainApp());
 }

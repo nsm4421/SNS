@@ -27,6 +27,7 @@ class CreateParentPostCommentCubit
   String get postId => _post.id;
 
   Future<void> submit(String content) async {
+    if (content.isEmpty) return;
     emit(state.copyWith(status: Status.loading));
     try {
       await _useCase
@@ -38,7 +39,8 @@ class CreateParentPostCommentCubit
                   state.copyWith(status: Status.error, errorMessage: l.message),
                 );
               },
-              (r) {
+              (r) async {
+                await Future.delayed(const Duration(milliseconds: 500));
                 emit(
                   state.copyWith(
                     status: Status.success,
