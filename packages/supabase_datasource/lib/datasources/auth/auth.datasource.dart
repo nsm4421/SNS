@@ -3,7 +3,7 @@ part of 'auth.datasource_impl.dart';
 abstract interface class SupabaseAuthDataSource {
   Stream<AuthStatus> get authStatusStream;
 
-  Future<AuthUserModel> getCurrentAuthUser();
+  Future<SupabaseAuthUserModel> getCurrentAuthUser();
 
   String? get currentUid;
 

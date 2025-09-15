@@ -27,15 +27,12 @@ class SupabaseAuthDataSourceImpl implements SupabaseAuthDataSource {
   String? get currentUid => _auth.currentUser?.id;
 
   @override
-  Future<AuthUserModel> getCurrentAuthUser() async {
+  Future<SupabaseAuthUserModel> getCurrentAuthUser() async {
     try {
       final data = _auth.currentUser?.userMetadata;
-      print(data);
       if (data == null) {
         throw ApiException.auth("can't find current authenticated user");
       }
-
-      print(_tryParseAuthUser(data));
       return _tryParseAuthUser(data);
     } catch (e) {
       throw _toApiException(e);
@@ -114,9 +111,9 @@ class SupabaseAuthDataSourceImpl implements SupabaseAuthDataSource {
     }
   }
 
-  AuthUserModel _tryParseAuthUser(Map<String, dynamic> json) {
+  SupabaseAuthUserModel _tryParseAuthUser(Map<String, dynamic> json) {
     try {
-      return AuthUserModel.fromJson(json);
+      return SupabaseAuthUserModel.fromJson(json);
     } catch (e) {
       throw ApiException.auth('parsing auth model fails');
     }
@@ -140,5 +137,4 @@ class SupabaseAuthDataSourceImpl implements SupabaseAuthDataSource {
       return ApiException.unknown(message);
     }
   }
-
 }

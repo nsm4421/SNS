@@ -26,7 +26,7 @@ class AuthDataSourceImpl implements AuthDataSource {
       _supabaseAuthDataSource.authStatusStream;
 
   @override
-  Future<AuthUserModel> getCurrentAuthUser() =>
+  Future<SupabaseAuthUserModel> getCurrentAuthUser() =>
       _supabaseAuthDataSource.getCurrentAuthUser();
 
   @override

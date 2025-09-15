@@ -6,7 +6,7 @@ part 'auth_user.model.freezed.dart';
 
 @freezed
 @JsonSerializable()
-class AuthUserModel with _$AuthUserModel {
+class SupabaseAuthUserModel with _$SupabaseAuthUserModel {
   @JsonKey(name: 'sub')
   final String id;
   final String email;
@@ -16,7 +16,7 @@ class AuthUserModel with _$AuthUserModel {
   @JsonKey(name: "created_at")
   final String? createdAt;
 
-  AuthUserModel({
+  SupabaseAuthUserModel({
     required this.id,
     required this.email,
     required this.username,
@@ -24,6 +24,6 @@ class AuthUserModel with _$AuthUserModel {
     this.createdAt,
   });
 
-  factory AuthUserModel.fromJson(Map<String, dynamic> json) =>
-      _$AuthUserModelFromJson(json);
+  factory SupabaseAuthUserModel.fromJson(Map<String, dynamic> json) =>
+      _$SupabaseAuthUserModelFromJson(json);
 }
