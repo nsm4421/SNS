@@ -17,6 +17,15 @@ class DmConversationDataSourceImpl implements DmConversationDataSource {
   final DmConversationsWithUserTable _dmConversationsWithUserTable;
 
   @override
+  Future<DmConversationsWithUserRow?> findConversationWithUserById(
+    String conversationId,
+  ) async {
+    return _dmConversationsWithUserTable.querySingleRow(
+      queryFn: (q) => q.eq('id', conversationId),
+    );
+  }
+
+  @override
   Future<Page<DmConversationsWithUserRow>> fetchConversations({
     String? cursor,
     int limit = 30,
@@ -53,10 +62,10 @@ class DmConversationDataSourceImpl implements DmConversationDataSource {
   }
 
   @override
-  Future<DmConversationsRow> updateLastSeenAt({
+  Future<void> updateLastSeenAt({
     required String conversationId,
     required String userId,
-    DateTime? lastSeenAt,
+    required DateTime lastSeenAt,
   }) async {
     final conversation = await _dmConversationsTable.querySingleRow(
       queryFn: (q) => q.eq('id', conversationId),
@@ -64,10 +73,21 @@ class DmConversationDataSourceImpl implements DmConversationDataSource {
     if (conversation == null) {
       throw ApiException.notFound('conversation not found');
     }
-    return _dmConversationsTable.upsertRow(
-      userId == conversation.user1Id
-          ? conversation.copyWith(user1LastSeenAt: lastSeenAt)
-          : conversation.copyWith(user2LastSeenAt: lastSeenAt),
+    await _dmConversationsTable.update(
+      matchingRows: (q) => q.eq('id', conversationId),
+      data: {
+        if (userId == conversation.user1Id) 'user1LastSeenAt': lastSeenAt,
+        if (userId == conversation.user2Id) 'user2LastSeenAt': lastSeenAt,
+      },
+      returnRows: false,
+    );
+  }
+
+  @override
+  Future<void> deleteConversationById(String conversationId) async {
+    await _dmConversationsTable.delete(
+      matchingRows: (q) => q.eq('id', conversationId),
+      returnRows: false,
     );
   }
 }

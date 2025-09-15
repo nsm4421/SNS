@@ -1,3 +1,4 @@
+import 'package:shared/export.dart';
 import 'package:supabase_datasource/datasources/database/generated/database.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -10,12 +11,9 @@ class DmReltimeDataSourceImpl implements DmRealtimeDataSource {
 
   DmReltimeDataSourceImpl(this._client);
 
-  Stream<DmConversationsRow> genConversationChannel({
-    required void Function(DmConversationsRow e) onInsert,
-    required void Function(DmConversationsRow e) onUpdate,
-    required void Function(DmConversationsRow e) onDelete,
-  }) {
-    return Stream<DmConversationsRow>.multi((controller) {
+  @override
+  Stream<StreamPayloadWrapper<DmConversationsRow>> genConversationChannel() {
+    return Stream<StreamPayloadWrapper<DmConversationsRow>>.multi((controller) {
       final tableName = DmConversationsTable().tableName;
       final channel =
           _client
@@ -24,21 +22,35 @@ class DmReltimeDataSourceImpl implements DmRealtimeDataSource {
                 event: PostgresChangeEvent.insert,
                 table: tableName,
                 callback: (payload) {
-                  onInsert(DmConversationsRow.fromJson(payload.newRecord));
+                  controller.add(
+                    StreamPayloadInserted<DmConversationsRow>(
+                      inserted: DmConversationsRow.fromJson(payload.newRecord),
+                    ),
+                  );
                 },
               )
               .onPostgresChanges(
                 event: PostgresChangeEvent.update,
                 table: tableName,
                 callback: (payload) {
-                  onUpdate(DmConversationsRow.fromJson(payload.newRecord));
+                  controller.add(
+                    StreamPayloadUpdated<DmConversationsRow>(
+                      updated: DmConversationsRow.fromJson(payload.newRecord),
+                    ),
+                  );
                 },
               )
               .onPostgresChanges(
                 event: PostgresChangeEvent.delete,
                 table: tableName,
                 callback: (payload) {
-                  onDelete(DmConversationsRow.fromJson(payload.oldRecord));
+                  controller.add(
+                    StreamPayloadDeleted<DmConversationsRow>(
+                      deleted: DmConversationsRow.fromJson(
+                        payload.oldRecord,
+                      ).id,
+                    ),
+                  );
                 },
               )
             ..subscribe();
@@ -50,12 +62,11 @@ class DmReltimeDataSourceImpl implements DmRealtimeDataSource {
     }, isBroadcast: true);
   }
 
-  Stream<DmMessagesRow> setMessageChannel({
-    required String conversationId,
-    required void Function(DmMessagesRow e) onInsert,
-    required void Function(DmMessagesRow e) onDelete,
-  }) {
-    return Stream<DmMessagesRow>.multi((controller) {
+  @override
+  Stream<StreamPayloadWrapper<DmMessagesRow>> getMessageChannel(
+    String conversationId,
+  ) {
+    return Stream<StreamPayloadWrapper<DmMessagesRow>>.multi((controller) {
       final tableName = DmMessagesTable().tableName;
       final filter = PostgresChangeFilter(
         type: PostgresChangeFilterType.eq,
@@ -70,7 +81,23 @@ class DmReltimeDataSourceImpl implements DmRealtimeDataSource {
                 table: tableName,
                 filter: filter,
                 callback: (payload) {
-                  onInsert(DmMessagesRow.fromJson(payload.newRecord));
+                  controller.add(
+                    StreamPayloadInserted<DmMessagesRow>(
+                      inserted: DmMessagesRow.fromJson(payload.newRecord),
+                    ),
+                  );
+                },
+              )
+              .onPostgresChanges(
+                event: PostgresChangeEvent.update,
+                table: tableName,
+                filter: filter,
+                callback: (payload) {
+                  controller.add(
+                    StreamPayloadUpdated<DmMessagesRow>(
+                      updated: DmMessagesRow.fromJson(payload.newRecord),
+                    ),
+                  );
                 },
               )
               .onPostgresChanges(
@@ -78,7 +105,11 @@ class DmReltimeDataSourceImpl implements DmRealtimeDataSource {
                 table: tableName,
                 filter: filter,
                 callback: (payload) {
-                  onDelete(DmMessagesRow.fromJson(payload.oldRecord));
+                  controller.add(
+                    StreamPayloadDeleted<DmMessagesRow>(
+                      deleted: DmMessagesRow.fromJson(payload.oldRecord).id,
+                    ),
+                  );
                 },
               )
             ..subscribe();

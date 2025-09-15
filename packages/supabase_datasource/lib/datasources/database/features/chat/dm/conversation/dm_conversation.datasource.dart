@@ -1,6 +1,10 @@
 part of 'dm_conversation.datasource_impl.dart';
 
 abstract interface class DmConversationDataSource {
+  Future<DmConversationsWithUserRow?> findConversationWithUserById(
+    String conversationId,
+  );
+
   Future<DmConversationsRow> getOrCreateConversation(String otherUserId);
 
   Future<Page<DmConversationsWithUserRow>> fetchConversations({
@@ -8,9 +12,11 @@ abstract interface class DmConversationDataSource {
     int limit = 20,
   });
 
-  Future<DmConversationsRow> updateLastSeenAt({
+  Future<void> updateLastSeenAt({
     required String conversationId,
     required String userId,
-    DateTime? lastSeenAt,
+    required DateTime lastSeenAt,
   });
+
+  Future<void> deleteConversationById(String conversationId);
 }
