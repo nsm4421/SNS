@@ -1,5 +1,7 @@
-# SNS
+# Alarm
 
-`flutter pub run melos run build:all`
+## android
 
-`flutter pub run build_runner build`
+- AndroidManifest.xml
+
+`<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>`

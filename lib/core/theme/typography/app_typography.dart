@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sns/core/theme/color_scheme/app_color.dart';
+import '../color_scheme/app_color.dart';
 
 part 'light_app_typography.dart';
 

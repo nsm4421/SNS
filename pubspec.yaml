@@ -1,5 +1,5 @@
-name: sns
-description: "sns project"
+name: alarm
+description: "alarm projectt"
 publish_to: 'none'
 version: 1.0.0+1
 environment:
@@ -7,12 +7,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  supabase_datasource:
-    path: packages/supabase_datasource
-  local_storage_datasource:
-    path: packages/local_storage_datasource
-  shared:
-    path: packages/shared
   get_it: ^8.0.3
   injectable: ^2.5.0
   either_dart: ^1.0.0
@@ -24,8 +18,6 @@ dependencies:
   cached_network_image: ^3.3.1
   smooth_page_indicator: ^1.2.1
   timeago: ^3.7.1
-  freezed: ^3.0.4
-  freezed_annotation: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -33,8 +25,6 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   build_runner: ^2.5.4
   injectable_generator: ^2.6.2
-  json_annotation: ^4.9.0
-  json_serializable: ^6.8.0
   copy_with_extension_gen: ^6.0.1
   bloc_test: ^10.0.0
   mocktail: ^1.0.4
