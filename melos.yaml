@@ -1,30 +1,6 @@
-# melos.yaml
-name: flutter_packages_workspace
+name: karma
 packages:
+  - ./**
   - packages/**
-
 scripts:
-  get:
-    run: melos bootstrap
-    description: 모든 패키지 pub get
-
-  build:all:
-    run: melos exec -c 4 -- "dart run build_runner build --delete-conflicting-outputs"
-    description: 모든 패키지에서 codegen 빌드
-    select-package:
-      depends-on:
-        - build_runner
-
-  watch:all:
-    run: melos exec -c 4 -- "dart run build_runner watch --delete-conflicting-outputs"
-    description: 모든 패키지에서 watch 실행
-    select-package:
-      depends-on:
-        - build_runner
-
-  clean:gen:
-    run: melos exec -- "dart run build_runner clean"
-    description: 모든 패키지의 build_runner 캐시 정리
-    select-package:
-      depends-on:
-        - build_runner
+  build: dart run build_runner build --delete-conflicting-outputs

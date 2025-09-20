@@ -1,5 +1,5 @@
-name: alarm
-description: "alarm projectt"
+name: karma
+description: "karma app"
 publish_to: 'none'
 version: 1.0.0+1
 environment:
@@ -11,13 +11,17 @@ dependencies:
   injectable: ^2.5.0
   either_dart: ^1.0.0
   flutter_bloc: ^9.1.0
-  logger: ^2.6.1
   auto_route: ^10.1.2
   image_picker: ^1.2.0
   uuid: ^4.5.1
   cached_network_image: ^3.3.1
   smooth_page_indicator: ^1.2.1
-  timeago: ^3.7.1
+  timezone: ^0.10.1
+
+  shared:
+    path: packages/shared
+  supabase_datasource:
+    path: packages/supabase_datasource
 
 dev_dependencies:
   flutter_test:

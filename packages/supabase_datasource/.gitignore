@@ -1,0 +1,9 @@
+.env
+lib/src/dependency_injection/dependency_injection.module.dart
+# See https://www.dartlang.org/guides/libraries/private-files
+
+# Files and directories created by pub
+.dart_tool/
+.packages
+build/
+pubspec.lock

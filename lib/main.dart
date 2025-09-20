@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart' show GetIt;
 import 'core/dependency_injection/dependency_injection.dart';
-import 'package:alarm/core/theme/theme_data/app_theme_data.dart'
+import 'core/theme/theme_data/app_theme_data.dart'
     show LightAppThemeData, DarkAppThemeData;
-import 'package:timeago/timeago.dart' as timeago;
 import 'presentation/router/app_router.dart' show AppRouter;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 의존성 주입
   await configureDependencies();
-
-  // timeago 한국어 세팅
-  timeago.setLocaleMessages('ko', timeago.KoMessages());
 
   runApp(const MainApp());
 }
