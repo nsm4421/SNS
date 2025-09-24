@@ -10,8 +10,13 @@ class CustomException implements Exception {
         message: message ?? 'auth error',
       );
 
-  factory CustomException.unknown([String? message]) =>
-      CustomException._(
-        message: message ?? 'unknown error',
-      );
+  factory CustomException.database({String? message, String? code}) =>
+      CustomException._(message: message ?? 'database error', code: code);
+
+  factory CustomException.unknown([String? message]) => CustomException._(
+    message: message ?? 'unknown error',
+  );
+
+  @override
+  String toString() => '[$code]: $message';
 }
