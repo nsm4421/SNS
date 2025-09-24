@@ -1,4 +1,6 @@
 .env
+lib/src/models/supabase/enums/
+lib/src/models/supabase/tables/
 lib/src/dependency_injection/dependency_injection.module.dart
 # See https://www.dartlang.org/guides/libraries/private-files
 

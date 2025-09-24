@@ -24,3 +24,12 @@ dev_dependencies:
   mocktail: ^1.0.4
   test: ^1.26.2
   very_good_analysis: ^9.0.0
+  supabase_codegen: ^2.0.0
+
+# run : dart run supabase_codegen:generate_types
+# .env파일에 SUPABASE_URL, SUPABASE_KEY(supabase service key)키값으로 환경변수를 읽음
+supabase_codegen:
+  output: lib/src/models/supabase
+  tag: v1
+  debug: true
+  skipFooter: true

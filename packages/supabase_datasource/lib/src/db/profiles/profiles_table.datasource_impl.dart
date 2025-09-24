@@ -3,18 +3,23 @@ part of 'profiles_table.datasource.dart';
 class SupabaseProfileTableDataSourceImpl
     with DbErrorHandlerMixin
     implements ProfilesTableDataSource {
-  SupabaseProfileTableDataSourceImpl(this._postgrestQueryBuilder);
+  SupabaseProfileTableDataSourceImpl(this._profilesTable);
 
-  final PostgrestQueryBuilder<void> _postgrestQueryBuilder;
+  final ProfilesTable _profilesTable;
 
   @override
-  Future<ProfileModel> findByUserId(String userId) async {
+  Future<ProfilesRow> findByUserId(String userId) async {
     try {
-      return await _postgrestQueryBuilder
-          .select()
-          .eq('user_id', userId)
-          .single()
-          .then(ProfileModel.fromJson);
+      final fetched = await _profilesTable.querySingleRow(
+        queryFn: (q) => q.eq('user_id', userId),
+      );
+      if (fetched == null) {
+        throw CustomException.database(
+          message: 'user id $userId is not founded',
+          code: 'NOT_FOUND',
+        );
+      }
+      return fetched;
     } on PostgrestException catch (e) {
       throwCustomExceptionFromPostgresException(e);
     } catch (e) {
@@ -23,16 +28,24 @@ class SupabaseProfileTableDataSourceImpl
   }
 
   @override
-  Future<ProfileModel> updateProfile(UpdateProfileRequestDto profile) async {
+  Future<ProfilesRow> updateProfile(UpdateProfileRequestDto dto) async {
     try {
-      return await _postgrestQueryBuilder
-          .upsert({
-            ...profile.toJson(),
-            'updated_at': DateTime.now().toUtc().toIso8601String(),
-          })
-          .select()
-          .single()
-          .then(ProfileModel.fromJson);
+      final updated = await _profilesTable
+          .update(
+            matchingRows: (q) => q.eq('user_id', dto.userId),
+            data: {
+              ...dto.toJson(),
+              'updated_at': DateTime.now().toUtc().toIso8601String(),
+            },
+          )
+          .then((res) => res.firstOrNull);
+      if (updated == null) {
+        throw CustomException.database(
+          message: 'user id ${dto.userId} is not founded',
+          code: 'NOT_FOUND',
+        );
+      }
+      return updated;
     } on PostgrestException catch (e) {
       throwCustomExceptionFromPostgresException(e);
     } catch (e) {
@@ -43,11 +56,8 @@ class SupabaseProfileTableDataSourceImpl
   @override
   Future<bool> getIsUsernameDuplicated(String username) async {
     try {
-      return await _postgrestQueryBuilder
-          .select('username')
-          .eq('username', username)
-          .limit(1)
-          .maybeSingle()
+      return await _profilesTable
+          .querySingleRow(queryFn: (q) => q.eq('username', username))
           .then((res) => res != null);
     } on PostgrestException catch (e) {
       throwCustomExceptionFromPostgresException(e);

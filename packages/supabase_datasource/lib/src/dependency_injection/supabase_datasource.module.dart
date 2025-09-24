@@ -3,6 +3,7 @@ import 'package:supabase/supabase.dart';
 import 'package:supabase_datasource/src/auth/auth_datasource.dart';
 import 'package:supabase_datasource/src/db/profiles/profiles_table.datasource.dart';
 import 'package:supabase_datasource/src/env/env.dart';
+import 'package:supabase_datasource/src/models/supabase/database.dart';
 
 @module
 abstract class SupabaseModule {
@@ -15,5 +16,6 @@ abstract class SupabaseModule {
   AuthDatasource get auth => SupabaseAuthDataSourceImpl(_client.auth);
 
   @lazySingleton
-  ProfilesTableDataSource get profileTable => SupabaseProfileTableDataSourceImpl(_client.rest.from('profiles'));
+  ProfilesTableDataSource get profileTable =>
+      SupabaseProfileTableDataSourceImpl(ProfilesTable());
 }
