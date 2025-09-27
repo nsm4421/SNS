@@ -76,7 +76,7 @@ class SupabaseAuthDataSourceImpl implements AuthDatasource {
           e.message.toLowerCase().contains('already registered')) {
         throw CustomException.auth(
           message: 'email already registered',
-          code: 'CONFLICT',
+          code: ErrorCode.conflict,
         );
       }
       throw CustomException.auth();
@@ -99,6 +99,7 @@ class SupabaseAuthDataSourceImpl implements AuthDatasource {
       if (res.user == null || res.session == null) {
         throw CustomException.auth(
           message: 'session refreshed but user, session is null',
+          code: ErrorCode.notFound,
         );
       }
       return SignInResponseDto(
@@ -121,7 +122,7 @@ class SupabaseAuthDataSourceImpl implements AuthDatasource {
           message: 'log in, but user, session is null',
         );
       }
-      ;
+
       return SignInResponseDto(
         user: AppUserModel.fromSupabaseUser(res.user!),
         accessToken: res.session?.accessToken,
@@ -133,17 +134,17 @@ class SupabaseAuthDataSourceImpl implements AuthDatasource {
           e.message.toLowerCase().contains('credential')) {
         throw CustomException.auth(
           message: 'email or password is wrong',
-          code: 'INVALID_CREDENTIAL',
+          code: ErrorCode.invalidCredential,
         );
       }
       if (e.statusCode == '429' ||
           e.message.toLowerCase().contains('too many')) {
         throw CustomException.auth(
           message: e.message,
-          code: 'RATE_LIMITED',
+          code: ErrorCode.ratedLimited,
         );
       }
-      throw CustomException.auth(code: 'SERVER');
+      throw CustomException.auth(code: ErrorCode.internalServer);
     } catch (e) {
       rethrow;
     }
@@ -154,7 +155,10 @@ class SupabaseAuthDataSourceImpl implements AuthDatasource {
     try {
       await _auth.signOut(scope: SignOutScope.global);
     } on AuthException catch (e) {
-      throw CustomException.auth(message: e.message, code: 'SERVER');
+      throw CustomException.auth(
+        message: e.message,
+        code: ErrorCode.internalServer,
+      );
     } catch (e) {
       rethrow;
     }

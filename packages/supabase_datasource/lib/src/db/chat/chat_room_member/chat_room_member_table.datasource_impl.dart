@@ -19,7 +19,7 @@ class SupabaseChatRoomMembersTableDataSourceImpl
   }
 
   @override
-  Future<Iterable<ChatRoomMembersRow>> findByRoomId(String roomId) async {
+  Future<List<ChatRoomMembersRow>> findByRoomId(String roomId) async {
     try {
       return await _chatRoomMembersTable.queryRows(
         queryFn: (q) => q.eq('room_id', roomId),

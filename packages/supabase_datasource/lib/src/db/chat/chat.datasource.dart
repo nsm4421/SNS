@@ -1,28 +1,39 @@
 import 'package:shared/shared.dart';
 import 'package:supabase/supabase.dart';
+import 'package:supabase_datasource/src/db/chat/chat_message/chat_messages_table.datasource.dart';
 import 'package:supabase_datasource/src/db/chat/chat_room/chat_room_table.datasource.dart';
 import 'package:supabase_datasource/src/db/chat/chat_room_member/chat_room_member_table.datasource.dart';
 import 'package:supabase_datasource/src/db/chat/dto/add_member_request.dto.dart';
 import 'package:supabase_datasource/src/db/chat/dto/create_chat_room_request.dto.dart';
+import 'package:supabase_datasource/src/db/chat/dto/send_message_request.dto.dart';
+import 'package:supabase_datasource/src/models/chat/chat_message.model.dart';
 import 'package:supabase_datasource/src/models/chat/chat_room.model.dart';
 
 part 'chat.datasource_impl.dart';
 
 abstract interface class ChatDataSource {
-  Future<ChatRoomModel> createChatRoom(CreateChatRoomRequestDto dto);
+  Future<ChatRoomModel> createRoom(CreateChatRoomRequestDto dto);
 
-  Future<Pageable<ChatRoomModel>> getMyChatRooms({
-    String? cursor,
+  Future<Pageable<ChatRoomModel>> fetchMyRooms({
+    required String cursor,
     int limit = 30,
   });
 
-  Future<ChatRoomModel> getChatRoomById(String roomId);
+  Future<ChatRoomModel> getRoomById(String roomId);
 
-  Future<ChatRoomModel> updateChatRoomMeta({
+  Future<ChatRoomModel> updateRoomMeta({
     required String roomId,
     String? name,
-    bool? isGroup,
+    bool isGroup = false,
   });
 
-  Future<void> deleteChatRoomById(String roomId);
+  Future<void> deleteRoomById(String roomId);
+
+  Future<ChatMessageModel> sendMessage(SendMessageRequestDto dto);
+
+  Future<Pageable<ChatMessageModel>> fetchMessageByRoomId({
+    required String roomId,
+    required String cursor,
+    int limit = 30,
+  });
 }

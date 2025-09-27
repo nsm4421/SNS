@@ -9,19 +9,19 @@ part 'chat_room_table.datasource_impl.dart';
 abstract interface class ChatRoomsTableDatSource {
   Future<ChatRoomsRow> create(CreateChatRoomRequestDto dto);
 
-  Future<Pageable<ChatRoomsRow>> findByOwnerId({
+  Future<Iterable<ChatRoomsRow>> fetchByOwnerId({
     required String ownerId,
-    String? cursor,
+    required String cursor, // created_at
     int limit = 30,
   });
 
   Future<ChatRoomsRow> getById(String id);
 
-  /// 방 메타 업데이트 (예: 이름 변경)
-  Future<ChatRoomsRow> updateMeta({
-    required String roomId,
+  Future<ChatRoomsRow> update({
+    required String id,
     String? name,
     bool? isGroup,
+    DateTime? lastMessageAt,
   });
 
   /// 방 삭제

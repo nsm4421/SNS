@@ -8,7 +8,7 @@ class SupabaseProfileTableDataSourceImpl
   final ProfilesTable _profilesTable;
 
   @override
-  Future<ProfilesRow> findByUserId(String userId) async {
+  Future<ProfileModel> findByUserId(String userId) async {
     try {
       final fetched = await _profilesTable.querySingleRow(
         queryFn: (q) => q.eq('user_id', userId),
@@ -16,10 +16,10 @@ class SupabaseProfileTableDataSourceImpl
       if (fetched == null) {
         throw CustomException.database(
           message: 'user id $userId is not founded',
-          code: 'NOT_FOUND',
+          code: ErrorCode.notFound,
         );
       }
-      return fetched;
+      return ProfileModel.fromRow(fetched);
     } on PostgrestException catch (e) {
       throwCustomExceptionFromPostgresException(e);
     } catch (e) {
@@ -28,7 +28,7 @@ class SupabaseProfileTableDataSourceImpl
   }
 
   @override
-  Future<ProfilesRow> updateProfile(UpdateProfileRequestDto dto) async {
+  Future<ProfileModel> updateProfile(UpdateProfileRequestDto dto) async {
     try {
       final updated = await _profilesTable
           .update(
@@ -42,10 +42,10 @@ class SupabaseProfileTableDataSourceImpl
       if (updated == null) {
         throw CustomException.database(
           message: 'user id ${dto.userId} is not founded',
-          code: 'NOT_FOUND',
+          code: ErrorCode.notFound,
         );
       }
-      return updated;
+      return ProfileModel.fromRow(updated);
     } on PostgrestException catch (e) {
       throwCustomExceptionFromPostgresException(e);
     } catch (e) {
