@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_datasource/src/auth/auth_datasource.dart';
+import 'package:supabase_datasource/src/realtime/chat/channel/chat_room.channel.dart';
 import 'package:supabase_datasource/src/db/chat/chat.datasource.dart';
 import 'package:supabase_datasource/src/db/chat/chat_message/chat_messages_table.datasource.dart';
 import 'package:supabase_datasource/src/db/chat/chat_room/chat_room_table.datasource.dart';
@@ -8,6 +9,7 @@ import 'package:supabase_datasource/src/db/chat/chat_room_member/chat_room_membe
 import 'package:supabase_datasource/src/db/profiles/profiles_table.datasource.dart';
 import 'package:supabase_datasource/src/env/env.dart';
 import 'package:supabase_datasource/src/models/supabase/database.dart';
+import 'package:supabase_datasource/src/realtime/chat/manager/chat_realtime_manager.dart';
 
 @module
 abstract class SupabaseModule {
@@ -24,7 +26,7 @@ abstract class SupabaseModule {
       SupabaseProfileTableDataSourceImpl(ProfilesTable());
 
   @lazySingleton
-  ChatDataSource get chat => SupabaseChatDataSourceImpl(
+  ChatDataSource get chatTable => SupabaseChatDataSourceImpl(
     client: _client,
     chatRoomsTableDatSource: SupabaseChatRoomsTableDataSourceImpl(
       ChatRoomsTable(),
@@ -36,4 +38,8 @@ abstract class SupabaseModule {
       ChatMessagesTable(),
     ),
   );
+
+  @lazySingleton
+  ChatRealtimeManager get chatRealtime =>
+      SupabaseChatRealtimeManagerImpl(_client);
 }

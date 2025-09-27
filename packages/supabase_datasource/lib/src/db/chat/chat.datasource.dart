@@ -12,6 +12,7 @@ import 'package:supabase_datasource/src/models/chat/chat_room.model.dart';
 part 'chat.datasource_impl.dart';
 
 abstract interface class ChatDataSource {
+  /// chat room
   Future<ChatRoomModel> createRoom(CreateChatRoomRequestDto dto);
 
   Future<Pageable<ChatRoomModel>> fetchMyRooms({
@@ -29,6 +30,7 @@ abstract interface class ChatDataSource {
 
   Future<void> deleteRoomById(String roomId);
 
+  /// chat message
   Future<ChatMessageModel> sendMessage(SendMessageRequestDto dto);
 
   Future<Pageable<ChatMessageModel>> fetchMessageByRoomId({

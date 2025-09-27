@@ -5,6 +5,8 @@ library;
 export 'src/auth/auth_datasource.dart';
 export 'src/db/chat/chat.datasource.dart';
 export 'src/db/profiles/profiles_table.datasource.dart';
+export 'src/realtime/chat/manager/chat_realtime_manager.dart';
+export 'src/realtime/chat/channel/chat_room.channel.dart';
 
 // models
 export 'src/models/auth/app_user.model.dart';
