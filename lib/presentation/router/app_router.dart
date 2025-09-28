@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:injectable/injectable.dart';
+import 'package:karma/presentation/view/auth/sign_up/sign_up.page.dart'
+    show SignUpPage;
 import 'package:karma/presentation/view/index.page.dart' show IndexPage;
 
 part 'app_router.gr.dart';
@@ -15,5 +17,6 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
     AutoRoute(page: IndexRoute.page, path: '/', initial: true),
+    AutoRoute(page: SignUpRoute.page, path: '/auth/sign-up'),
   ];
 }

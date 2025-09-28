@@ -4,13 +4,13 @@ class SupabaseChatRealtimeManagerImpl implements ChatRealtimeManager {
   SupabaseChatRealtimeManagerImpl(this._client) {
     _disposed = false;
     _channels = {};
-    _connectionCtrl = StreamController<RealtimeConnState>.broadcast(
+    _connectionCtrl = StreamController<RealtimeConnStateVo>.broadcast(
       sync: true,
     );
   }
 
   final SupabaseClient _client;
-  late final StreamController<RealtimeConnState> _connectionCtrl;
+  late final StreamController<RealtimeConnStateVo> _connectionCtrl;
   late final Map<String, SupabaseChatRoomChannelImpl> _channels;
   late bool _disposed;
 
@@ -18,11 +18,11 @@ class SupabaseChatRealtimeManagerImpl implements ChatRealtimeManager {
   bool get disposed => _disposed;
 
   @override
-  Stream<RealtimeConnState> get connectionStateStream => _connectionCtrl.stream;
+  Stream<RealtimeConnStateVo> get connectionStateStream => _connectionCtrl.stream;
 
   void _emitConn(bool ok, {String? reason}) {
     if (_disposed) return;
-    _connectionCtrl.add(RealtimeConnState(ok, reason: reason));
+    _connectionCtrl.add(RealtimeConnStateVo(ok, reason: reason));
   }
 
   @override

@@ -1,6 +1,6 @@
 part of 'auth_datasource.dart';
 
-class SupabaseAuthDataSourceImpl implements AuthDatasource {
+class SupabaseAuthDataSourceImpl implements AuthDataSource {
   final GoTrueClient _auth;
 
   SupabaseAuthDataSourceImpl(this._auth);
@@ -86,11 +86,15 @@ class SupabaseAuthDataSourceImpl implements AuthDatasource {
   }
 
   @override
-  Future<AppUserModel?> getCurrentUser() async {
+  Future<AppUserModel> getCurrentUser() async {
     final supabaseUser = _auth.currentUser;
-    return supabaseUser == null
-        ? null
-        : AppUserModel.fromSupabaseUser(supabaseUser);
+    if (supabaseUser == null) {
+      throw CustomException.auth(
+        message: 'current user is not found',
+        code: ErrorCode.notFound,
+      );
+    }
+    return AppUserModel.fromSupabaseUser(supabaseUser);
   }
 
   @override

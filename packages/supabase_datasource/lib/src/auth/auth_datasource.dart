@@ -9,7 +9,7 @@ import 'package:shared/shared.dart';
 
 part 'auth_datasource_impl.dart';
 
-abstract interface class AuthDatasource {
+abstract interface class AuthDataSource {
   Stream<AuthStatusModel> get authStatusStream;
 
   Future<SignUpResponseDto> signUp(
@@ -20,7 +20,7 @@ abstract interface class AuthDatasource {
     SignInRequestDto request,
   );
 
-  Future<AppUserModel?> getCurrentUser();
+  Future<AppUserModel> getCurrentUser();
 
   Future<void> signOut();
 

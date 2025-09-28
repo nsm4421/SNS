@@ -6,9 +6,9 @@ part 'auth_status.model.freezed.dart';
 @freezed
 sealed class AuthStatusModel with _$AuthStatusModel {
   const factory AuthStatusModel.signedIn({
-    required AppUserModel user,
     String? accessToken,
     String? refreshToken,
+    required AppUserModel user,
   }) = SignedIn;
 
   const factory AuthStatusModel.signedOut() = SignedOut;

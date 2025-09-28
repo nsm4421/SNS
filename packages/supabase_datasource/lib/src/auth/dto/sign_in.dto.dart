@@ -12,14 +12,10 @@ class SignInRequestDto with _$SignInRequestDto {
   SignInRequestDto({
     required this.email,
     required this.password,
-    this.username,
-    this.avatarUrl,
   });
 
   final String email;
   final String password;
-  final String? username;
-  final String? avatarUrl;
 
   factory SignInRequestDto.fromJson(Map<String, dynamic> json) =>
       _$SignInRequestDtoFromJson(json);

@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:supabase/supabase.dart';
-import 'package:supabase_datasource/src/models/realtime/message_change_event.dart';
-import 'package:supabase_datasource/src/models/realtime/presence_state.dart';
-import 'package:supabase_datasource/src/models/realtime/realtime_connection_state.dart';
+import 'package:supabase_datasource/vo/message_change_event.vo.dart';
+import 'package:supabase_datasource/vo/presence_state.vo.dart';
+import 'package:supabase_datasource/vo/realtime_connection_state.vo.dart';
 import 'package:supabase_datasource/src/realtime/chat/dto/typing_event.dto.dart';
 
 part 'chat_room.channel_impl.dart';
@@ -13,19 +13,19 @@ abstract interface class ChatRoomChannel {
 
   /// 메시지 변경 구독 (insert/update/delete)
   /// - 서버 RLS가 걸려 있으므로 현재 사용자 권한 범위 내에서만 이벤트가 도착
-  Stream<MessageChangeEvent> get messageChangeStream;
+  Stream<MessageChangeEventVo> get messageChangeStream;
 
   /// 타이핑 인디케이터 (선택)
   /// - 간단한 브로드캐스트(typing:true/false)를 데이터 메시지로 송신/수신
   Stream<TypingEventDto> get typingStream;
 
   /// 채널 단위 연결 상태
-  Stream<RealtimeConnState> get channelStateStream;
+  Stream<RealtimeConnStateVo> get channelStateStream;
 
   /// Presence: 현재 접속자 목록(동기화 시점 전체 스냅샷)
   /// - `presence.track()`으로 내가 들어왔음을 서버에 알리고,
   ///   `presenceState()`를 반영한 스냅샷을 스트림으로 제공
-  Stream<PresenceState> get presenceStream;
+  Stream<PresenceStateVo> get presenceStream;
 
   /// Presence에 내가 올릴 payload (예: {user_id, username, joined_at, ...})
   Future<void> trackPresence(PresencePayload payload);

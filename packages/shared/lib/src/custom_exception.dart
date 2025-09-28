@@ -1,14 +1,4 @@
-enum ErrorCode {
-  invalidCredential,
-  ratedLimited,
-  invalidParam,
-  notFound,
-  duplicated,
-  permissionDenied,
-  conflict,
-  internalServer,
-  unKnown,
-}
+import 'package:shared/src/error_code.dart';
 
 class CustomException implements Exception {
   CustomException._({
@@ -37,6 +27,15 @@ class CustomException implements Exception {
     message: message ?? 'database error',
     code: code,
     tag: 'DATABASE',
+  );
+
+  factory CustomException.localStorage({
+    String? message,
+    ErrorCode code = ErrorCode.unKnown,
+  }) => CustomException._(
+    message: message ?? 'local storage error',
+    code: code,
+    tag: 'LOCAL_STORAGE',
   );
 
   factory CustomException.unknown([String? message]) =>

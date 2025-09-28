@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:supabase/supabase.dart';
-import 'package:supabase_datasource/src/models/realtime/realtime_connection_state.dart';
+import 'package:supabase_datasource/vo/realtime_connection_state.vo.dart';
 import 'package:supabase_datasource/src/realtime/chat/channel/chat_room.channel.dart';
 
 part 'chat_realtime_manager_impl.dart';
@@ -13,7 +13,7 @@ abstract interface class ChatRealtimeManager {
   ChatRoomChannel getRoomChannel(String roomId);
 
   /// 전체 연결 상태 스트림 (인터넷/웹소켓 재연결 등)
-  Stream<RealtimeConnState> get connectionStateStream;
+  Stream<RealtimeConnStateVo> get connectionStateStream;
 
   /// 정리
   Future<void> dispose();

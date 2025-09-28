@@ -13,7 +13,7 @@ import '../mocks.dart';
 void main() {
   late MockSupabaseClient mockSupabaseClient;
   late MockGoTrueClient mockSupabaseAuth;
-  late AuthDatasource datasource;
+  late AuthDataSource datasource;
   late String email;
   late String password;
 
@@ -31,7 +31,6 @@ void main() {
   group('회원가입', () {
     test('회원가입이 정상적으로 이루어지는 경우, AppUserModel을 반환함', () async {
       final supabaseUser = User.fromJson(mockUserJson());
-      final appUser = AppUserModel.fromSupabaseUser(supabaseUser!);
       final session = Session.fromJson(mockSessionJson());
 
       when(
@@ -89,7 +88,7 @@ void main() {
           await requestCallback();
           fail('회원가입 실패해야 하는데 성공함');
         } on CustomException catch (e) {
-          expect(e.code, 'CONFLICT');
+          expect(e.code, ErrorCode.conflict);
           expect(e.message, 'email already registered');
         }
       },
@@ -142,7 +141,7 @@ void main() {
           );
           fail('인증 오류로 살패해야 함');
         } on CustomException catch (e) {
-          expect(e.code, 'INVALID_CREDENTIAL');
+          expect(e.code, ErrorCode.invalidCredential);
           expect(e.message, 'email or password is wrong');
         } catch (e) {
           fail('오류 처리가 잘못됨');

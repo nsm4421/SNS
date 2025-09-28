@@ -4,16 +4,16 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
   SupabaseChatRoomChannelImpl({
     required SupabaseClient client,
     required String roomId,
-    required void Function(RealtimeConnState state) onChannelState,
+    required void Function(RealtimeConnStateVo state) onChannelState,
   }) : _client = client,
        _onChannelState = onChannelState {
     _roomId = roomId;
-    _messageController = StreamController<MessageChangeEvent>.broadcast(
+    _messageController = StreamController<MessageChangeEventVo>.broadcast(
       sync: true,
     );
-    _presenceController = StreamController<PresenceState>.broadcast(sync: true);
+    _presenceController = StreamController<PresenceStateVo>.broadcast(sync: true);
     _typingController = StreamController<TypingEventDto>.broadcast(sync: true);
-    _stateController = StreamController<RealtimeConnState>.broadcast(
+    _stateController = StreamController<RealtimeConnStateVo>.broadcast(
       sync: true,
     );
     _subscribed = false;
@@ -22,13 +22,13 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
   }
 
   final SupabaseClient _client;
-  final void Function(RealtimeConnState state) _onChannelState;
+  final void Function(RealtimeConnStateVo state) _onChannelState;
 
   late final String _roomId;
-  late final StreamController<MessageChangeEvent> _messageController;
-  late final StreamController<PresenceState> _presenceController;
+  late final StreamController<MessageChangeEventVo> _messageController;
+  late final StreamController<PresenceStateVo> _presenceController;
   late final StreamController<TypingEventDto> _typingController;
-  late final StreamController<RealtimeConnState> _stateController;
+  late final StreamController<RealtimeConnStateVo> _stateController;
   late bool _subscribed;
   late bool _pgChangeChannelInitialized;
   late bool _presenceChannelInitialized;
@@ -39,20 +39,20 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
   String get roomId => _roomId;
 
   @override
-  Stream<MessageChangeEvent> get messageChangeStream =>
+  Stream<MessageChangeEventVo> get messageChangeStream =>
       _messageController.stream;
 
   @override
-  Stream<PresenceState> get presenceStream => _presenceController.stream;
+  Stream<PresenceStateVo> get presenceStream => _presenceController.stream;
 
   @override
   Stream<TypingEventDto> get typingStream => _typingController.stream;
 
   @override
-  Stream<RealtimeConnState> get channelStateStream => _stateController.stream;
+  Stream<RealtimeConnStateVo> get channelStateStream => _stateController.stream;
 
   void _emitState(bool ok, {String? reason}) {
-    final s = RealtimeConnState(ok, reason: reason);
+    final s = RealtimeConnStateVo(ok, reason: reason);
     _stateController.add(s);
     _onChannelState.call(s);
   }
@@ -74,7 +74,7 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
         filter: filter,
         callback: (payload) {
           _messageController.add(
-            MessageChangeEvent(
+            MessageChangeEventVo(
               type: MessageChangeType.insert,
               record: payload.newRecord,
             ),
@@ -88,7 +88,7 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
         filter: filter,
         callback: (payload) {
           _messageController.add(
-            MessageChangeEvent(
+            MessageChangeEventVo(
               type: MessageChangeType.update,
               record: payload.newRecord,
               oldRecord: payload.oldRecord,
@@ -103,7 +103,7 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
         filter: filter,
         callback: (payload) {
           _messageController.add(
-            MessageChangeEvent(
+            MessageChangeEventVo(
               type: MessageChangeType.delete,
               record: payload.oldRecord,
             ),
@@ -123,7 +123,7 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
         _$presenceChannel
             .presenceState()
             .map((e) => {e.key: e.presences.map((p) => p.payload).toList()})
-            .map(PresenceState.new)
+            .map(PresenceStateVo.new)
             .forEach(_presenceController.add);
       })
       ..onBroadcast(

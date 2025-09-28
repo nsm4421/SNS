@@ -10,6 +10,7 @@ export 'src/realtime/chat/channel/chat_room.channel.dart';
 
 // models
 export 'src/models/auth/app_user.model.dart';
+export 'src/models/auth/auth_status.model.dart';
 export 'src/models/profile/profile.model.dart';
 export 'src/models/chat/chat_room.model.dart';
 export 'src/models/chat/chat_message.model.dart';
@@ -25,3 +26,4 @@ export 'src/db/chat/dto/send_message_request.dto.dart';
 
 // dependency injection
 export 'src/dependency_injection/dependency_injection.module.dart';
+export 'src/dependency_injection/dependency_injection.dart';
