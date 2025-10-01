@@ -1,9 +1,9 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:karma/core/vo/failure.vo.dart';
 import 'package:karma/domain/entity/auth/user.entity.dart';
 import 'package:karma/domain/repository/auth.repository.dart';
 import 'package:local_storage/local_storage.dart';
+import 'package:shared/shared.dart';
 import 'package:supabase_datasource/supabase_datasource.dart';
 import 'package:karma/data/mapper/user_entity.mapper.dart';
 

@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:karma/core/vo/error_message.vo.dart';
-import 'package:karma/core/vo/failure.vo.dart';
 import 'package:karma/domain/entity/auth/user.entity.dart';
 import 'package:karma/domain/repository/auth.repository.dart';
 import 'package:shared/shared.dart';

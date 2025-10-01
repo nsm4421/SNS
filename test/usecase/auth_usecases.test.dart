@@ -5,7 +5,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared/shared.dart';
 import 'package:test/test.dart';
 
-import 'package:karma/core/vo/failure.vo.dart';
 import 'package:karma/domain/entity/auth/user.entity.dart';
 import 'package:karma/domain/repository/auth.repository.dart';
 

@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:karma/core/vo/failure.vo.dart';
 import 'package:karma/domain/entity/auth/user.entity.dart';
+import 'package:shared/shared.dart';
 
 abstract interface class AuthRepository {
   Stream<AppUserEntity?> get authStream;
