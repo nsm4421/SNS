@@ -25,6 +25,7 @@ dependencies:
     path: packages/supabase_datasource
   local_storage:
     path: packages/local_storage
+  logger: ^2.6.1
 
 dev_dependencies:
   flutter_test:

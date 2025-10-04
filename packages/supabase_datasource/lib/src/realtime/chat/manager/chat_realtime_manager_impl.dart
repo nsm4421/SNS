@@ -1,24 +1,27 @@
 part of 'chat_realtime_manager.dart';
 
 class SupabaseChatRealtimeManagerImpl implements ChatRealtimeManager {
-  SupabaseChatRealtimeManagerImpl(this._client) {
+  SupabaseChatRealtimeManagerImpl(this._client, {Logger? logger}) {
     _disposed = false;
     _channels = {};
     _connectionCtrl = StreamController<RealtimeConnStateVo>.broadcast(
       sync: true,
     );
+    _logger = logger;
   }
 
   final SupabaseClient _client;
   late final StreamController<RealtimeConnStateVo> _connectionCtrl;
   late final Map<String, SupabaseChatRoomChannelImpl> _channels;
   late bool _disposed;
+  late final Logger? _logger;
 
   @override
   bool get disposed => _disposed;
 
   @override
-  Stream<RealtimeConnStateVo> get connectionStateStream => _connectionCtrl.stream;
+  Stream<RealtimeConnStateVo> get connectionStateStream =>
+      _connectionCtrl.stream;
 
   void _emitConn(bool ok, {String? reason}) {
     if (_disposed) return;

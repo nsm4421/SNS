@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -14,7 +15,7 @@ part 'auth.event.dart';
 part 'auth.bloc.freezed.dart';
 
 @lazySingleton
-class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtilMixIn {
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCases _useCases;
   AppUserEntity? _currentUser;
 
@@ -47,13 +48,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtilMixIn {
     _SignInRequested event,
     Emitter<AuthState> emit,
   ) async {
-    logger.t('_onSignInRequested email:${event.email}');
     emit(const AuthState.loading());
     await _useCases.signIn
         .call(email: event.email, password: event.password)
         .then(
           (res) => res.match((l) {
-            logger.fail(l);
+            debugPrint('sign in fails|${l.repr}');
             emit(AuthState.failure(l));
           }, (r) => emit(AuthState.authenticated(r))),
         );
@@ -72,13 +72,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with LoggerUtilMixIn {
           avatarUrl: event.avatarUrl,
         )
         .then(
-          (res) => res.match(
-            (l)  {
-              logger.fail(l);
-              emit(AuthState.failure(l));
-            },
-            (r) => emit(AuthState.authenticated(r)),
-          ),
+          (res) => res.match((l) {
+            debugPrint('sign up fails|${l.repr}');
+            emit(AuthState.failure(l));
+          }, (r) => emit(AuthState.authenticated(r))),
         );
   }
 

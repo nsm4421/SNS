@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:logger/logger.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_datasource/vo/realtime_connection_state.vo.dart';
 import 'package:supabase_datasource/src/realtime/chat/channel/chat_room.channel.dart';

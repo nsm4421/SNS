@@ -19,6 +19,7 @@ class SignUpRequestDto with _$SignUpRequestDto {
   final String email;
   final String password;
   final String? username;
+  @JsonKey(name: 'avatar_url')
   final String? avatarUrl;
 
   factory SignUpRequestDto.fromJson(Map<String, dynamic> json) =>

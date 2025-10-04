@@ -14,6 +14,8 @@ class Failure {
     return const Failure('unknown');
   }
 
+  String get repr => '[${code}]$message';
+
   Failure copyWith(String message) {
     return Failure(message, code: this.code, tag: this.tag);
   }

@@ -2,8 +2,11 @@ part of 'auth_datasource.dart';
 
 class SupabaseAuthDataSourceImpl implements AuthDataSource {
   final GoTrueClient _auth;
+  late final Logger? _logger;
 
-  SupabaseAuthDataSourceImpl(this._auth);
+  SupabaseAuthDataSourceImpl(this._auth, {Logger? logger}) {
+    _logger = logger;
+  }
 
   Stream<AuthStatusModel> get authStatusStream =>
       _auth.onAuthStateChange.asyncMap((e) {
@@ -49,6 +52,7 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
   @override
   Future<SignUpResponseDto> signUp(SignUpRequestDto request) async {
     try {
+      _logger?.t('sign up called');
       return await _auth
           // 회원가입 요청
           .signUp(
@@ -61,6 +65,7 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
           )
           .then((res) {
             if (res.user == null) {
+              _logger?.e('User is null after signUp');
               throw const AuthException('User is null after signUp');
             }
             // 회원가입 응답값 반환
@@ -71,7 +76,8 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
               refreshToken: res.session?.refreshToken,
             );
           });
-    } on AuthException catch (e) {
+    } on AuthException catch (e, st) {
+      _logger?.e(e, stackTrace: st);
       if (e.code == '400' ||
           e.message.toLowerCase().contains('already registered')) {
         throw CustomException.auth(
@@ -132,7 +138,8 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
         accessToken: res.session?.accessToken,
         refreshToken: res.session?.refreshToken,
       );
-    } on AuthException catch (e) {
+    } on AuthException catch (e, st) {
+      _logger?.e(e, stackTrace: st);
       if (e.statusCode == '400' ||
           e.message.toLowerCase().contains('invalid') ||
           e.message.toLowerCase().contains('credential')) {
@@ -158,12 +165,14 @@ class SupabaseAuthDataSourceImpl implements AuthDataSource {
   Future<void> signOut() async {
     try {
       await _auth.signOut(scope: SignOutScope.global);
-    } on AuthException catch (e) {
+    } on AuthException catch (e, st) {
+      _logger?.e(e, stackTrace: st);
       throw CustomException.auth(
         message: e.message,
         code: ErrorCode.internalServer,
       );
-    } catch (e) {
+    } catch (e, st) {
+      _logger?.e(e, stackTrace: st);
       rethrow;
     }
   }

@@ -3,9 +3,12 @@ part of 'profiles_table.datasource.dart';
 class SupabaseProfileTableDataSourceImpl
     with DbErrorHandlerMixin
     implements ProfilesTableDataSource {
-  SupabaseProfileTableDataSourceImpl(this._profilesTable);
+  SupabaseProfileTableDataSourceImpl(this._profilesTable, {Logger? logger}) {
+    _logger = logger;
+  }
 
   final ProfilesTable _profilesTable;
+  late final Logger? _logger;
 
   @override
   Future<ProfileModel> findByUserId(String userId) async {

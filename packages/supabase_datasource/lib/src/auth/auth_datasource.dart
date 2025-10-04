@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:logger/logger.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_datasource/src/auth/dto/sign_in.dto.dart';
 import 'package:supabase_datasource/src/auth/dto/sign_up.dto.dart';

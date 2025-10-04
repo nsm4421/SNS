@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:shared/shared.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_datasource/src/db/chat/chat_message/chat_messages_table.datasource.dart';

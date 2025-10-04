@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:shared/shared.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_datasource/src/db/exception/db_error_handler_mixin.dart';

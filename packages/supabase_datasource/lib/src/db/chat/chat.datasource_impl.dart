@@ -3,6 +3,7 @@ part of 'chat.datasource.dart';
 class SupabaseChatDataSourceImpl implements ChatDataSource {
   SupabaseChatDataSourceImpl({
     required SupabaseClient client,
+    Logger? logger,
     required ChatRoomsTableDatSource chatRoomsTableDatSource,
     required ChatRoomMembersTableDataSource chatRoomMembersTableDataSource,
     required ChatMessagesTableDataSource chatMessagesTableDataSource,
@@ -10,9 +11,11 @@ class SupabaseChatDataSourceImpl implements ChatDataSource {
        _chatRoomMembersTableDataSource = chatRoomMembersTableDataSource,
        _chatMessagesTableDataSource = chatMessagesTableDataSource {
     _currentUserId = client.auth.currentUser!.id;
+    _logger = logger;
   }
 
   late final String _currentUserId;
+  late final Logger? _logger;
   final ChatRoomsTableDatSource _chatRoomsTableDatSource;
   final ChatRoomMembersTableDataSource _chatRoomMembersTableDataSource;
   final ChatMessagesTableDataSource _chatMessagesTableDataSource;
