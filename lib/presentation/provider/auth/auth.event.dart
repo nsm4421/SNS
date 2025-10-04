@@ -21,4 +21,7 @@ sealed class AuthEvent with _$AuthEvent {
 
   /// 로그아웃
   const factory AuthEvent.signOutRequested() = _SignOutRequested;
+
+  /// authStream 변화 이벤트
+  const factory AuthEvent.authChanged(AppUserEntity? user) = _AuthChanged;
 }
