@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:logger/logger.dart';
 import 'package:supabase/supabase.dart';
-import 'package:supabase_datasource/src/auth/dto/sign_in.dto.dart';
-import 'package:supabase_datasource/src/auth/dto/sign_up.dto.dart';
+import 'package:supabase_datasource/src/auth/remote/dto/sign_in.dto.dart';
+import 'package:supabase_datasource/src/auth/remote/dto/sign_up.dto.dart';
 import 'package:supabase_datasource/src/models/auth/app_user.model.dart';
 import 'package:supabase_datasource/src/models/auth/auth_status.model.dart';
 import 'package:shared/shared.dart';

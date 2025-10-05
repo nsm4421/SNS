@@ -16,3 +16,9 @@ sealed class AuthState with _$AuthState {
   /// 액션 실패 (signIn/signUp/signOut 등)
   const factory AuthState.failure(Failure error) = _Failure;
 }
+
+extension AuthStateExtension on AuthState {
+  bool get isAuth => maybeWhen(authenticated: (_) => true, orElse: () => false);
+
+  bool get isLoading => maybeWhen(loading: () => true, orElse: () => false);
+}

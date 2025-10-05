@@ -1,9 +1,9 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:shared/shared.dart';
 import 'package:supabase/supabase.dart';
-import 'package:supabase_datasource/src/auth/auth_datasource.dart';
-import 'package:supabase_datasource/src/auth/dto/sign_in.dto.dart';
-import 'package:supabase_datasource/src/auth/dto/sign_up.dto.dart';
+import 'package:supabase_datasource/src/auth/remote/auth_datasource.dart';
+import 'package:supabase_datasource/src/auth/remote/dto/sign_in.dto.dart';
+import 'package:supabase_datasource/src/auth/remote/dto/sign_up.dto.dart';
 import 'package:supabase_datasource/src/models/auth/app_user.model.dart';
 import 'package:test/test.dart';
 

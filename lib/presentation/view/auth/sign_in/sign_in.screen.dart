@@ -34,7 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   _handlePushToSignUpPage() async {
-    await context.router.push(const SignUpRoute());
+    await context.router.replace(const SignUpRoute());
   }
 
   _handleSubmit() async {
@@ -42,6 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
       _tappable = false;
     });
     try {
+      debugPrint('sign in button clicked');
       context.read<AuthBloc>().add(
         AuthEvent.signInRequested(
           email: _emailController.text.trim(),
@@ -51,6 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
     } catch (_, st) {
       debugPrintStack(stackTrace: st);
       await Future.delayed(const Duration(milliseconds: 800));
+    } finally {
       setState(() {
         _tappable = true;
       });
@@ -147,7 +149,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(width: 6),
                   Icon(
-                    Icons.arrow_forward_outlined,
+                    Icons.chevron_right,
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ],

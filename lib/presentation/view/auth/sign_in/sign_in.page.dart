@@ -16,13 +16,9 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        state.maybeWhen(
-          authenticated: (u) {
-            debugPrint('sign in success');
-            context.router.replace(const HomeRoute());
-          },
-          orElse: () {},
-        );
+        if (state.isAuth) {
+          context.router.replace(const HomeRoute());
+        }
       },
       child: const SignInScreen(),
     );

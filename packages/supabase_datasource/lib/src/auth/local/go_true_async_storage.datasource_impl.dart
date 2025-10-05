@@ -9,7 +9,7 @@ class GoTrueAsyncStorageDataSourceImpl implements GoTrueAsyncStorageDataSource {
 
   @override
   Future<String?> getItem({required String key}) async {
-    return await _flutterSecureStorage.read(key: key);
+    return _flutterSecureStorage.read(key: key);
   }
 
   @override

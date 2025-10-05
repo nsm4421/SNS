@@ -33,6 +33,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _passwordConfirmController.dispose();
   }
 
+  _handleNavigateToSignInRoute() async {
+    await context.router.replace(const SignInRoute());
+  }
+
   _handleSwitchPasswordVisibility() {
     setState(() {
       _isPasswordVisible = !_isPasswordVisible;
@@ -91,6 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } catch (_, st) {
       debugPrintStack(stackTrace: st);
       await Future.delayed(const Duration(milliseconds: 800));
+    } finally {
       setState(() {
         _tappable = true;
       });
@@ -101,7 +106,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: const Text("SIGN UP")),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: _handleNavigateToSignInRoute,
+          icon: const Icon(Icons.chevron_left),
+        ),
+        title: const Text("SIGN UP"),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

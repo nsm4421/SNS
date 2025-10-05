@@ -2,7 +2,7 @@
 library;
 
 // datasource
-export 'src/auth/auth_datasource.dart';
+export 'src/auth/remote/auth_datasource.dart';
 export 'src/db/chat/chat.datasource.dart';
 export 'src/db/profiles/profiles_table.datasource.dart';
 export 'src/realtime/chat/manager/chat_realtime_manager.dart';
@@ -16,8 +16,8 @@ export 'src/models/chat/chat_room.model.dart';
 export 'src/models/chat/chat_message.model.dart';
 
 // dto
-export 'src/auth/dto/sign_in.dto.dart';
-export 'src/auth/dto/sign_up.dto.dart';
+export 'src/auth/remote/dto/sign_in.dto.dart';
+export 'src/auth/remote/dto/sign_up.dto.dart';
 export 'src/db/profiles/dto/update_profile_request.dto.dart';
 export 'src/db/chat/dto/add_member_request.dto.dart';
 export 'src/db/chat/dto/create_chat_room_request.dto.dart';

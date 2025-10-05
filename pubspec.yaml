@@ -23,8 +23,6 @@ dependencies:
     path: packages/shared
   supabase_datasource:
     path: packages/supabase_datasource
-  local_storage:
-    path: packages/local_storage
 
 dev_dependencies:
   flutter_test:
