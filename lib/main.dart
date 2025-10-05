@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart' show GetIt;
+import 'package:karma/core/util/snack_bar_extension.dart';
 import 'package:karma/presentation/provider/auth/auth.bloc.dart';
 import 'package:supabase_datasource/supabase_datasource.dart'
     show initSupabaseDataSourceMicroPackage;
@@ -32,6 +33,7 @@ class MainApp extends StatelessWidget {
         theme: GetIt.instance<LightAppThemeData>().themeData,
         darkTheme: GetIt.instance<DarkAppThemeData>().themeData,
         routerConfig: GetIt.instance<AppRouter>().config(),
+        scaffoldMessengerKey: scaffoldMessengerKey,
       ),
     );
   }

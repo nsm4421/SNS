@@ -21,4 +21,6 @@ extension AuthStateExtension on AuthState {
   bool get isAuth => maybeWhen(authenticated: (_) => true, orElse: () => false);
 
   bool get isLoading => maybeWhen(loading: () => true, orElse: () => false);
+
+  bool get isFail => maybeWhen(failure: (_) => true, orElse: () => false);
 }
