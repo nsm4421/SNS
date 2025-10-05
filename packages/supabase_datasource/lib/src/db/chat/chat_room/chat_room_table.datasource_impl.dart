@@ -10,7 +10,11 @@ class SupabaseChatRoomsTableDataSourceImpl
   @override
   Future<ChatRoomsRow> create(CreateChatRoomRequestDto dto) async {
     try {
-      return await _chatRoomsTable.insert(dto.toJson());
+      return await _chatRoomsTable.insert({
+        // optimistic update를 위해 직접 room id를 전달하는 경우
+        if (dto.roomId != null) 'id': dto.roomId,
+        ...dto.toJson(),
+      });
     } on PostgrestException catch (e) {
       throwCustomExceptionFromPostgresException(e);
     } catch (e) {

@@ -19,7 +19,7 @@ abstract interface class AuthRepository {
 
   Future<Either<Failure, AppUserEntity>> getCurrentUser();
 
-  Future<Either<Failure, void>> signOut();
+  Future<Either<Failure, Unit>> signOut();
 
   Future<Either<Failure, AppUserEntity>> refreshSession();
 }

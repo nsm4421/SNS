@@ -14,6 +14,7 @@ part 'chat.datasource_impl.dart';
 
 abstract interface class ChatDataSource {
   /// chat room
+  // TODO : 채팅방 프로필사진이나 메타데이터 필드 추가
   Future<ChatRoomModel> createRoom(CreateChatRoomRequestDto dto);
 
   Future<Pageable<ChatRoomModel>> fetchMyRooms({
@@ -23,6 +24,7 @@ abstract interface class ChatDataSource {
 
   Future<ChatRoomModel> getRoomById(String roomId);
 
+  // TODO : 채팅방 프로필사진이나 메타데이터 수정기능 추가
   Future<ChatRoomModel> updateRoomMeta({
     required String roomId,
     String? name,

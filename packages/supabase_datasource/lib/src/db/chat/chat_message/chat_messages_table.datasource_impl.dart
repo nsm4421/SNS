@@ -10,7 +10,11 @@ class SupabaseChatMessagesTableDataSourceImpl
   @override
   Future<ChatMessagesRow> create(SendMessageRequestDto dto) async {
     try {
-      return await _chatMessagesTable.insert(dto.toJson());
+      return await _chatMessagesTable.insert({
+        ...dto.toJson(),
+        // optimistic update를 위해 직접 message id를 전달하는 경우
+        if (dto.messageId !=null) 'id':dto.messageId
+      });
     } on PostgrestException catch (e) {
       throwCustomExceptionFromPostgresException(e);
     } catch (e) {

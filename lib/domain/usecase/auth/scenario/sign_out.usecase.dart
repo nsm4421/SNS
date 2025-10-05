@@ -5,7 +5,7 @@ final class SignOutUseCase {
 
   SignOutUseCase(this._repository);
 
-  Future<Either<Failure, void>> call() async {
+  Future<Either<Failure, Unit>> call() async {
     return await _repository.signOut().then(
       (res) => res.mapLeft((l) => l.copyWith('sign out fails')),
     );

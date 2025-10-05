@@ -3,14 +3,11 @@ import 'package:injectable/injectable.dart';
 import 'package:shared/shared.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_datasource/src/auth/local/go_true_async_storage.datasource.dart';
-import 'package:supabase_datasource/src/db/chat/chat.datasource.dart';
 import 'package:supabase_datasource/src/db/chat/chat_message/chat_messages_table.datasource.dart';
 import 'package:supabase_datasource/src/db/chat/chat_room/chat_room_table.datasource.dart';
 import 'package:supabase_datasource/src/db/chat/chat_room_member/chat_room_member_table.datasource.dart';
-import 'package:supabase_datasource/src/db/profiles/profiles_table.datasource.dart';
 import 'package:supabase_datasource/src/env/env.dart';
 import 'package:supabase_datasource/src/models/supabase/database.dart';
-import 'package:supabase_datasource/src/realtime/chat/manager/chat_realtime_manager.dart';
 import 'package:supabase_datasource/supabase_datasource.dart';
 
 @module
