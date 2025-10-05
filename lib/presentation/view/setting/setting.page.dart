@@ -1,0 +1,14 @@
+import 'package:auto_route/annotations.dart';
+import 'package:flutter/material.dart';
+
+part 'setting.screen.dart';
+
+@RoutePage()
+class SettingPage extends StatelessWidget {
+  const SettingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SettingScreen();
+  }
+}
