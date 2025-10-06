@@ -9,7 +9,7 @@ class UserEntity {
   final String id;
   final String? username;
   final String? avatarUrl;
-  final String? createdAt;
+  final DateTime? createdAt;
 }
 
 @CopyWith(copyWithNull: true)

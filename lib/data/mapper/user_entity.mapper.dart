@@ -10,3 +10,14 @@ extension AppUserMapper on AppUserModel {
     createdAt: createdAt,
   );
 }
+
+extension ProfileMapper on ProfileModel {
+  UserEntity toEntity() {
+    return UserEntity(
+      id: userId,
+      username: username,
+      avatarUrl: avatarUrl,
+      createdAt: createdAt,
+    );
+  }
+}
