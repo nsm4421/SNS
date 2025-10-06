@@ -1,8 +1,12 @@
+create type public.member_role as enum ('owner', 'admin', 'member');
+create type public.invite_status as enum ('pending','accepted','declined','expired','revoked');
+create type public.message_type as enum ('text','image','file','system','custom');
+
 -- 대소문자 구분 없는 유니크 처리를 위해
 create extension if not exists citext;
-
 -- UUID 생성 등 유틸 확장
-create extension if not exists pgcrypto;
+create extension if not exists "pgcrypto";
+create extension if not exists "pg_trgm";
 
 -- updated_at 자동 갱신 트리거
 create or replace function set_updated_at()
