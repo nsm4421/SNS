@@ -1,13 +1,8 @@
 import 'dart:async';
-
-import 'package:logger/logger.dart';
-import 'package:supabase/supabase.dart';
-import 'package:supabase_datasource/vo/realtime_connection_state.vo.dart';
+import 'package:supabase_datasource/src/models/vo/realtime_connection_state.vo.dart';
 import 'package:supabase_datasource/src/realtime/chat/channel/chat_room.channel.dart';
 
-part 'chat_realtime_manager_impl.dart';
-
-abstract interface class ChatRealtimeManager {
+abstract class ChatRealtimeManager {
   bool get disposed;
 
   /// 방(roomId)용 채널을 준비/획득

@@ -4,14 +4,20 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
   SupabaseChatRoomChannelImpl({
     required SupabaseClient client,
     required String roomId,
+    required String chatRoomTableName,
+    required String chatMessageTableName,
     required void Function(RealtimeConnStateVo state) onChannelState,
   }) : _client = client,
        _onChannelState = onChannelState {
     _roomId = roomId;
+    _chatRoomTableName = chatRoomTableName;
+    _chatMessageTableName = chatMessageTableName;
     _messageController = StreamController<MessageChangeEventVo>.broadcast(
       sync: true,
     );
-    _presenceController = StreamController<PresenceStateVo>.broadcast(sync: true);
+    _presenceController = StreamController<PresenceStateVo>.broadcast(
+      sync: true,
+    );
     _typingController = StreamController<TypingEventDto>.broadcast(sync: true);
     _stateController = StreamController<RealtimeConnStateVo>.broadcast(
       sync: true,
@@ -22,9 +28,12 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
   }
 
   final SupabaseClient _client;
+
   final void Function(RealtimeConnStateVo state) _onChannelState;
 
   late final String _roomId;
+  late final String _chatRoomTableName;
+  late final String _chatMessageTableName;
   late final StreamController<MessageChangeEventVo> _messageController;
   late final StreamController<PresenceStateVo> _presenceController;
   late final StreamController<TypingEventDto> _typingController;
@@ -66,50 +75,51 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
       column: 'room_id',
       value: roomId,
     );
-    _$pgChangeChannel = _client.channel('room:$roomId:changes')
-      ..onPostgresChanges(
-        event: PostgresChangeEvent.insert,
-        schema: 'public',
-        table: 'chat_messages',
-        filter: filter,
-        callback: (payload) {
-          _messageController.add(
-            MessageChangeEventVo(
-              type: MessageChangeType.insert,
-              record: payload.newRecord,
-            ),
+    _$pgChangeChannel =
+        _client.channel('$_chatMessageTableName:$roomId:changes')
+          ..onPostgresChanges(
+            event: PostgresChangeEvent.insert,
+            schema: 'public',
+            table: _chatMessageTableName,
+            filter: filter,
+            callback: (payload) {
+              _messageController.add(
+                MessageChangeEventVo(
+                  type: MessageChangeType.insert,
+                  record: payload.newRecord,
+                ),
+              );
+            },
+          )
+          ..onPostgresChanges(
+            event: PostgresChangeEvent.update,
+            schema: 'public',
+            table: _chatRoomTableName,
+            filter: filter,
+            callback: (payload) {
+              _messageController.add(
+                MessageChangeEventVo(
+                  type: MessageChangeType.update,
+                  record: payload.newRecord,
+                  oldRecord: payload.oldRecord,
+                ),
+              );
+            },
+          )
+          ..onPostgresChanges(
+            event: PostgresChangeEvent.delete,
+            schema: 'public',
+            table: _chatRoomTableName,
+            filter: filter,
+            callback: (payload) {
+              _messageController.add(
+                MessageChangeEventVo(
+                  type: MessageChangeType.delete,
+                  record: payload.oldRecord,
+                ),
+              );
+            },
           );
-        },
-      )
-      ..onPostgresChanges(
-        event: PostgresChangeEvent.update,
-        schema: 'public',
-        table: 'chat_messages',
-        filter: filter,
-        callback: (payload) {
-          _messageController.add(
-            MessageChangeEventVo(
-              type: MessageChangeType.update,
-              record: payload.newRecord,
-              oldRecord: payload.oldRecord,
-            ),
-          );
-        },
-      )
-      ..onPostgresChanges(
-        event: PostgresChangeEvent.delete,
-        schema: 'public',
-        table: 'chat_messages',
-        filter: filter,
-        callback: (payload) {
-          _messageController.add(
-            MessageChangeEventVo(
-              type: MessageChangeType.delete,
-              record: payload.oldRecord,
-            ),
-          );
-        },
-      );
     _pgChangeChannelInitialized = true;
     return _$pgChangeChannel;
   }
@@ -118,7 +128,7 @@ class SupabaseChatRoomChannelImpl implements ChatRoomChannel {
     if (_presenceChannelInitialized) {
       return _$presenceChannel;
     }
-    _$presenceChannel = _client.channel('room:$roomId:presence')
+    _$presenceChannel = _client.channel('$_chatRoomTableName:$roomId:presence')
       ..onPresenceSync((_) {
         _$presenceChannel
             .presenceState()

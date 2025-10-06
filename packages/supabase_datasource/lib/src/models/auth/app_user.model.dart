@@ -22,7 +22,7 @@ class AppUserModel with _$AppUserModel {
   @JsonKey(name: 'avatar_url')
   final String? avatarUrl;
   @JsonKey(name: 'created_at')
-  final String? createdAt;
+  final DateTime? createdAt;
 
   factory AppUserModel.fromJson(Map<String, dynamic> json) =>
       _$AppUserModelFromJson(json);
@@ -35,7 +35,7 @@ class AppUserModel with _$AppUserModel {
       email: supabaseUser.email ?? '',
       username: supabaseUser.userMetadata?['username'] as String?,
       avatarUrl: supabaseUser.userMetadata?['avatar_url'] as String?,
-      createdAt: supabaseUser.createdAt,
+      createdAt: DateTime.tryParse(supabaseUser.createdAt),
     );
   }
 }

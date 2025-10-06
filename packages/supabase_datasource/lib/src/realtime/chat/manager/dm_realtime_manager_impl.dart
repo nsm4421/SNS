@@ -1,7 +1,7 @@
-part of 'chat_realtime_manager.dart';
+part of 'dm_realtime_manager.dart';
 
-class SupabaseChatRealtimeManagerImpl implements ChatRealtimeManager {
-  SupabaseChatRealtimeManagerImpl(this._client, {Logger? logger}) {
+class SupabaseDmRealtimeManagerImpl implements DmRealtimeManager {
+  SupabaseDmRealtimeManagerImpl(this._client, {Logger? logger}) {
     _disposed = false;
     _channels = {};
     _connectionCtrl = StreamController<RealtimeConnStateVo>.broadcast(
@@ -35,6 +35,8 @@ class SupabaseChatRealtimeManagerImpl implements ChatRealtimeManager {
       () => SupabaseChatRoomChannelImpl(
         roomId: roomId,
         client: _client,
+        chatRoomTableName: 'dm_rooms',
+        chatMessageTableName: 'dm_messages',
         onChannelState: (s) => _emitConn(s.isConnected, reason: s.reason),
       ),
     );

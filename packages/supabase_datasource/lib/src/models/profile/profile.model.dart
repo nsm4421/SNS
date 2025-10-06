@@ -4,7 +4,7 @@ class ProfileModel extends ProfilesRow {
   ProfileModel({
     required super.userId,
     required super.username,
-    required super.createdAt,
+    super.createdAt,
     super.displayName,
     super.avatarUrl,
     super.bio,

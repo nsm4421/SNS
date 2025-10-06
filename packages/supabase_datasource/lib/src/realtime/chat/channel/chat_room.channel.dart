@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:supabase/supabase.dart';
-import 'package:supabase_datasource/vo/message_change_event.vo.dart';
-import 'package:supabase_datasource/vo/presence_state.vo.dart';
-import 'package:supabase_datasource/vo/realtime_connection_state.vo.dart';
+import 'package:supabase_datasource/src/models/vo/message_change_event.vo.dart';
+import 'package:supabase_datasource/src/models/vo/presence_state.vo.dart';
+import 'package:supabase_datasource/src/models/vo/realtime_connection_state.vo.dart';
 import 'package:supabase_datasource/src/realtime/chat/dto/typing_event.dto.dart';
 
 part 'chat_room.channel_impl.dart';

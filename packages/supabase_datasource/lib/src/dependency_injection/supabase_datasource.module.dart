@@ -3,9 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:shared/shared.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_datasource/src/auth/local/go_true_async_storage.datasource.dart';
-import 'package:supabase_datasource/src/db/chat/chat_message/chat_messages_table.datasource.dart';
-import 'package:supabase_datasource/src/db/chat/chat_room/chat_room_table.datasource.dart';
-import 'package:supabase_datasource/src/db/chat/chat_room_member/chat_room_member_table.datasource.dart';
+import 'package:supabase_datasource/src/db/chat/dm/message/dm_message.datasource.dart';
+import 'package:supabase_datasource/src/db/chat/dm/room/dm_room.datasource.dart';
+import 'package:supabase_datasource/src/db/chat/dm/room_read_state/dm_read_state.datasource.dart';
 import 'package:supabase_datasource/src/env/env.dart';
 import 'package:supabase_datasource/src/models/supabase/database.dart';
 import 'package:supabase_datasource/supabase_datasource.dart';
@@ -34,21 +34,23 @@ abstract class SupabaseDataSourceModule extends LoggerUtil {
       SupabaseProfileTableDataSourceImpl(ProfilesTable(), logger: logger);
 
   @lazySingleton
-  ChatDataSource get chatTable => SupabaseChatDataSourceImpl(
-    client: _client,
+  DmDataSource get dm => SupabaseDmDataSourceImpl(
     logger: logger,
-    chatRoomsTableDatSource: SupabaseChatRoomsTableDataSourceImpl(
-      ChatRoomsTable(),
+    currentUserId: _client.auth.currentUser!.id,
+    dmRoomDataSource: SupabaseDmRoomDataSourceImpl(
+      dmRoomsTable: DmRoomsTable(),
+      vMyDmRoomsTable: VMyDmRoomsTable(),
     ),
-    chatRoomMembersTableDataSource: SupabaseChatRoomMembersTableDataSourceImpl(
-      ChatRoomMembersTable(),
+    dmMessageDataSource: SupabaseDmMessageDataSourceImpl(
+      dmMessagesTable: DmMessagesTable(),
+      vMyDmMessagesTable: VMyDmMessagesTable(),
     ),
-    chatMessagesTableDataSource: SupabaseChatMessagesTableDataSourceImpl(
-      ChatMessagesTable(),
+    dmRoomReadStateDataSource: SupabaseDmRoomReadStateDataSourceImpl(
+      DmRoomReadStateTable(),
     ),
   );
 
   @lazySingleton
-  ChatRealtimeManager get chatRealtime =>
-      SupabaseChatRealtimeManagerImpl(_client, logger: logger);
+  DmRealtimeManager get dmRealtime =>
+      SupabaseDmRealtimeManagerImpl(_client, logger: logger);
 }
