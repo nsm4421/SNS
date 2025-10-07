@@ -1,7 +1,12 @@
-# Alarm
+# Chatting App
 
-## android
+## UI
 
-- AndroidManifest.xml
-
-`<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>`
+1. 유저목록 페이지
+   - 현재 로그인한 유저 목록을 보여줌
+   - 메세지를 보낼 수 있음
+2. DM 목록 페이지
+3. 알림 목록 페이지
+4. 세팅 페이지
+   - 프로필 수정
+   - 회원탈퇴
