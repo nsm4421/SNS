@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:karma/data/datasource/realtime/chat/channel/chat_room.channel.dart';
 import 'package:karma/domain/entity/chat/dm_message.entity.dart';
 import 'package:karma/domain/entity/chat/dm_room.entity.dart';
-import 'package:shared/shared.dart';
-import 'package:supabase_datasource/supabase_datasource.dart';
+import 'package:karma/core/core.export.dart';
 
 abstract interface class DmRepository {
   // TODO : domain layer에서 supabase_datasource를 import하는게 상당히 거슬림. 나중에 시간되면 refactoring해보기

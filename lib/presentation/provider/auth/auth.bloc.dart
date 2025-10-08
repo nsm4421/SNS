@@ -4,10 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:karma/core/util/app_logger.dart';
-import 'package:karma/domain/entity/auth/user.entity.dart';
+import 'package:karma/core/core.export.dart';
+import 'package:karma/domain/entity/entity.export.dart';
 import 'package:karma/domain/usecase/auth/auth.usecases.dart';
-import 'package:shared/shared.dart';
 
 part 'auth.state.dart';
 
@@ -16,7 +15,7 @@ part 'auth.event.dart';
 part 'auth.bloc.freezed.dart';
 
 @lazySingleton
-class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixIn {
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCases _useCases;
   AppUserEntity? _currentUser;
   late final StreamSubscription<AppUserEntity?> _streamSubscription;
@@ -56,7 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixIn {
         .call(email: event.email, password: event.password)
         .then(
           (res) => res.match((l) {
-            logF(l);
+            appLogger.logF(l);
             emit(AuthState.failure(l));
           }, (r) => emit(AuthState.authenticated(r))),
         );
@@ -76,7 +75,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AppLoggerMixIn {
         )
         .then(
           (res) => res.match((l) {
-            logF(l);
+            appLogger.logF(l);
             emit(AuthState.failure(l));
           }, (r) => emit(AuthState.authenticated(r))),
         );

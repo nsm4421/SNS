@@ -1,14 +1,14 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:karma/domain/entity/auth/user.entity.dart';
-import 'package:karma/domain/repository/auth.repository.dart';
-import 'package:shared/shared.dart';
-import 'package:supabase_datasource/supabase_datasource.dart';
-import 'package:karma/data/mapper/user_entity.mapper.dart';
+import 'package:karma/core/core.export.dart';
+import 'package:karma/data/datasource/datasource.export.dart';
+import 'package:karma/data/model/model.export.dart';
+import 'package:karma/domain/entity/entity.export.dart';
+import 'package:karma/domain/repository/repository.export.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthDataSource _authDataSource;
+  final RemoteAuthDataSource _authDataSource;
 
   AuthRepositoryImpl(this._authDataSource);
 
@@ -34,12 +34,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       return await _authDataSource
           .signUp(
-            SignUpRequestDto(
-              email: email,
-              password: password,
-              username: username,
-              avatarUrl: avatarUrl,
-            ),
+            email: email,
+            password: password,
+            username: username,
+            avatarUrl: avatarUrl,
           )
           .then((res) => res.user.toEntity())
           .then(Right.new);
@@ -79,7 +77,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       return await _authDataSource
-          .signIn(SignInRequestDto(email: email, password: password))
+          .signIn(email: email, password: password)
           .then((res) => res.user.toEntity())
           .then(Right.new);
     } catch (e) {

@@ -1,9 +1,9 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:karma/domain/entity/chat/dm_room.entity.dart';
+import 'package:karma/core/core.export.dart';
+import 'package:karma/domain/entity/entity.export.dart';
 import 'package:karma/domain/usecase/chat/dm/dm.usecases.dart';
 import 'package:karma/presentation/provider/display/display.bloc.dart';
-import 'package:shared/shared.dart';
 
 @lazySingleton
 class DisplayDmRoomsBloc extends DisplayBloc<DmRoomEntity> {

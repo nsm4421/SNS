@@ -1,3 +1,5 @@
+**/generated/**
+.env
 **.gr.dart
 **.export.dart
 layers/data/.env.codegen
