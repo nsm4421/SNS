@@ -2,7 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:karma/core/core.export.dart';
 import 'package:karma/domain/entity/entity.export.dart';
-import 'package:karma/domain/usecase/chat/dm/dm.usecases.dart';
+import 'package:karma/domain/usecase/usecase.export.dart';
 import 'package:karma/presentation/provider/display/display.bloc.dart';
 
 @injectable

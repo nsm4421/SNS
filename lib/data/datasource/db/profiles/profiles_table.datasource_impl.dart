@@ -11,7 +11,7 @@ class SupabaseProfileTableDataSourceImpl
   late final Logger? _logger;
 
   @override
-  Future<ProfileModel> findByUserId(String userId) async {
+  Future<ProfileModel> getByUserId(String userId) async {
     try {
       final fetched = await _profilesTable.querySingleRow(
         queryFn: (q) => q.eq('user_id', userId),

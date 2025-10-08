@@ -8,6 +8,8 @@ import 'package:supabase/supabase.dart';
 part 'remote_auth_datasource_impl.dart';
 
 abstract interface class RemoteAuthDataSource {
+  String? get currentUserId;
+
   Stream<AuthStatusModel> get authStatusStream;
 
   Future<AuthResponseDto> signUp({

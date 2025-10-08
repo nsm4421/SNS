@@ -8,7 +8,7 @@ import '../generated/database.dart';
 part 'profiles_table.datasource_impl.dart';
 
 abstract interface class ProfilesTableDataSource {
-  Future<ProfileModel> findByUserId(String userId);
+  Future<ProfileModel> getByUserId(String userId);
 
   Future<ProfileModel> updateProfile(UpdateProfileRequestDto dto);
 

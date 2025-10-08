@@ -7,6 +7,9 @@ class SupabaseAuthDataSourceImpl implements RemoteAuthDataSource {
   const SupabaseAuthDataSourceImpl(this._auth, {Logger? logger})
     : _logger = logger;
 
+  @override
+  String? get currentUserId => _auth.currentUser?.id;
+
   Stream<AuthStatusModel> get authStatusStream =>
       _auth.onAuthStateChange.asyncMap((e) {
         switch (e.event) {

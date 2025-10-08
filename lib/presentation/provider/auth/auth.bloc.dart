@@ -6,7 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:karma/core/core.export.dart';
 import 'package:karma/domain/entity/entity.export.dart';
-import 'package:karma/domain/usecase/auth/auth.usecases.dart';
+import 'package:karma/domain/usecase/usecase.export.dart';
 
 part 'auth.state.dart';
 
