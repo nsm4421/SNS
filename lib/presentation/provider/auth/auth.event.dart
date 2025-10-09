@@ -15,7 +15,7 @@ sealed class AuthEvent with _$AuthEvent {
   const factory AuthEvent.signUpRequested({
     required String email,
     required String password,
-    String? username,
+    required String username,
     String? avatarUrl,
   }) = _SignUpRequested;
 

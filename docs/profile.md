@@ -1,17 +1,16 @@
 create table public.profiles (
-user_id        uuid primary key
-references auth.users(id) on delete cascade,
-username       citext unique,                   -- @중복 방지(대소문자 무시)
-display_name   text,
-avatar_url     text,
-bio            text,
-status_message text,                            -- 상태메시지(선택)
-last_seen_at   timestamptz,                     -- 마지막 접속(옵션)
-created_at     timestamptz not null default now(),
-updated_at     timestamptz not null default now(),
--- 사용자명 패턴(영문/숫자/밑줄, 3~20자 예시)
-constraint username_format_chk
-check (username is null or username ~ '^[a-zA-Z0-9_]{3,20}$')
+    user_id        uuid primary key
+    references auth.users(id) on delete cascade,
+    username       text unique,
+    avatar_url     text,
+    bio            text,
+    status_message text,                            -- 상태메시지(선택)
+    last_seen_at   timestamptz,                     -- 마지막 접속(옵션)
+    created_at     timestamptz not null default now(),
+    updated_at     timestamptz not null default now(),
+    -- 사용자명 패턴(영문/숫자/밑줄, 3~20자 예시)
+    constraint username_format_chk
+    check (username is null or username ~ '^[a-zA-Z0-9_]{3,20}$')
 );
 
 create trigger profiles_set_updated_at
@@ -49,9 +48,16 @@ security definer
 set search_path = public
 as $$
 begin
-insert into public.profiles (user_id, display_name)
-values (new.id, coalesce(new.raw_user_meta_data->>'name', ''));
-return new;
+    insert into public.profiles (
+        user_id
+        , username
+        , avatar_url
+    ) values (
+        new.id
+        , coalesce(new.raw_user_meta_data->>'username', '')
+        , coalesce(new.raw_user_meta_data->>'avatar_url', '')
+    );
+    return null;
 end;
 $$;
 

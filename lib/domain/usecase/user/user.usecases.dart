@@ -10,6 +10,8 @@ part 'scenario/update_profile.usecase.dart';
 
 part 'scenario/online_presence.usecase.dart';
 
+part 'scenario/get_is_username_duplicated.usecase.dart';
+
 @lazySingleton
 class UserUseCases {
   final UserRepository _repository;
@@ -20,6 +22,9 @@ class UserUseCases {
       _repository.getOnlineUserIdsStream(topic);
 
   GetUserByIdUseCase get getById => GetUserByIdUseCase(_repository);
+
+  GetIsUsernameDuplicatedUseCase get getIsUsernameDuplicated =>
+      GetIsUsernameDuplicatedUseCase(_repository);
 
   UpdateProfileUseCase get updateProfile => UpdateProfileUseCase(_repository);
 

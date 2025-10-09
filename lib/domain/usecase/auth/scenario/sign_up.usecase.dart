@@ -1,9 +1,10 @@
 part of '../auth.usecases.dart';
 
 final class SignUpUseCase {
-  final AuthRepository _repository;
+  final AuthRepository _authRepository;
+  final UserRepository _userRepository;
 
-  SignUpUseCase(this._repository);
+  SignUpUseCase(this._authRepository, this._userRepository);
 
   Future<Either<Failure, AppUserEntity>> call({
     required String email,
@@ -11,7 +12,7 @@ final class SignUpUseCase {
     String? username,
     String? avatarUrl,
   }) async {
-    return await _repository
+    return await _authRepository
         .signUp(
           email: email,
           password: password,
@@ -25,6 +26,16 @@ final class SignUpUseCase {
             }
             return l.copyWith('sign up fail');
           }),
-        );
+        )
+        .whenComplete(() async {
+          await _userRepository
+              .updateLastSeenAt(DateTime.now())
+              .then(
+                (res) => res.mapLeft((l) {
+                  debugPrint('update last seen at failed');
+                }),
+              );
+        });
+    ;
   }
 }

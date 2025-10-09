@@ -5,6 +5,8 @@ import 'package:karma/domain/entity/entity.export.dart';
 abstract interface class UserRepository {
   Stream<Set<String>> getOnlineUserIdsStream(String topic);
 
+  Future<Either<Failure, bool>> getIsUsernameDuplicated(String username);
+
   Future<Either<Failure, UserEntity>> getById(String userId);
 
   Future<Either<Failure, UserEntity>> updateProfile({
@@ -25,4 +27,6 @@ abstract interface class UserRepository {
   Future<Either<Failure, Unit>> leavePresence(String topic);
 
   Future<Either<Failure, Unit>> disposePresence();
+
+  Future<Either<Failure, void>> updateLastSeenAt(DateTime lastSeenAt);
 }

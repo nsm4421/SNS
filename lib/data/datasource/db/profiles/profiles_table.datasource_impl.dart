@@ -68,4 +68,15 @@ class SupabaseProfileTableDataSourceImpl
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateLastSeenAt({
+    required String userId,
+    required DateTime lastSeenAt,
+  }) async {
+    await _profilesTable.update(
+      matchingRows: (q) => q.eq('user_id', userId),
+      data: {'last_seen_at': lastSeenAt.toUtc().toIso8601String()},
+    );
+  }
 }

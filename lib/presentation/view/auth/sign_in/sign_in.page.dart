@@ -19,7 +19,7 @@ class SignInPage extends StatelessWidget {
       listener: (context, state) {
         state.maybeWhen(
           authenticated: (_) {
-            context.router.replace(const EntryRoute());
+            context.router.replaceAll([const EntryRoute()]);
           },
           failure: (fail) {
             debugPrint(fail.repr);

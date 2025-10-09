@@ -12,5 +12,10 @@ abstract interface class ProfilesTableDataSource {
 
   Future<ProfileModel> updateProfile(UpdateProfileRequestDto dto);
 
+  Future<void> updateLastSeenAt({
+    required String userId,
+    required DateTime lastSeenAt,
+  });
+
   Future<bool> getIsUsernameDuplicated(String username);
 }

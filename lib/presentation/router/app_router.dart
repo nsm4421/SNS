@@ -1,10 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:injectable/injectable.dart';
 import 'package:karma/presentation/router/auth_guard.dart';
-import 'package:karma/presentation/view/auth/sign_in/sign_in.page.dart'
-    show SignInPage;
-import 'package:karma/presentation/view/auth/sign_up/sign_up.page.dart'
-    show SignUpPage;
+import 'package:karma/presentation/view/auth/sign_in/sign_in.page.dart';
+import 'package:karma/presentation/view/auth/sign_up/sign_up.page.dart';
 import 'package:karma/presentation/view/entry/chat/chat_tab.page.dart';
 import 'package:karma/presentation/view/entry/entry.page.dart';
 import 'package:karma/presentation/view/entry/feed/feed_tab.page.dart';
@@ -12,6 +10,7 @@ import 'package:karma/presentation/view/entry/group/group_tab.page.dart';
 import 'package:karma/presentation/view/entry/home/home_tab.page.dart';
 import 'package:karma/presentation/view/entry/notification/notification_tab.page.dart';
 import 'package:karma/presentation/view/entry/setting/setting_tab.page.dart';
+import 'package:karma/presentation/view/splah/splash.page.dart';
 
 part 'app_router.gr.dart';
 
@@ -27,14 +26,19 @@ class AppRouter extends RootStackRouter {
   RouteType get defaultRouteType => const RouteType.material();
 
   @override
-  List<AutoRoute> get routes => [..._authRoutes, _homeRoute];
+  List<AutoRoute> get routes => [_splashRoute, ..._authRoutes, _entryRoute];
+
+  AutoRoute get _splashRoute => AutoRoute(
+    page: SplashRoute.page,
+    path: '/splash',
+    guards: [_unAuthPageGuard],
+    initial: true,
+  );
 
   List<AutoRoute> get _authRoutes => [
     AutoRoute(
       page: SignInRoute.page, // 로그인
       path: '/auth/sign-in',
-      guards: [_unAuthPageGuard],
-      initial: true,
     ),
     AutoRoute(
       page: SignUpRoute.page, // 회원가입
@@ -43,9 +47,9 @@ class AppRouter extends RootStackRouter {
     ),
   ];
 
-  AutoRoute get _homeRoute => AutoRoute(
+  AutoRoute get _entryRoute => AutoRoute(
     page: EntryRoute.page,
-    path: '/home',
+    path: '/entry',
     guards: [_authPageGuard],
     children: [
       AutoRoute(page: HomeTabRoute.page, path: 'home', initial: true),

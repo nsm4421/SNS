@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:karma/core/core.export.dart';
-import 'package:karma/core/exception/failure.dart';
 import 'package:karma/data/datasource/datasource.export.dart';
 import 'package:karma/data/model/model.export.dart';
 import 'package:karma/domain/entity/entity.export.dart';
@@ -24,6 +23,17 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Stream<Set<String>> getOnlineUserIdsStream(String topic) =>
       _userPresenceDataSource.onlineUserIdsStream(topic);
+
+  @override
+  Future<Either<Failure, bool>> getIsUsernameDuplicated(String username) async {
+    try {
+      return await _profilesTableDataSource
+          .getIsUsernameDuplicated(username)
+          .then(Right.new);
+    } catch (e) {
+      return Left(Failure.fromObj(e));
+    }
+  }
 
   @override
   Future<Either<Failure, UserEntity>> getById(String userId) async {
@@ -106,6 +116,21 @@ class UserRepositoryImpl implements UserRepository {
       return _userPresenceDataSource.clearResources().then(
         (_) => const Right(unit),
       );
+    } catch (e) {
+      return Left(Failure.fromObj(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateLastSeenAt(DateTime lastSeenAt) async {
+    try {
+      final currentUserId = _remoteAuthDataSource.currentUserId;
+      if (currentUserId == null) {
+        throw CustomException.auth(message: 'not logged in');
+      }
+      return _profilesTableDataSource
+          .updateLastSeenAt(userId: currentUserId, lastSeenAt: lastSeenAt)
+          .then((_) => const Right(unit));
     } catch (e) {
       return Left(Failure.fromObj(e));
     }

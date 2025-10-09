@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:karma/core/core.export.dart';
@@ -16,21 +17,22 @@ part 'scenario/get_current_user.usecase.dart';
 
 @lazySingleton
 class AuthUseCases {
-  final AuthRepository _repository;
+  final AuthRepository _authRepository;
+  final UserRepository _userRepository;
 
-  AuthUseCases(this._repository);
+  AuthUseCases(this._authRepository, this._userRepository);
 
-  Stream<AppUserEntity?> get authStream => _repository.authStream;
+  Stream<AppUserEntity?> get authStream => _authRepository.authStream;
 
-  SignUpUseCase get signUp => SignUpUseCase(_repository);
+  SignUpUseCase get signUp => SignUpUseCase(_authRepository, _userRepository);
 
-  SignInUseCase get signIn => SignInUseCase(_repository);
+  SignInUseCase get signIn => SignInUseCase(_authRepository, _userRepository);
 
-  SignOutUseCase get signOut => SignOutUseCase(_repository);
+  SignOutUseCase get signOut => SignOutUseCase(_authRepository);
 
   RestoreSessionUseCase get restoreSession =>
-      RestoreSessionUseCase(_repository);
+      RestoreSessionUseCase(_authRepository);
 
   GetCurrentUserUseCase get getCurrentUser =>
-      GetCurrentUserUseCase(_repository);
+      GetCurrentUserUseCase(_authRepository);
 }

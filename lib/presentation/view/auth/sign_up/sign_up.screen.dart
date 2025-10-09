@@ -11,9 +11,11 @@ class _SignUpScreenState extends State<_SignUpScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _passwordConfirmController;
+  late final TextEditingController _usernameController;
   late final GlobalKey<FormState> _formKey;
   bool _isPasswordVisible = false;
   bool _isPasswordConfirmVisible = false;
+
   bool _tappable = true;
 
   @override
@@ -22,6 +24,7 @@ class _SignUpScreenState extends State<_SignUpScreen> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _passwordConfirmController = TextEditingController();
+    _usernameController = TextEditingController();
     _formKey = GlobalKey<FormState>();
   }
 
@@ -31,6 +34,7 @@ class _SignUpScreenState extends State<_SignUpScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _passwordConfirmController.dispose();
+    _usernameController.dispose();
   }
 
   _handleNavigateToSignInRoute() async {
@@ -79,23 +83,26 @@ class _SignUpScreenState extends State<_SignUpScreen> {
   }
 
   _handleSubmit() async {
-    setState(() {
-      _tappable = false;
-    });
     try {
+      setState(() {
+        _tappable = false;
+      });
       _formKey.currentState?.save();
       final ok = _formKey.currentState?.validate();
-      if (ok == null || !ok) return;
+      if (ok == null || !ok) {
+        return;
+      }
       context.read<AuthBloc>().add(
         AuthEvent.signUpRequested(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
+          username: _usernameController.text.trim(),
         ),
       );
     } catch (_, st) {
       debugPrintStack(stackTrace: st);
-      await Future.delayed(const Duration(milliseconds: 800));
     } finally {
+      await Future.delayed(const Duration(milliseconds: 800));
       setState(() {
         _tappable = true;
       });
@@ -190,11 +197,20 @@ class _SignUpScreenState extends State<_SignUpScreen> {
                       ),
                     ),
                   ),
+
+                  // 유저명 텍스트 필드
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    child: _UsernameTextFieldWidget(_usernameController),
+                  ),
                 ],
               ),
             ),
 
-            // 로그인 버튼
+            // 회원가입 버튼
             GestureDetector(
               onTap: _tappable ? _handleSubmit : null,
               child: Container(

@@ -59,16 +59,14 @@ class SupabaseAuthDataSourceImpl implements RemoteAuthDataSource {
     String? avatarUrl,
   }) async {
     try {
+      final data = {
+        'email': email,
+        if (username != null) 'username': username,
+        if (avatarUrl != null) 'avatar_url': avatarUrl,
+      };
       return await _auth
           // 회원가입 요청
-          .signUp(
-            email: email,
-            password: password,
-            data: {
-              if (username != null) 'username': username,
-              if (avatarUrl != null) 'avatar_url': avatarUrl,
-            },
-          )
+          .signUp(email: email, password: password, data: data)
           .then((res) {
             if (res.user == null) {
               throw const AuthException('User is null after signUp');
