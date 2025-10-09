@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
+import 'package:karma/data/datasource/auth/local/local_token.datasource.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_codegen/supabase_codegen.dart';
 
@@ -17,20 +18,26 @@ import 'realtime/presence/user_presence.datasource.dart';
 
 @module
 abstract class DataSourceModule {
-  final SupabaseClient _client = setClient(
+  final FlutterSecureStorage _flutterSecureStorage =
+      const FlutterSecureStorage();
+  late final SupabaseClient _client = setClient(
     SupabaseClient(
       Env.supabaseApiUrl,
       Env.supabaseAnonKey,
-      authOptions: const AuthClientOptions(
+      authOptions: AuthClientOptions(
         authFlowType: AuthFlowType.pkce,
         pkceAsyncStorage: GoTrueAsyncStorageDataSourceImpl(
-          FlutterSecureStorage(),
+          _flutterSecureStorage,
         ),
         // redirectTo: 'io.your.app://callback', // OAuth 쓸 때만
         // autoRefreshToken: true, persistSession: true, // 필요 시
       ),
     ),
   );
+
+  @lazySingleton
+  LocalTokenDataSource get localToken =>
+      LocalTokenDataSourceImpl(_flutterSecureStorage, logger: appLogger);
 
   @lazySingleton
   RemoteAuthDataSource get auth =>

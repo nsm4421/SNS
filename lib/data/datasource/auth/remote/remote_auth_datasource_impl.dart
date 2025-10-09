@@ -107,20 +107,23 @@ class SupabaseAuthDataSourceImpl implements RemoteAuthDataSource {
   }
 
   @override
-  Future<AuthResponseDto> refreshSession() async {
-    return _auth.refreshSession().then((res) {
-      if (res.user == null || res.session == null) {
-        throw CustomException.auth(
-          message: 'session refreshed but user, session is null',
-          code: ErrorCode.notFound,
-        );
-      }
-      return AuthResponseDto(
-        user: AppUserModel.fromSupabaseUser(res.user!),
-        accessToken: res.session?.accessToken,
-        refreshToken: res.session?.refreshToken,
-      );
-    });
+  Future<AuthResponseDto> restoreSession([String? refreshToken]) async {
+    return (refreshToken == null
+            ? _auth.refreshSession()
+            : _auth.setSession(refreshToken))
+        .then((res) {
+          if (res.user == null || res.session == null) {
+            throw CustomException.auth(
+              message: 'session refreshed but user, session is null',
+              code: ErrorCode.notFound,
+            );
+          }
+          return AuthResponseDto(
+            user: AppUserModel.fromSupabaseUser(res.user!),
+            accessToken: res.session?.accessToken,
+            refreshToken: res.session?.refreshToken,
+          );
+        });
   }
 
   @override

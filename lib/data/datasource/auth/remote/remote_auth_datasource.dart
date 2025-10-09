@@ -28,5 +28,5 @@ abstract interface class RemoteAuthDataSource {
 
   Future<void> signOut();
 
-  Future<AuthResponseDto> refreshSession();
+  Future<AuthResponseDto> restoreSession([String? refreshToken]);
 }

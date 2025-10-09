@@ -6,7 +6,7 @@ final class RestoreSessionUseCase {
   RestoreSessionUseCase(this._repository);
 
   Future<Either<Failure, AppUserEntity>> call() async {
-    return await _repository.refreshSession().then(
+    return await _repository.restoreSession().then(
       (res) => res.mapLeft((l) => l.copyWith('restore session fails')),
     );
   }
