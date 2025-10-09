@@ -1,13 +1,13 @@
 part of 'sign_in.page.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class _SignInScreen extends StatefulWidget {
+  const _SignInScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<_SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignInScreenState extends State<_SignInScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   bool _isPasswordVisible = false;

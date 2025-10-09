@@ -5,14 +5,13 @@ import 'package:karma/presentation/view/auth/sign_in/sign_in.page.dart'
     show SignInPage;
 import 'package:karma/presentation/view/auth/sign_up/sign_up.page.dart'
     show SignUpPage;
-import 'package:karma/presentation/view/home/display_dm_rooms/display_chats.page.dart' show DisplayDmRoomsPage;
-import 'package:karma/presentation/view/home/home.page.dart' show HomePage;
-import 'package:karma/presentation/view/home/display_profiles/display_profiles.page.dart'
-    show DisplayProfilesPage;
-import 'package:karma/presentation/view/home/display_notifications/display_notifications.page.dart'
-    show DisplayNotificationsPage;
-import 'package:karma/presentation/view/home/setting/setting.page.dart'
-    show SettingPage;
+import 'package:karma/presentation/view/entry/chat/chat_tab.page.dart';
+import 'package:karma/presentation/view/entry/entry.page.dart';
+import 'package:karma/presentation/view/entry/feed/feed_tab.page.dart';
+import 'package:karma/presentation/view/entry/group/group_tab.page.dart';
+import 'package:karma/presentation/view/entry/home/home_tab.page.dart';
+import 'package:karma/presentation/view/entry/notification/notification_tab.page.dart';
+import 'package:karma/presentation/view/entry/setting/setting_tab.page.dart';
 
 part 'app_router.gr.dart';
 
@@ -45,21 +44,16 @@ class AppRouter extends RootStackRouter {
   ];
 
   AutoRoute get _homeRoute => AutoRoute(
-    page: HomeRoute.page,
+    page: EntryRoute.page,
     path: '/home',
     guards: [_authPageGuard],
     children: [
-      AutoRoute(
-        page: DisplayProfilesRoute.page,
-        path: 'display-profiles',
-        initial: true,
-      ),
-      AutoRoute(page: DisplayDmRoomsRoute.page, path: 'display-dm_rooms'),
-      AutoRoute(
-        page: DisplayNotificationsRoute.page,
-        path: 'display-notifications',
-      ),
-      AutoRoute(page: SettingRoute.page, path: 'setting'),
+      AutoRoute(page: HomeTabRoute.page, path: 'home', initial: true),
+      AutoRoute(page: FeedTabRoute.page, path: 'feed'),
+      AutoRoute(page: GroupTabRoute.page, path: 'group'),
+      AutoRoute(page: ChatTabRoute.page, path: 'chat'),
+      AutoRoute(page: NotificationTabRoute.page, path: 'notification'),
+      AutoRoute(page: SettingTabRoute.page, path: 'setting'),
     ],
   );
 }

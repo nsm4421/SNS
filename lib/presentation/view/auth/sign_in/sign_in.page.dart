@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karma/core/extension/build_context.extension.dart';
 import 'package:karma/presentation/provider/auth/auth.bloc.dart';
 import 'package:karma/presentation/router/app_router.dart'
-    show SignUpRoute, HomeRoute;
+    show SignUpRoute, EntryRoute;
 
 part 'sign_in.screen.dart';
 
@@ -19,7 +19,7 @@ class SignInPage extends StatelessWidget {
       listener: (context, state) {
         state.maybeWhen(
           authenticated: (_) {
-            context.router.replace(const HomeRoute());
+            context.router.replace(const EntryRoute());
           },
           failure: (fail) {
             debugPrint(fail.repr);
@@ -28,7 +28,7 @@ class SignInPage extends StatelessWidget {
           orElse: () {},
         );
       },
-      child: const SignInScreen(),
+      child: const _SignInScreen(),
     );
   }
 }

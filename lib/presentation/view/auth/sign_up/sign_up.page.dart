@@ -24,7 +24,7 @@ class SignUpPage extends StatelessWidget {
           orElse: () {},
         );
       },
-      child: const SignUpScreen(),
+      child: const _SignUpScreen(),
     );
   }
 }

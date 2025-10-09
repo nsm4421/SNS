@@ -41,7 +41,7 @@ class UnAuthPageGuard extends _AuthPageGuard {
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
     await waitUntilResolved();
     if (_authBloc.state.isAuth) {
-      router.replaceAll([const HomeRoute()]);
+      router.replaceAll([const EntryRoute()]);
     } else {
       resolver.next(true);
     }
