@@ -1,15 +1,98 @@
-# Chat
+create type public.member_role as enum ('owner', 'admin', 'member');
+create type public.invite_status as enum ('pending','accepted','declined','expired','revoked');
+create type public.message_type as enum ('text','image','file','system','custom');
 
-## DM
+-- 대소문자 구분 없는 유니크 처리를 위해
+create extension if not exists citext;
+-- UUID 생성 등 유틸 확장
+create extension if not exists "pgcrypto";
+create extension if not exists "pg_trgm";
 
-### Tables
+-- updated_at 자동 갱신 트리거
+create or replace function set_updated_at()
+returns trigger language plpgsql as $$
+begin
+new.updated_at = now();
+return new;
+end $$;
 
-1. dm_rooms
-2. dm_messages
-3. dm_read_state
-    - dm_unread_on_message_insert : 새로운 메세지가 생성되는 경우 자동으로 메세지 보낸이와 받는이의 read state를 업데이트
+-- Reference : https://github.com/Khuwn-Soulutions/supabase_codegen/blob/main/packages/supabase_codegen/bin/sql/get_enum_types.dart
+CREATE OR REPLACE FUNCTION public.get_enum_types()
+RETURNS TABLE (
+enum_name text,
+enum_value text
+)
+LANGUAGE plpgsql
+SET search_path = public
+AS $$
+BEGIN
+RETURN QUERY
+SELECT
+t.typname::text as enum_name,
+e.enumlabel::text as enum_value
+FROM
+pg_type t
+JOIN pg_enum e ON t.oid = e.enumtypid
+JOIN pg_catalog.pg_namespace n ON n.oid = t.typnamespace
+WHERE
+n.nspname = 'public'
+ORDER BY
+t.typname,
+e.enumsortorder;
+END;
+$$;
 
-### View
+--- Revoke access to the function
+REVOKE EXECUTE ON FUNCTION public.get_enum_types FROM public, anon, authenticated;
 
-1. v_my_dm_rooms
-2. v_my_dm_messages
+-- Grant access to the function
+GRANT EXECUTE ON FUNCTION public.get_enum_types TO service_role;
+
+-- Reference : https://github.com/Khuwn-Soulutions/supabase_codegen/blob/main/packages/supabase_codegen/bin/sql/get_schema_info.dart
+CREATE OR REPLACE FUNCTION public.get_schema_info()
+RETURNS TABLE (
+table_name text,
+column_name text,
+data_type text,
+udt_name text,
+is_nullable text,
+column_default text,
+is_array boolean,
+element_type text
+)
+LANGUAGE plpgsql
+SET search_path = public
+AS $$
+BEGIN
+RETURN QUERY
+SELECT
+c.table_name::text,
+c.column_name::text,
+c.data_type::text,
+c.udt_name::text,
+c.is_nullable::text,
+c.column_default::text,
+(c.data_type = 'ARRAY') AS is_array,
+e.data_type::text as element_type
+FROM
+information_schema.columns c
+LEFT JOIN
+information_schema.element_types e
+ON
+((c.table_catalog, c.table_schema, c.table_name, 'TABLE', c.dtd_identifier)
+= (e.object_catalog, e.object_schema, e.object_name, e.object_type, e.collection_type_identifier))
+WHERE
+c.table_schema = 'public'
+AND c.table_name NOT LIKE 'pg_%'
+AND c.table_name NOT LIKE '_prisma_%'
+ORDER BY
+c.table_name,
+c.ordinal_position;
+END;
+$$;
+
+--- Revoke access to the function
+REVOKE EXECUTE ON FUNCTION public.get_schema_info FROM public, anon, authenticated;
+
+-- Grant access to the function
+GRANT EXECUTE ON FUNCTION public.get_schema_info TO service_role;
