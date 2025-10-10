@@ -7,5 +7,9 @@ enum ErrorCode {
   permissionDenied,
   conflict,
   internalServer,
+  network,
+  unAuthorized,
+  tooLargeRequest,
+  unSupportedMedia,
   unKnown,
 }

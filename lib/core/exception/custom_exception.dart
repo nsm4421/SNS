@@ -38,6 +38,15 @@ class CustomException implements Exception {
     tag: 'LOCAL_STORAGE',
   );
 
+  factory CustomException.storage({
+    String? message,
+    ErrorCode code = ErrorCode.unKnown,
+  }) => CustomException._(
+    message: message ?? 'storage error',
+    code: code,
+    tag: 'STORAGE',
+  );
+
   factory CustomException.unknown([String? message]) =>
       CustomException._(message: message ?? 'unknown error', tag: 'UNKNOWN');
 
