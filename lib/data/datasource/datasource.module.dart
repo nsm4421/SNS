@@ -1,18 +1,22 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:karma/data/datasource/auth/local/local_token.datasource.dart';
+import 'package:karma/data/datasource/datasource.export.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_codegen/supabase_codegen.dart';
 
 import 'package:karma/core/core.export.dart';
 import 'auth/local/go_true_async_storage.datasource.dart';
+import 'auth/local/local_token.datasource.dart';
 import 'auth/remote/remote_auth_datasource.dart';
 import 'db/chat/dm/dm_datasource.dart';
 import 'db/chat/dm/message/dm_message.datasource.dart';
 import 'db/chat/dm/room/dm_room.datasource.dart';
 import 'db/chat/dm/room_read_state/dm_read_state.datasource.dart';
-import 'db/profiles/profiles_table.datasource.dart';
 import 'db/generated/database.dart';
+import 'package:karma/data/datasource/storage/storage.datasource.dart';
+
+import 'db/profiles/profiles_table.datasource.dart';
 import 'realtime/chat/manager/dm_realtime_manager.dart';
 import 'realtime/presence/user_presence.datasource.dart';
 
@@ -34,59 +38,52 @@ abstract class DataSourceModule {
       ),
     ),
   );
+  final _dio = Dio();
 
   @lazySingleton
-  LocalTokenDataSource get localToken =>
-      LocalTokenDataSourceImpl(_flutterSecureStorage, logger: appLogger);
+  LocalTokenDataSource get localToken => LocalTokenDataSourceImpl(
+    flutterSecureStorage: _flutterSecureStorage,
+    logger: appLogger,
+  );
 
   @lazySingleton
   RemoteAuthDataSource get auth =>
-      SupabaseAuthDataSourceImpl(_client.auth, logger: appLogger);
+      SupabaseAuthDataSourceImpl(client: _client, logger: appLogger);
 
   @lazySingleton
   ProfilesTableDataSource get profileTable =>
-      SupabaseProfileTableDataSourceImpl(_profilesTable, logger: appLogger);
+      SupabaseProfileTableDataSourceImpl(ProfilesTable(), logger: appLogger);
 
   @lazySingleton
   DmDataSource get dm => SupabaseDmDataSourceImpl(
     logger: appLogger,
-    currentUserId: _client.auth.currentUser!.id,
+    client: _client,
     dmRoomDataSource: SupabaseDmRoomDataSourceImpl(
-      dmRoomsTable: _dmRoomsTable,
-      vMyDmRoomsTable: _dmRoomsView,
+      dmRoomsTable: DmRoomsTable(),
+      vMyDmRoomsTable: VMyDmRoomsTable(),
     ),
     dmMessageDataSource: SupabaseDmMessageDataSourceImpl(
-      dmMessagesTable: _dmMessagesTable,
-      vMyDmMessagesTable: _dmMessagesView,
+      dmMessagesTable: DmMessagesTable(),
+      vMyDmMessagesTable: VMyDmMessagesTable(),
     ),
     dmRoomReadStateDataSource: SupabaseDmRoomReadStateDataSourceImpl(
-      _dmRoomReadStateTable,
+      DmRoomReadStateTable(),
     ),
   );
 
   @lazySingleton
   DmRealtimeManager get dmRealtime =>
-      SupabaseDmRealtimeManagerImpl(_client, logger: appLogger);
+      SupabaseDmRealtimeManagerImpl(client: _client, logger: appLogger);
 
   @lazySingleton
   UserPresenceDataSource get userPresence =>
-      SupabaseUserPresenceDataSourceImpl(_client, logger: appLogger);
+      SupabaseUserPresenceDataSourceImpl(client: _client, logger: appLogger);
 
   @lazySingleton
-  ProfilesTable get _profilesTable => ProfilesTable();
+  FeedBucketDataSource get feedBucket =>
+      SupabaseFeedBucketDataSourceImpl(storageDataSource: _storage);
 
   @lazySingleton
-  DmRoomsTable get _dmRoomsTable => DmRoomsTable();
-
-  @lazySingleton
-  DmMessagesTable get _dmMessagesTable => DmMessagesTable();
-
-  @lazySingleton
-  VMyDmRoomsTable get _dmRoomsView => VMyDmRoomsTable();
-
-  @lazySingleton
-  VMyDmMessagesTable get _dmMessagesView => VMyDmMessagesTable();
-
-  @lazySingleton
-  DmRoomReadStateTable get _dmRoomReadStateTable => DmRoomReadStateTable();
+  StorageDataSource get _storage =>
+      SupabaseStorageDataSourceImpl(client: _client, dio: _dio);
 }

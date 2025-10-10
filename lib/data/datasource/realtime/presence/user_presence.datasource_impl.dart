@@ -4,8 +4,11 @@ class SupabaseUserPresenceDataSourceImpl implements UserPresenceDataSource {
   final SupabaseClient _client;
   final Logger? _logger;
 
-  SupabaseUserPresenceDataSourceImpl(this._client, {Logger? logger})
-    : _logger = logger;
+  SupabaseUserPresenceDataSourceImpl({
+    required SupabaseClient client,
+    Logger? logger,
+  }) : _client = client,
+       _logger = logger;
 
   final String _kPresenceUserIdKey = 'id';
 

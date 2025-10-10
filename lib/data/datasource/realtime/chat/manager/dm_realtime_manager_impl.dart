@@ -1,7 +1,10 @@
 part of 'dm_realtime_manager.dart';
 
 class SupabaseDmRealtimeManagerImpl implements DmRealtimeManager {
-  SupabaseDmRealtimeManagerImpl(this._client, {Logger? logger}) {
+  SupabaseDmRealtimeManagerImpl({
+    required SupabaseClient client,
+    Logger? logger,
+  }) : _client = client {
     _disposed = false;
     _channels = {};
     _connectionCtrl = StreamController<RealtimeConnStateDto>.broadcast(

@@ -5,19 +5,19 @@ class SupabaseDmDataSourceImpl implements DmDataSource {
   final DmMessageDataSource _dmMessageDataSource;
   final DmRoomReadStateDataSource _dmRoomReadStateDataSource;
   final Logger? _logger;
-  final String _currentUserId;
+  late final String _currentUserId;
 
   SupabaseDmDataSourceImpl({
+    required SupabaseClient client,
     required DmRoomDataSource dmRoomDataSource,
     required DmMessageDataSource dmMessageDataSource,
     required DmRoomReadStateDataSource dmRoomReadStateDataSource,
     Logger? logger,
-    required String currentUserId,
   }) : _dmRoomDataSource = dmRoomDataSource,
        _dmMessageDataSource = dmMessageDataSource,
        _dmRoomReadStateDataSource = dmRoomReadStateDataSource,
        _logger = logger,
-       _currentUserId = currentUserId;
+       _currentUserId = client.auth.currentUser!.id;
 
   @override
   Future<DmRoomModel> createOrGetRoom(String counterpartId) async {
@@ -26,10 +26,7 @@ class SupabaseDmDataSourceImpl implements DmDataSource {
       return DmRoomModel.fromRow(row: fetched, currentUserId: counterpartId);
     }
     final createdId = await _dmRoomDataSource
-        .create(
-          currentUserId: _currentUserId,
-          otherUserId: counterpartId,
-        )
+        .create(currentUserId: _currentUserId, otherUserId: counterpartId)
         .then((res) => res.id);
     final created = await _dmRoomDataSource.findById(createdId);
     return DmRoomModel.fromRow(row: created!, currentUserId: counterpartId);
@@ -61,9 +58,7 @@ class SupabaseDmDataSourceImpl implements DmDataSource {
   }) async {
     return _dmMessageDataSource
         .fetch(roomId: roomId, cursor: cursor, limit: limit)
-        .then(
-          (res) => res.map(DmMessageModel.fromRow).toList(),
-        )
+        .then((res) => res.map(DmMessageModel.fromRow).toList())
         .then(Pageable.from);
   }
 

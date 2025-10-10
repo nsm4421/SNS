@@ -2,6 +2,7 @@ import 'package:logger/logger.dart';
 
 import 'package:karma/data/model/model.export.dart';
 import 'package:karma/core/core.export.dart';
+import 'package:supabase/supabase.dart';
 
 import 'message/dm_message.datasource.dart';
 import 'room/dm_room.datasource.dart';

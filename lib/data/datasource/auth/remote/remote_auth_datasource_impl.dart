@@ -1,11 +1,13 @@
 part of 'remote_auth_datasource.dart';
 
 class SupabaseAuthDataSourceImpl implements RemoteAuthDataSource {
-  final GoTrueClient _auth;
+  late final GoTrueClient _auth;
   final Logger? _logger;
 
-  const SupabaseAuthDataSourceImpl(this._auth, {Logger? logger})
-    : _logger = logger;
+  SupabaseAuthDataSourceImpl({required SupabaseClient client, Logger? logger})
+    : _logger = logger {
+    _auth = client.auth;
+  }
 
   @override
   String? get currentUserId => _auth.currentUser?.id;
