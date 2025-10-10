@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:karma/data/datasource/datasource.export.dart';
+import 'package:karma/data/datasource/db/feed/feed_tables.datasource.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_codegen/supabase_codegen.dart';
 
@@ -51,11 +52,11 @@ abstract class DataSourceModule {
       SupabaseAuthDataSourceImpl(client: _client, logger: appLogger);
 
   @lazySingleton
-  ProfilesTableDataSource get profileTable =>
+  ProfilesTableDataSource get profileTables =>
       SupabaseProfileTableDataSourceImpl(ProfilesTable(), logger: appLogger);
 
   @lazySingleton
-  DmDataSource get dm => SupabaseDmDataSourceImpl(
+  DmDataSource get dmTables => SupabaseDmDataSourceImpl(
     logger: appLogger,
     client: _client,
     dmRoomDataSource: SupabaseDmRoomDataSourceImpl(
@@ -74,6 +75,18 @@ abstract class DataSourceModule {
   @lazySingleton
   DmRealtimeManager get dmRealtime =>
       SupabaseDmRealtimeManagerImpl(client: _client, logger: appLogger);
+
+  @lazySingleton
+  FeedTablesDataSource get feedTables => SupabaseFeedTablesDataSourceImpl(
+    client: _client,
+    postView: VFeedListTable(),
+    commentView: VFeedCommentListTable(),
+    postsTable: FeedPostsTable(),
+    postLikesTable: FeedPostLikesTable(),
+    commentTable: FeedCommentsTable(),
+    mediaTable: FeedMediaTable(),
+    logger: appLogger,
+  );
 
   @lazySingleton
   UserPresenceDataSource get userPresence =>

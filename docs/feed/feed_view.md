@@ -37,3 +37,24 @@ from public.feed_posts p
     ) lc on true
     -- 최근 댓글 작성자
     left join public.profiles lcp on lcp.user_id = lc.author_id;
+
+
+create or replace view public.v_feed_comment_list as
+select
+    fc.id,
+    fc.post_id,
+    fc.author_id,
+    fc.parent_id,
+    fc.content,
+    fc.created_at,
+    fc.updated_at,
+
+    -- 작성자 프로필
+    pr.username        as author_username,
+    pr.avatar_url      as author_avatar_url
+
+from public.feed_comments fc
+-- 피드 작성자
+join public.profiles pr on pr.user_id = fc.author_id
+-- 삭제 안된 댓글만
+where fc.deleted_at is null
