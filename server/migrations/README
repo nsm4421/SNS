@@ -1,0 +1,10 @@
+`alembic init migrations`
+
+env.py파일 수정
+
+`target_metadata = database.Base.metadata`
+
+```
+poetry run alembic revision --autogenerate -m "MESSAGE"
+poetry run alembic upgrade head
+```
