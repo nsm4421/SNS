@@ -9,23 +9,28 @@ part 'feed_bucket.datasource_impl.dart';
 
 abstract interface class FeedBucketDataSource {
   // <feedId>/<uuid>.ext
-  String buildObjectPath({required String feedId, required String filename});
+  String buildStoragePath({required String postId, required String filename});
 
   Future<Uri> uploadBytes({
-    required String feedId,
+    required String postId,
     required String filename,
-    required String mimeType,
+    String? mimeType,
     required Uint8List bytes,
     void Function(double progress)? onProgress,
     bool upsert = false,
   });
 
-  Future<void> delete(String objectPath);
+  Future<void> delete(String storagePath);
 
   Uri getPublicUrl(
-    String objectPath, {
+    String storagePath, {
     int? width,
     int? height,
     int quality = 80,
+  });
+
+  Future<Uri> createSignedUrlForDownload({
+    required String storagePath,
+    Duration expiresIn = const Duration(minutes: 30),
   });
 }

@@ -71,3 +71,60 @@ create trigger feed_post_likes_count_aiud
 after insert or delete on public.feed_post_likes
 for each row execute function public.trg_feed_posts_like_count();
 
+-- rpc 함수 생성
+create or replace function public.toggle_feed_like(_post_id uuid)
+returns table(liked boolean, like_count integer)
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+    _uid uuid := auth.uid();
+    _liked_before boolean;
+begin
+    if _uid is null then
+        raise exception 'toggle_feed_like: auth required (auth.uid() is null)';
+    end if;
+    
+    -- 대상 포스트 잠금(동시성/경쟁 조건 방지)
+    perform 1 from public.feed_posts where id = _post_id for update;
+    if not found then
+        raise exception 'toggle_feed_like: post % not found', _post_id;
+    end if;
+    
+    select exists(
+        select 1 from public.feed_post_likes
+        where post_id = _post_id and user_id = _uid
+    ) into _liked_before;
+    
+    if _liked_before then
+        delete from public.feed_post_likes
+        where post_id = _post_id and user_id = _uid;
+    else
+        insert into public.feed_post_likes (post_id, user_id)
+        values (_post_id, _uid)
+        on conflict (post_id, user_id) do nothing;
+    end if;
+    
+    -- 정확성 우선: 재계산으로 like_count 반영
+    update public.feed_posts p
+    set like_count = sub.cnt
+    from (
+        select count(*)::int as cnt
+        from public.feed_post_likes
+        where post_id = _post_id
+    ) sub
+    where p.id = _post_id;
+    
+    liked := exists(
+        select 1 from public.feed_post_likes
+        where post_id = _post_id and user_id = _uid
+    );
+    select p.like_count into like_count
+    from public.feed_posts p where p.id = _post_id;
+    
+    return next;
+    end;
+$$;
+
+grant execute on function public.toggle_feed_like(uuid) to authenticated;

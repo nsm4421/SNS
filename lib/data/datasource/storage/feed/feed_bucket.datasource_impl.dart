@@ -10,21 +10,21 @@ class SupabaseFeedBucketDataSourceImpl implements FeedBucketDataSource {
   static const String _bucketName = "feeds";
 
   @override
-  String buildObjectPath({required String feedId, required String filename}) {
-    final segments = [feedId, const Uuid().v4(), filename.ext];
+  String buildStoragePath({required String postId, required String filename}) {
+    final segments = [postId, const Uuid().v4(), filename.ext];
     return posix.joinAll(segments);
   }
 
   @override
   Uri getPublicUrl(
-    String objectPath, {
+    String storagePath, {
     int? width,
     int? height,
     int quality = 80,
   }) {
     return _storageDataSource.getPublicUrl(
       bucketName: _bucketName,
-      path: objectPath,
+      storagePath: storagePath,
       transform: TransformOptions(
         width: width,
         height: height,
@@ -36,9 +36,9 @@ class SupabaseFeedBucketDataSourceImpl implements FeedBucketDataSource {
 
   @override
   Future<Uri> uploadBytes({
-    required String feedId,
+    required String postId,
     required String filename,
-    required String mimeType,
+    String? mimeType,
     required Uint8List bytes,
     void Function(double progress)? onProgress,
     bool upsert = false,
@@ -46,13 +46,13 @@ class SupabaseFeedBucketDataSourceImpl implements FeedBucketDataSource {
     return onProgress == null
         ? await _storageDataSource.uploadBytesThenReturnPublicUrl(
             bucketName: _bucketName,
-            objectPath: buildObjectPath(feedId: feedId, filename: filename),
+            storagePath: buildStoragePath(postId: postId, filename: filename),
             bytes: bytes,
             mimeType: mimeType,
           )
         : await _storageDataSource.uploadBytesWithOnProgressThenReturnPublicUrl(
             bucketName: _bucketName,
-            objectPath: buildObjectPath(feedId: feedId, filename: filename),
+            storagePath: buildStoragePath(postId: postId, filename: filename),
             bytes: bytes,
             mimeType: mimeType,
             onProgress: onProgress,
@@ -60,7 +60,22 @@ class SupabaseFeedBucketDataSourceImpl implements FeedBucketDataSource {
   }
 
   @override
-  Future<void> delete(String objectPath) async {
-    return _storageDataSource.delete(bucketName: _bucketName, path: objectPath);
+  Future<void> delete(String storagePath) async {
+    return _storageDataSource.delete(
+      bucketName: _bucketName,
+      path: storagePath,
+    );
+  }
+
+  @override
+  Future<Uri> createSignedUrlForDownload({
+    required String storagePath,
+    Duration expiresIn = const Duration(minutes: 30),
+  }) async {
+    return await _storageDataSource.createSignedUrlForDownload(
+      bucketName: _bucketName,
+      storagePath: storagePath,
+      expiresIn: expiresIn,
+    );
   }
 }

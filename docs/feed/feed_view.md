@@ -10,7 +10,7 @@ select
     p.updated_at,
     p.like_count,
     p.comment_count,
-    
+ 
     -- 작성자 프로필
     pr.username        as author_username,
     pr.avatar_url      as author_avatar_url,
@@ -21,7 +21,18 @@ select
     lc.author_id       as latest_comment_author_id,
     lcp.username       as latest_comment_author_username,
     lcp.avatar_url     as latest_comment_author_avatar_url,
-    lc.created_at      as latest_comment_created_at
+    lc.created_at      as latest_comment_created_at,
+
+    -- 미디어 경로들 (배열)
+    coalesce(fm.media_paths, '{}'::text[]) as media_paths,
+
+    -- 좋아요 여부
+    exists (
+        select 1
+        from public.feed_post_likes pl
+        where pl.post_id = p.id
+            and pl.user_id = auth.uid()
+    ) as liked_by_me
     
 from public.feed_posts p
     -- 피드 작성자
@@ -36,8 +47,15 @@ from public.feed_posts p
         limit 1
     ) lc on true
     -- 최근 댓글 작성자
-    left join public.profiles lcp on lcp.user_id = lc.author_id;
-
+    left join public.profiles lcp on lcp.user_id = lc.author_id
+    -- 동영상/이미지
+    left join lateral (
+        select array_agg(m.storage_path order by m.sort_order nulls last, m.id)      
+            as media_paths
+        from public.feed_media m
+        where m.post_id = p.id
+    ) fm on true
+;
 
 create or replace view public.v_feed_comment_list as
 select

@@ -24,10 +24,6 @@ abstract interface class FeedTablesDataSource {
   Future<void> deletePost(String postId, {bool isSoft = true});
 
   // ───── likes ─────
-  Future<void> likePost(String postId);
-
-  Future<void> unlikePost(String postId);
-
   Future<FeedPostLikesRow?> findPostLike(String postId);
 
   // ───── comments ─────
@@ -43,7 +39,7 @@ abstract interface class FeedTablesDataSource {
   Future<void> deleteComment(String commentId, {bool isSoft = true});
 
   // ───── media ─────
-  Future<Iterable<FeedMediaRow>> insertMedias(Iterable<InsertMediaRequestDto> dtos);
+  Future<FeedMediaRow> insertMedia(InsertMediaRequestDto dto);
 
   Future<Iterable<FeedMediaRow>> getMedias(String postId);
 

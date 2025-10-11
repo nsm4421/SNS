@@ -56,3 +56,7 @@ use fastapi_db
 
 create schema `fastapi-ca`;
 ```
+
+memo
+
+`find . -type d -name "__pycache__" -exec rm -rf {} +`

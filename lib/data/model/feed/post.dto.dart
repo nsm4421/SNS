@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:karma/data/datasource/datasource.export.dart';
 
 part 'post.dto.freezed.dart';
 

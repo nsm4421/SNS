@@ -14,17 +14,17 @@ abstract interface class StorageDataSource {
   /// 바이트 업로드
   Future<Uri> uploadBytesThenReturnPublicUrl({
     required String bucketName,
-    required String objectPath,
+    required String storagePath,
     required Uint8List bytes,
-    required String mimeType,
+    String? mimeType,
     bool upsert = false,
   });
 
   Future<Uri> uploadBytesWithOnProgressThenReturnPublicUrl({
     required String bucketName,
-    required String objectPath,
+    required String storagePath,
     required Uint8List bytes,
-    required String mimeType,
+    String? mimeType,
     bool upsert = false,
     required void Function(double progress) onProgress, // progress : 0~1
   });
@@ -35,20 +35,20 @@ abstract interface class StorageDataSource {
   /// 여러 파일 삭제
   Future<void> deleteAll({
     required String bucketName,
-    required List<String> paths,
+    required List<String> storagePaths,
   });
 
   /// 공개 URL
   Uri getPublicUrl({
     required String bucketName,
-    required String path,
+    required String storagePath,
     TransformOptions? transform,
   });
 
   /// 사인드 URL 발급
   Future<Uri> createSignedUrlForDownload({
     required String bucketName,
-    required String path,
+    required String storagePath,
     Duration expiresIn = const Duration(minutes: 30),
   });
 

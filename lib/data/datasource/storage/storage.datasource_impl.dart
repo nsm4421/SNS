@@ -35,20 +35,20 @@ class SupabaseStorageDataSourceImpl
   @override
   Future<Uri> uploadBytesThenReturnPublicUrl({
     required String bucketName,
-    required String objectPath,
+    required String storagePath,
     required Uint8List bytes,
-    required String mimeType,
+    String? mimeType,
     bool upsert = false,
   }) async {
     try {
       return await _storage
           .from(bucketName)
           .uploadBinary(
-            objectPath,
+            storagePath,
             bytes,
             fileOptions: FileOptions(contentType: mimeType, upsert: upsert),
           )
-          .then((p) => getPublicUrl(path: p, bucketName: bucketName));
+          .then((p) => getPublicUrl(storagePath: p, bucketName: bucketName));
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);
       throwCustomExceptionFromException(e);
@@ -58,16 +58,16 @@ class SupabaseStorageDataSourceImpl
   @override
   Future<Uri> uploadBytesWithOnProgressThenReturnPublicUrl({
     required String bucketName,
-    required String objectPath,
+    required String storagePath,
     required Uint8List bytes,
-    required String mimeType,
+    String? mimeType,
     bool upsert = false,
     required void Function(double progress) onProgress,
   }) async {
     try {
       final signedUrlForUpload = await _storage
           .from(bucketName)
-          .createSignedUploadUrl(objectPath)
+          .createSignedUploadUrl(storagePath)
           .then((res) => res.signedUrl);
       await _dio.put(
         signedUrlForUpload,
@@ -81,7 +81,7 @@ class SupabaseStorageDataSourceImpl
           }
         },
       );
-      return getPublicUrl(bucketName: bucketName, path: objectPath);
+      return getPublicUrl(bucketName: bucketName, storagePath: storagePath);
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);
       throwCustomExceptionFromException(e);
@@ -104,13 +104,13 @@ class SupabaseStorageDataSourceImpl
   @override
   Future<void> deleteAll({
     required String bucketName,
-    required List<String> paths,
+    required List<String> storagePaths,
   }) async {
     try {
-      if (paths.isEmpty) {
+      if (storagePaths.isEmpty) {
         _logger?.w('paths are not given');
       }
-      await _storage.from(bucketName).remove(paths);
+      await _storage.from(bucketName).remove(storagePaths);
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);
       throwCustomExceptionFromException(e);
@@ -120,12 +120,14 @@ class SupabaseStorageDataSourceImpl
   @override
   Uri getPublicUrl({
     required String bucketName,
-    required String path,
+    required String storagePath,
     TransformOptions? transform,
   }) {
     try {
       return Uri.parse(
-        _storage.from(bucketName).getPublicUrl(path, transform: transform),
+        _storage
+            .from(bucketName)
+            .getPublicUrl(storagePath, transform: transform),
       );
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);
@@ -136,13 +138,13 @@ class SupabaseStorageDataSourceImpl
   @override
   Future<Uri> createSignedUrlForDownload({
     required String bucketName,
-    required String path,
+    required String storagePath,
     Duration expiresIn = const Duration(minutes: 30),
   }) async {
     try {
       return await _storage
           .from(bucketName)
-          .createSignedUrl(path, expiresIn.inSeconds)
+          .createSignedUrl(storagePath, expiresIn.inSeconds)
           .then(Uri.parse);
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);

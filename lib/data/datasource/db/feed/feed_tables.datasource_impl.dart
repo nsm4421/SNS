@@ -121,32 +121,6 @@ class SupabaseFeedTablesDataSourceImpl
   }
 
   /// -──── likes ─────
-  @override
-  Future<void> likePost(String postId) async {
-    try {
-      await _postLikesTable.insert({
-        'post_id': postId,
-        'user_id': _currentUserId,
-      });
-    } on PostgrestException catch (e, st) {
-      _logger?.e('feed datsource error', error: e, stackTrace: st);
-      throwCustomExceptionFromPostgresException(e);
-    }
-  }
-
-  @override
-  Future<void> unlikePost(String postId) async {
-    try {
-      await _postLikesTable.delete(
-        matchingRows: (q) =>
-            q.eq('post_id', postId).eq('user_id', _currentUserId),
-        returnRows: false,
-      );
-    } on PostgrestException catch (e, st) {
-      _logger?.e('feed datsource error', error: e, stackTrace: st);
-      throwCustomExceptionFromPostgresException(e);
-    }
-  }
 
   @override
   Future<FeedPostLikesRow?> findPostLike(String postId) async {
@@ -218,13 +192,9 @@ class SupabaseFeedTablesDataSourceImpl
 
   /// -──── media ─────
   @override
-  Future<Iterable<FeedMediaRow>> insertMedias(
-    Iterable<InsertMediaRequestDto> dtos,
-  ) async {
+  Future<FeedMediaRow> insertMedia(InsertMediaRequestDto dto) async {
     try {
-      return await Future.wait(
-        dtos.map((dto) async => await _mediaTable.insert({...dto.toJson()})),
-      ).then((res) => res.toList());
+      return await _mediaTable.insert({...dto.toJson()});
     } on PostgrestException catch (e, st) {
       _logger?.e('feed datsource error', error: e, stackTrace: st);
       throwCustomExceptionFromPostgresException(e);
