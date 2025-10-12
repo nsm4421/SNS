@@ -38,7 +38,7 @@ class SupabaseFeedTablesDataSourceImpl
       return await _postsTable.insert({
         if (dto.clientPostId != null) 'id': dto.clientPostId,
         ...dto.toJson(),
-        'visibility': tryParseFeedVisibility(dto.visibilityText),
+        'visibility': tryParseFeedVisibility(dto.visibilityText).name,
       });
     } on PostgrestException catch (e, st) {
       _logger?.e('feed datsource error', error: e, stackTrace: st);
@@ -66,7 +66,7 @@ class SupabaseFeedTablesDataSourceImpl
   }
 
   @override
-  Future<Pageable<VFeedListRow>> fetchFeedList({
+  Future<List<VFeedListRow>> fetchFeedList({
     required String cursor, // createdAt
     int limit = 30,
   }) async {
@@ -75,8 +75,7 @@ class SupabaseFeedTablesDataSourceImpl
           .queryRows(
             queryFn: (q) => q.lt('created_at', cursor).order('created_at'),
             limit: limit,
-          )
-          .then((res) => Pageable.from(res));
+          );
     } on PostgrestException catch (e, st) {
       _logger?.e('feed datsource error', error: e, stackTrace: st);
       throwCustomExceptionFromPostgresException(e);
@@ -91,7 +90,7 @@ class SupabaseFeedTablesDataSourceImpl
         data: {
           ...dto.toJson(),
           if (dto.visibilityText != null)
-            'visibility': tryParseFeedVisibility(dto.visibilityText!),
+            'visibility': tryParseFeedVisibility(dto.visibilityText!).name,
         },
         returnRows: false,
       );

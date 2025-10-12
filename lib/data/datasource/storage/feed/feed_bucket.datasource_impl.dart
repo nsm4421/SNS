@@ -11,31 +11,20 @@ class SupabaseFeedBucketDataSourceImpl implements FeedBucketDataSource {
 
   @override
   String buildStoragePath({required String postId, required String filename}) {
-    final segments = [postId, const Uuid().v4(), filename.ext];
+    final segments = [postId, '${const Uuid().v4()}${filename.ext}'];
     return posix.joinAll(segments);
   }
 
   @override
-  Uri getPublicUrl(
-    String storagePath, {
-    int? width,
-    int? height,
-    int quality = 80,
-  }) {
+  String getPublicUrl(String storagePath) {
     return _storageDataSource.getPublicUrl(
       bucketName: _bucketName,
       storagePath: storagePath,
-      transform: TransformOptions(
-        width: width,
-        height: height,
-        quality: quality,
-        resize: ResizeMode.cover,
-      ),
     );
   }
 
   @override
-  Future<Uri> uploadBytes({
+  Future<String> uploadBytes({
     required String postId,
     required String filename,
     String? mimeType,
@@ -44,19 +33,23 @@ class SupabaseFeedBucketDataSourceImpl implements FeedBucketDataSource {
     bool upsert = false,
   }) async {
     return onProgress == null
-        ? await _storageDataSource.uploadBytesThenReturnPublicUrl(
+        ? await _storageDataSource.uploadBytesThenReturnStoragePath(
             bucketName: _bucketName,
             storagePath: buildStoragePath(postId: postId, filename: filename),
             bytes: bytes,
             mimeType: mimeType,
           )
-        : await _storageDataSource.uploadBytesWithOnProgressThenReturnPublicUrl(
-            bucketName: _bucketName,
-            storagePath: buildStoragePath(postId: postId, filename: filename),
-            bytes: bytes,
-            mimeType: mimeType,
-            onProgress: onProgress,
-          );
+        : await _storageDataSource
+              .uploadBytesWithOnProgressThenReturnStoragePath(
+                bucketName: _bucketName,
+                storagePath: buildStoragePath(
+                  postId: postId,
+                  filename: filename,
+                ),
+                bytes: bytes,
+                mimeType: mimeType,
+                onProgress: onProgress,
+              );
   }
 
   @override
@@ -68,7 +61,7 @@ class SupabaseFeedBucketDataSourceImpl implements FeedBucketDataSource {
   }
 
   @override
-  Future<Uri> createSignedUrlForDownload({
+  Future<String> createSignedUrlForDownload({
     required String storagePath,
     Duration expiresIn = const Duration(minutes: 30),
   }) async {

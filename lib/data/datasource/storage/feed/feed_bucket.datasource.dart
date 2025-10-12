@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:karma/core/extension/string.extension.dart';
+import 'package:karma/core/util/app_logger.dart';
 import 'package:supabase/supabase.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart';
@@ -11,7 +12,7 @@ abstract interface class FeedBucketDataSource {
   // <feedId>/<uuid>.ext
   String buildStoragePath({required String postId, required String filename});
 
-  Future<Uri> uploadBytes({
+  Future<String> uploadBytes({
     required String postId,
     required String filename,
     String? mimeType,
@@ -22,14 +23,9 @@ abstract interface class FeedBucketDataSource {
 
   Future<void> delete(String storagePath);
 
-  Uri getPublicUrl(
-    String storagePath, {
-    int? width,
-    int? height,
-    int quality = 80,
-  });
+  String getPublicUrl(String storagePath);
 
-  Future<Uri> createSignedUrlForDownload({
+  Future<String> createSignedUrlForDownload({
     required String storagePath,
     Duration expiresIn = const Duration(minutes: 30),
   });

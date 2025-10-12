@@ -33,7 +33,7 @@ class SupabaseStorageDataSourceImpl
   }
 
   @override
-  Future<Uri> uploadBytesThenReturnPublicUrl({
+  Future<String> uploadBytesThenReturnStoragePath({
     required String bucketName,
     required String storagePath,
     required Uint8List bytes,
@@ -48,7 +48,7 @@ class SupabaseStorageDataSourceImpl
             bytes,
             fileOptions: FileOptions(contentType: mimeType, upsert: upsert),
           )
-          .then((p) => getPublicUrl(storagePath: p, bucketName: bucketName));
+          .then((_) => storagePath);
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);
       throwCustomExceptionFromException(e);
@@ -56,7 +56,7 @@ class SupabaseStorageDataSourceImpl
   }
 
   @override
-  Future<Uri> uploadBytesWithOnProgressThenReturnPublicUrl({
+  Future<String> uploadBytesWithOnProgressThenReturnStoragePath({
     required String bucketName,
     required String storagePath,
     required Uint8List bytes,
@@ -81,7 +81,7 @@ class SupabaseStorageDataSourceImpl
           }
         },
       );
-      return getPublicUrl(bucketName: bucketName, storagePath: storagePath);
+      return storagePath;
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);
       throwCustomExceptionFromException(e);
@@ -118,17 +118,15 @@ class SupabaseStorageDataSourceImpl
   }
 
   @override
-  Uri getPublicUrl({
+  String getPublicUrl({
     required String bucketName,
     required String storagePath,
     TransformOptions? transform,
   }) {
     try {
-      return Uri.parse(
-        _storage
-            .from(bucketName)
-            .getPublicUrl(storagePath, transform: transform),
-      );
+      return _storage
+          .from(bucketName)
+          .getPublicUrl(storagePath, transform: transform);
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);
       throwCustomExceptionFromException(e);
@@ -136,7 +134,7 @@ class SupabaseStorageDataSourceImpl
   }
 
   @override
-  Future<Uri> createSignedUrlForDownload({
+  Future<String> createSignedUrlForDownload({
     required String bucketName,
     required String storagePath,
     Duration expiresIn = const Duration(minutes: 30),
@@ -144,8 +142,7 @@ class SupabaseStorageDataSourceImpl
     try {
       return await _storage
           .from(bucketName)
-          .createSignedUrl(storagePath, expiresIn.inSeconds)
-          .then(Uri.parse);
+          .createSignedUrl(storagePath, expiresIn.inSeconds);
     } catch (e, st) {
       _logger?.e('storage exception', error: e, stackTrace: st);
       throwCustomExceptionFromException(e);

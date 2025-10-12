@@ -6,7 +6,7 @@ part 'feed_media.entity.g.dart';
 class FeedMediaEntity {
   final String postId;
   final String storagePath;
-  final String? publicUrl;
+  final String? url;
   final String? id;
   final String? mimeType;
   final int? width;
@@ -17,7 +17,7 @@ class FeedMediaEntity {
   FeedMediaEntity({
     required this.postId,
     required this.storagePath,
-    this.publicUrl,
+    this.url,
     this.id,
     this.mimeType,
     this.width,

@@ -14,7 +14,7 @@ abstract interface class FeedTablesDataSource {
 
   Future<FeedPostsRow> getPostById(String postId);
 
-  Future<Pageable<VFeedListRow>> fetchFeedList({
+  Future<Iterable<VFeedListRow>> fetchFeedList({
     required String cursor, // createdAt
     int limit = 30,
   });

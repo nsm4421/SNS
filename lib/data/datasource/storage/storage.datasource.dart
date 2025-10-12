@@ -12,7 +12,7 @@ abstract interface class StorageDataSource {
   Future<bool> getIsBucketExists(String bucketName, {bool public = true});
 
   /// 바이트 업로드
-  Future<Uri> uploadBytesThenReturnPublicUrl({
+  Future<String> uploadBytesThenReturnStoragePath({
     required String bucketName,
     required String storagePath,
     required Uint8List bytes,
@@ -20,7 +20,7 @@ abstract interface class StorageDataSource {
     bool upsert = false,
   });
 
-  Future<Uri> uploadBytesWithOnProgressThenReturnPublicUrl({
+  Future<String> uploadBytesWithOnProgressThenReturnStoragePath({
     required String bucketName,
     required String storagePath,
     required Uint8List bytes,
@@ -39,14 +39,14 @@ abstract interface class StorageDataSource {
   });
 
   /// 공개 URL
-  Uri getPublicUrl({
+  String getPublicUrl({
     required String bucketName,
     required String storagePath,
     TransformOptions? transform,
   });
 
   /// 사인드 URL 발급
-  Future<Uri> createSignedUrlForDownload({
+  Future<String> createSignedUrlForDownload({
     required String bucketName,
     required String storagePath,
     Duration expiresIn = const Duration(minutes: 30),

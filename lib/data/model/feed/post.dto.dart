@@ -19,7 +19,7 @@ class CreatePostRequestDto with _$CreatePostRequestDto {
   final String content;
   @JsonKey(includeToJson: false)
   final String visibilityText;
-  @JsonKey(name: 'replay_to_id')
+  @JsonKey(name: 'reply_to_id')
   final String? replyToId;
 
   Map<String, dynamic> toJson() => _$CreatePostRequestDtoToJson(this);

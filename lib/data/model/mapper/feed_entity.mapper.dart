@@ -96,7 +96,7 @@ extension FeedMediaMapper on FeedMediaRow {
     return FeedMediaEntity(
       postId: postId,
       storagePath: storagePath,
-      publicUrl: publicUrl,
+      url: publicUrl,
       id: id,
       mimeType: mimeType,
       width: width,

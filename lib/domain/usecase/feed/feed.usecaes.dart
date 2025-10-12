@@ -28,7 +28,10 @@ class FeedUseCases {
 
   FeedUseCases(this._repository);
 
-  CreatePostUseCase get createFeed => CreatePostUseCase(_repository);
+  SavePostOnDbUseCase get savePostOnDb => SavePostOnDbUseCase(_repository);
+
+  UploadPostMediaUseCase get uploadPostMedia =>
+      UploadPostMediaUseCase(_repository);
 
   FetchPostsUseCase get fetchPosts => FetchPostsUseCase(_repository);
 

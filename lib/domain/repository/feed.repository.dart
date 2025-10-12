@@ -56,8 +56,6 @@ abstract interface class FeedRepository {
     required int sortOrder,
   });
 
-  Future<Either<Failure, List<FeedMediaEntity>>> getMedias(String postId);
-
   Future<Either<Failure, Unit>> deleteMedia(String mediaId);
 
   Future<Either<Failure, Unit>> reorderMedia({
@@ -66,7 +64,7 @@ abstract interface class FeedRepository {
   });
 
   /// --- Bucket ---
-  Future<Either<Failure, Uri>> uploadFile({
+  Future<Either<Failure, String>> uploadFile({
     required String postId,
     required File file,
     void Function(double progress)? onProgress,

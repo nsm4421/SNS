@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:fpdart/src/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:karma/core/exception/failure.dart';
+import 'package:karma/core/core.export.dart';
 import 'package:karma/core/extension/file.extension.dart';
-import 'package:karma/core/vo/pageable.vo.dart';
 import 'package:karma/data/datasource/datasource.export.dart';
 import 'package:karma/data/datasource/rpc/feed/feed_rpc.datasource.dart';
 import 'package:karma/data/model/model.export.dart';
@@ -46,7 +44,8 @@ class FeedRepositoryImpl implements FeedRepository {
           )
           .then((res) => res.toEntity())
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -58,7 +57,8 @@ class FeedRepositoryImpl implements FeedRepository {
           .getPostById(postId)
           .then((res) => res.toEntity())
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -70,21 +70,28 @@ class FeedRepositoryImpl implements FeedRepository {
     bool isMediaUrlIsPublic = true,
   }) async {
     try {
-      return await _feedTablesDataSource
+      final futures = await _feedTablesDataSource
           .fetchFeedList(cursor: cursor, limit: limit)
+          .then((rows) => rows.map((row) => row.toEntity()))
           .then(
-            (res) => res.convert((model) {
-              final entity = model.toEntity();
-              final medias = entity.medias
-                  .map(
-                    (e) => e.copyWith(publicUrl: _getPublicUrl(e.storagePath)),
-                  )
-                  .toList();
-              return entity.copyWith(medias: medias);
+            (entities) => entities.map((entity) async {
+              if (entity.medias.isEmpty) return entity;
+              final urls = await _getUrls(
+                entity.medias.map((e) => e.storagePath),
+                isPublic: entity.isPublic,
+              ).then((res) => res.toList());
+              return entity.copyWith(
+                medias: entity.medias.indexed
+                    .map((e) => e.$2.copyWith(url: urls[e.$1]))
+                    .toList(),
+              );
             }),
-          )
-          .then(Right.new);
-    } catch (e) {
+          );
+      return await Future.wait(
+        futures,
+      ).then((res) => Pageable.from(res)).then(Right.new);
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -95,7 +102,8 @@ class FeedRepositoryImpl implements FeedRepository {
       return await _feedTablesDataSource
           .deletePost(postId, isSoft: true)
           .then((_) => const Right(unit));
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -107,7 +115,8 @@ class FeedRepositoryImpl implements FeedRepository {
   ) async {
     try {
       return await _feedRpcDataSource.toggleLike(postId).then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -119,7 +128,8 @@ class FeedRepositoryImpl implements FeedRepository {
           .findPostLike(postId)
           .then((e) => e != null)
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -144,7 +154,8 @@ class FeedRepositoryImpl implements FeedRepository {
           )
           .then((e) => e.toEntity())
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -160,7 +171,8 @@ class FeedRepositoryImpl implements FeedRepository {
           .fetchComments(cursor: cursor, limit: limit, postId: postId)
           .then((res) => res.convert((e) => e.toEntity()))
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -171,7 +183,8 @@ class FeedRepositoryImpl implements FeedRepository {
       return await _feedTablesDataSource
           .deleteComment(commentId, isSoft: true)
           .then((_) => const Right(unit));
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -200,26 +213,8 @@ class FeedRepositoryImpl implements FeedRepository {
           )
           .then((res) => res.toEntity())
           .then(Right.new);
-    } catch (e) {
-      return Left(Failure.fromObj(e));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<FeedMediaEntity>>> getMedias(
-    String postId,
-  ) async {
-    try {
-      return await _feedTablesDataSource
-          .getMedias(postId)
-          .then(
-            (res) => res
-                .map((e) => e.toEntity())
-                .map((e) => e.copyWith(publicUrl: _getPublicUrl(e.storagePath)))
-                .toList(),
-          )
-          .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -230,7 +225,8 @@ class FeedRepositoryImpl implements FeedRepository {
       return await _feedTablesDataSource
           .deleteMedia(mediaId)
           .then((_) => const Right(unit));
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -244,7 +240,8 @@ class FeedRepositoryImpl implements FeedRepository {
       return await _feedTablesDataSource
           .reorderMedias(ReorderMediaRequestDto(postId: postId, orders: orders))
           .then((_) => const Right(unit));
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -256,13 +253,14 @@ class FeedRepositoryImpl implements FeedRepository {
       return await _feedBucketDataSource
           .delete(storagePath)
           .then((_) => const Right(unit));
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
 
   @override
-  Future<Either<Failure, Uri>> uploadFile({
+  Future<Either<Failure, String>> uploadFile({
     required String postId,
     required File file,
     void Function(double progress)? onProgress,
@@ -279,24 +277,26 @@ class FeedRepositoryImpl implements FeedRepository {
             upsert: upsert,
           )
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('FeedRepository', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
 
-  String _getPublicUrl(
-    String storagePath, {
-    int? width,
-    int? height,
-    int quality = 80,
-  }) {
-    return _feedBucketDataSource
-        .getPublicUrl(
-          storagePath,
-          width: width,
-          height: height,
-          quality: quality,
-        )
-        .toString();
+  Future<String> _getUrl(String storagePath, {bool isPublic = true}) async {
+    return isPublic
+        ? _feedBucketDataSource.getPublicUrl(storagePath)
+        : await _feedBucketDataSource.createSignedUrlForDownload(
+            storagePath: storagePath,
+          );
+  }
+
+  Future<Iterable<String>> _getUrls(
+    Iterable<String> storagePaths, {
+    bool isPublic = true,
+  }) async {
+    return await Future.wait(
+      storagePaths.map((path) async => await _getUrl(path, isPublic: isPublic)),
+    );
   }
 }

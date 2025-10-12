@@ -4,7 +4,7 @@ exception when duplicate_object then null; end $$;
 
 create table if not exists public.feed_posts (
     id           uuid primary key default gen_random_uuid(),
-    author_id    uuid not null references auth.users(id) on delete cascade,
+    author_id    uuid not null default auth.uid() references auth.users(id) on delete cascade,
     content      text not null,
     visibility   public.feed_visibility not null default 'public',
     reply_to_id  uuid null references public.feed_posts(id) on delete set null, -- 쓰레드/답글용

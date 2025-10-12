@@ -59,3 +59,32 @@ with check (
         where p.id = post_id and p.author_id = auth.uid()
     )
 );
+
+-- Bucket
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('feeds', 'feeds', true, 52428800, array['image/*','video/*']);
+
+create policy "feeds read public"
+on storage.objects for select
+using ( bucket_id = 'feeds' );
+
+create policy "feeds insert by authenticated"
+on storage.objects for insert
+with check (
+    bucket_id = 'feeds'
+    and auth.role() = 'authenticated'
+);
+
+create policy "feeds delete by owner"
+on storage.objects for delete
+using (
+    bucket_id = 'feeds'
+    and owner = auth.uid()
+);
+
+create policy "feeds update by owner"
+on storage.objects for update
+using (
+    bucket_id = 'feeds'
+    and owner = auth.uid()
+);
