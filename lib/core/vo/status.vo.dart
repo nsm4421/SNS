@@ -4,3 +4,5 @@ enum DisplayStatus {
   refreshing, // Pull-to-refresh 동작 중
   paginated, // 다음 페이지 로딩 중 (하단 스피너)
 }
+
+enum ComposeStatus { idle, submitting, success, failure }

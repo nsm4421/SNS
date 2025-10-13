@@ -5,7 +5,6 @@ import 'package:injectable/injectable.dart';
 import 'package:karma/core/core.export.dart';
 import 'package:karma/core/extension/file.extension.dart';
 import 'package:karma/data/datasource/datasource.export.dart';
-import 'package:karma/data/datasource/rpc/feed/feed_rpc.datasource.dart';
 import 'package:karma/data/model/model.export.dart';
 import 'package:karma/domain/entity/entity.export.dart';
 import 'package:karma/domain/repository/repository.export.dart';
@@ -51,7 +50,9 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
-  Future<Either<Failure, FeedPostEntity>> getPost(String postId) async {
+  Future<Either<Failure, FeedPostEntityWithAuthor>> getPost(
+    String postId,
+  ) async {
     try {
       return await _feedTablesDataSource
           .getPostById(postId)

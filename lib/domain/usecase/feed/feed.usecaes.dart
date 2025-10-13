@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:karma/core/core.export.dart';
-import 'package:karma/core/extension/file.extension.dart';
 import 'package:karma/domain/entity/entity.export.dart';
 import 'package:karma/domain/repository/repository.export.dart';
 import 'package:uuid/uuid.dart';
+
+part 'scenario/post/get_post.usecase.dart';
 
 part 'scenario/post/create_post.usecase.dart';
 
@@ -27,6 +28,8 @@ class FeedUseCases {
   final FeedRepository _repository;
 
   FeedUseCases(this._repository);
+
+  GetPostUseCase get getPost => GetPostUseCase(_repository);
 
   SavePostOnDbUseCase get savePostOnDb => SavePostOnDbUseCase(_repository);
 

@@ -13,7 +13,7 @@ abstract interface class FeedRepository {
     String? replyToId,
   });
 
-  Future<Either<Failure, FeedPostEntity>> getPost(String postId);
+  Future<Either<Failure, FeedPostEntityWithAuthor>> getPost(String postId);
 
   Future<Either<Failure, Pageable<FeedPostEntityWithAuthor>>> fetchFeeds({
     required String cursor,

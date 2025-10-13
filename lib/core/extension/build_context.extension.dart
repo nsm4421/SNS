@@ -66,12 +66,12 @@ extension SnackBarExtension on BuildContext {
     }
   }
 
-  showSuccessSnackBar(String message) =>
+  void showSuccessSnackBar(String message) =>
       _show(type: _SnackBarType.success, message: message);
 
-  showWarningSnackBar(String message) =>
+  void showWarningSnackBar(String message) =>
       _show(type: _SnackBarType.warning, message: message);
 
-  showErrorSnackBar(String message) =>
+  void showErrorSnackBar(String message) =>
       _show(type: _SnackBarType.error, message: message);
 }

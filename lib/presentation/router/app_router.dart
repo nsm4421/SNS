@@ -4,13 +4,14 @@ import 'package:karma/presentation/router/auth_guard.dart';
 import 'package:karma/presentation/view/auth/sign_in/sign_in.page.dart';
 import 'package:karma/presentation/view/auth/sign_up/sign_up.page.dart';
 import 'package:karma/presentation/view/entry/chat/chat_tab.page.dart';
-import 'package:karma/presentation/view/entry/entry.page.dart';
-import 'package:karma/presentation/view/entry/feed/feed_tab.page.dart';
+import 'package:karma/presentation/view/entry/p_entry.dart';
+import 'package:karma/presentation/view/entry/feed/create_post/p_create_post.dart';
+import 'package:karma/presentation/view/entry/feed/p_feed_tab.dart';
 import 'package:karma/presentation/view/entry/group/group_tab.page.dart';
 import 'package:karma/presentation/view/entry/home/home_tab.page.dart';
 import 'package:karma/presentation/view/entry/notification/notification_tab.page.dart';
 import 'package:karma/presentation/view/entry/setting/setting_tab.page.dart';
-import 'package:karma/presentation/view/splah/splash.page.dart';
+import 'package:karma/presentation/view/splash/p_splash.dart';
 
 part 'app_router.gr.dart';
 
@@ -26,7 +27,12 @@ class AppRouter extends RootStackRouter {
   RouteType get defaultRouteType => const RouteType.material();
 
   @override
-  List<AutoRoute> get routes => [_splashRoute, ..._authRoutes, _entryRoute];
+  List<AutoRoute> get routes => [
+    _splashRoute,
+    ..._authRoutes,
+    _entryRoute,
+    AutoRoute(page: CreatePostRoute.page, path: '/feed/create'),
+  ];
 
   AutoRoute get _splashRoute => AutoRoute(
     page: SplashRoute.page,

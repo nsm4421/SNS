@@ -35,11 +35,12 @@ class SupabaseFeedTablesDataSourceImpl
   @override
   Future<FeedPostsRow> createPost(CreatePostRequestDto dto) async {
     try {
-      return await _postsTable.insert({
+      final data = {
         if (dto.clientPostId != null) 'id': dto.clientPostId,
         ...dto.toJson(),
         'visibility': tryParseFeedVisibility(dto.visibilityText).name,
-      });
+      };
+      return await _postsTable.insert(data);
     } on PostgrestException catch (e, st) {
       _logger?.e('feed datsource error', error: e, stackTrace: st);
       throwCustomExceptionFromPostgresException(e);
@@ -47,9 +48,9 @@ class SupabaseFeedTablesDataSourceImpl
   }
 
   @override
-  Future<FeedPostsRow> getPostById(String postId) async {
+  Future<VFeedListRow> getPostById(String postId) async {
     try {
-      final fetched = await _postsTable.querySingleRow(
+      final fetched = await _postView.querySingleRow(
         queryFn: (q) => q.eq('id', postId),
       );
       if (fetched == null) {
@@ -71,11 +72,10 @@ class SupabaseFeedTablesDataSourceImpl
     int limit = 30,
   }) async {
     try {
-      return await _postView
-          .queryRows(
-            queryFn: (q) => q.lt('created_at', cursor).order('created_at'),
-            limit: limit,
-          );
+      return await _postView.queryRows(
+        queryFn: (q) => q.lt('created_at', cursor).order('created_at'),
+        limit: limit,
+      );
     } on PostgrestException catch (e, st) {
       _logger?.e('feed datsource error', error: e, stackTrace: st);
       throwCustomExceptionFromPostgresException(e);

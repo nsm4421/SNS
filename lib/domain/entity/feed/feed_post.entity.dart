@@ -45,7 +45,7 @@ class FeedPostEntityWithAuthor extends FeedPostEntity {
     super.content = '',
     super.isPublic = true,
     required this.author,
-    this.medias = const[],
+    this.medias = const [],
     super.replyToId,
     required super.createdAt,
     required super.updatedAt,
@@ -53,6 +53,21 @@ class FeedPostEntityWithAuthor extends FeedPostEntity {
     super.likeCount,
     super.commentCount,
     this.latestComment,
-    this.likedByMe = false
+    this.likedByMe = false,
   }) : super(createdBy: author.id);
+
+  factory FeedPostEntityWithAuthor.from({
+    required UserEntity user,
+    required FeedPostEntity feed,
+  }) {
+    return FeedPostEntityWithAuthor(
+      postId: feed.postId,
+      content: feed.postId,
+      isPublic: feed.isPublic,
+      author: user,
+      replyToId: feed.replyToId,
+      createdAt: feed.createdAt,
+      updatedAt: feed.updatedAt,
+    );
+  }
 }

@@ -30,7 +30,8 @@ class UserRepositoryImpl implements UserRepository {
       return await _profilesTableDataSource
           .getIsUsernameDuplicated(username)
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('UserRepositoryImpl', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -42,7 +43,8 @@ class UserRepositoryImpl implements UserRepository {
           .getByUserId(userId)
           .then((e) => e.toEntity())
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('UserRepositoryImpl', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -70,7 +72,8 @@ class UserRepositoryImpl implements UserRepository {
           )
           .then((e) => e.toEntity())
           .then(Right.new);
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('UserRepositoryImpl', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -94,7 +97,8 @@ class UserRepositoryImpl implements UserRepository {
             includeSelfInState: includeSelfInState,
           )
           .then((_) => const Right(unit));
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('UserRepositoryImpl', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -105,7 +109,8 @@ class UserRepositoryImpl implements UserRepository {
       return await _userPresenceDataSource
           .leave(topic)
           .then((_) => const Right(unit));
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('UserRepositoryImpl', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -116,7 +121,8 @@ class UserRepositoryImpl implements UserRepository {
       return _userPresenceDataSource.clearResources().then(
         (_) => const Right(unit),
       );
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('UserRepositoryImpl', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }
@@ -131,7 +137,8 @@ class UserRepositoryImpl implements UserRepository {
       return _profilesTableDataSource
           .updateLastSeenAt(userId: currentUserId, lastSeenAt: lastSeenAt)
           .then((_) => const Right(unit));
-    } catch (e) {
+    } catch (e, st) {
+      appLogger.e('UserRepositoryImpl', error: e, stackTrace: st);
       return Left(Failure.fromObj(e));
     }
   }

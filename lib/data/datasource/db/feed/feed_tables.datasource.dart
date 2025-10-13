@@ -12,7 +12,7 @@ abstract interface class FeedTablesDataSource {
   // ───── posts ─────
   Future<FeedPostsRow> createPost(CreatePostRequestDto dto);
 
-  Future<FeedPostsRow> getPostById(String postId);
+  Future<VFeedListRow> getPostById(String postId);
 
   Future<Iterable<VFeedListRow>> fetchFeedList({
     required String cursor, // createdAt

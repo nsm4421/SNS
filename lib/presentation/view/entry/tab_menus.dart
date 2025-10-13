@@ -1,4 +1,4 @@
-part of 'entry.page.dart';
+part of 'p_entry.dart';
 
 enum _TabMenus {
   home(

@@ -10,6 +10,15 @@ class UserEntity {
   final String? username;
   final String? avatarUrl;
   final DateTime? createdAt;
+
+  factory UserEntity.from(AppUserEntity e) {
+    return UserEntity(
+      id: e.id,
+      username: e.username,
+      avatarUrl: e.avatarUrl,
+      createdAt: e.createdAt,
+    );
+  }
 }
 
 @CopyWith(copyWithNull: true)
