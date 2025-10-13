@@ -110,6 +110,10 @@ class _FeedItemWidget extends StatelessWidget {
                       },
                     ),
                   ),
+
+                Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [LikeIconWidget(_feed)]),
               ],
             ),
           ),
