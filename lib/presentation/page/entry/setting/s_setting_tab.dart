@@ -1,4 +1,4 @@
-part of 'setting_tab.page.dart';
+part of 'p_setting_tab.dart';
 
 class _SettingTabScreen extends StatelessWidget {
   const _SettingTabScreen({super.key});

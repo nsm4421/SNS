@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:karma/core/core.export.dart';
-import 'package:karma/presentation/provider/feed/create_post/create_post.cubit.dart';
+import 'package:karma/presentation/provider/provider.export.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 part 's_create_post.dart';

@@ -5,9 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:karma/domain/entity/entity.export.dart';
 import 'package:karma/domain/usecase/usecase.export.dart';
-import 'package:karma/presentation/component/preferred_sized_widget_wrapper.dart';
-import 'package:karma/presentation/provider/display/display.bloc.dart';
-import 'package:karma/presentation/provider/feed/display_posts/display_posts.bloc.dart';
+import 'package:karma/presentation/component/component.export.dart';
+import 'package:karma/presentation/provider/provider.export.dart';
 import 'package:karma/presentation/router/app_router.dart';
 
 part 'tab_menus.dart';

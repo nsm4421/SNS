@@ -5,13 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:karma/core/extension/build_context.extension.dart';
 import 'package:karma/domain/usecase/usecase.export.dart';
-import 'package:karma/presentation/provider/auth/auth.bloc.dart';
+import 'package:karma/presentation/provider/provider.export.dart';
 import 'package:karma/presentation/router/app_router.dart'
     show SignInRoute, EntryRoute;
 
-part 'sign_up.screen.dart';
+part 's_sign_up.dart';
 
-part 'username_text_field.widget.dart';
+part 'w_username_text_field.dart';
 
 @RoutePage()
 class SignUpPage extends StatelessWidget {

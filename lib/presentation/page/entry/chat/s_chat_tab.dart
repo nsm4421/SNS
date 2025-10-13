@@ -1,4 +1,4 @@
-part of 'chat_tab.page.dart';
+part of 'p_chat_tab.dart';
 
 class _ChatTabScreen extends StatelessWidget {
   const _ChatTabScreen({super.key});

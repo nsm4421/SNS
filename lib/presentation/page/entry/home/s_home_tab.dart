@@ -1,4 +1,4 @@
-part of 'home_tab.page.dart';
+part of 'p_home_tab.dart';
 
 class _HomeTabScreen extends StatelessWidget {
   const _HomeTabScreen({super.key});

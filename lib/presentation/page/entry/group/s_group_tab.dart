@@ -1,4 +1,4 @@
-part of 'group_tab.page.dart';
+part of 'p_group_tab.dart';
 
 class _GroupTabScreen extends StatelessWidget {
   const _GroupTabScreen({super.key});

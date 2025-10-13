@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart' show GetIt;
+import 'package:get_it/get_it.dart';
 import 'core/core.export.dart';
-import 'package:karma/presentation/provider/auth/auth.bloc.dart';
-import 'presentation/router/app_router.dart' show AppRouter;
+import 'presentation/provider/provider.export.dart';
+import 'presentation/router/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,4 +1,4 @@
-part of 'sign_up.page.dart';
+part of 'p_sign_up.dart';
 
 class _UsernameTextFieldWidget extends StatefulWidget {
   const _UsernameTextFieldWidget(this._usernameController, {super.key});

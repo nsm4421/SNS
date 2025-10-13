@@ -1,14 +1,14 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
-part 'chat_tab.screen.dart';
+part 's_setting_tab.dart';
 
 @RoutePage()
-class ChatTabPage extends StatelessWidget {
-  const ChatTabPage({super.key});
+class SettingTabPage extends StatelessWidget {
+  const SettingTabPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _ChatTabScreen();
+    return const _SettingTabScreen();
   }
 }
