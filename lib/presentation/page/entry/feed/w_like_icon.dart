@@ -1,69 +1,43 @@
 part of 'p_feed_tab.dart';
 
-class LikeIconWidget extends StatefulWidget {
-  const LikeIconWidget(this._feed, {super.key});
+class _LikeIconWidget extends StatelessWidget {
+  const _LikeIconWidget(this._feed, {super.key});
 
   final FeedPostEntityWithAuthor _feed;
 
-  @override
-  State<LikeIconWidget> createState() => _LikeIconWidgetState();
-}
-
-class _LikeIconWidgetState extends State<LikeIconWidget> {
-  late bool _likeByMe;
-  late int _likeCount;
-  late bool _tappable;
-  static const int _duration = 300;
-
-  @override
-  void initState() {
-    super.initState();
-    _likeByMe = widget._feed.likedByMe;
-    _likeCount = widget._feed.likeCount;
-    _tappable = true;
-  }
-
-  Future<void> _handleToggleLike() async {
-    setState(() {
-      _tappable = false;
-    });
-    await GetIt.instance<FeedUseCases>().toggleLike
-        .call(widget._feed.postId)
-        .then(
-          (res) => res.match(
-            (l) {
-              debugPrint('toggle like fails >> ${l.repr}');
-            },
-            (r) {
-              debugPrint('toggle like success');
-              _likeByMe = r.$1;
-              _likeCount = r.$2;
-            },
-          ),
-        );
-    await Future.delayed(const Duration(milliseconds: _duration), () {
-      setState(() {
-        _tappable = true;
-      });
-    });
-  }
+  static const double _iconSize = 16;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          onPressed: _tappable ? _handleToggleLike : null,
-          icon: Icon(
-            _likeByMe ? Icons.favorite : Icons.favorite_border,
-            color: _tappable
-                ? Theme.of(context).colorScheme.primary
-                : Colors.grey,
-          ),
-        ),
-        Text(_likeCount.toString()),
-      ],
+    return BlocProvider(
+      create: (_) => GetIt.instance<ToggleLikeOnPostCubit>(param1: _feed),
+      child: BlocBuilder<ToggleLikeOnPostCubit, ToggleLikeOnPostState>(
+        builder: (context, state) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: state.isLoading
+                    ? null
+                    : () async {
+                        await context.read<ToggleLikeOnPostCubit>().toggle();
+                      },
+                icon: Icon(
+                  state.likedByMe ? Icons.favorite : Icons.favorite_border,
+                  color: state.isLoading ? Colors.grey : Colors.blueGrey,
+                  size: _iconSize,
+                ),
+              ),
+              Text(
+                state.likeCount.toString(),
+                style: Theme.of(
+                  context,
+                ).textTheme.labelSmall?.copyWith(color: Colors.blueGrey),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

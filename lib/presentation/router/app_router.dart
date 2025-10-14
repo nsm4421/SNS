@@ -22,6 +22,7 @@ class AppRouter extends RootStackRouter {
     ..._authRoutes,
     _entryRoute,
     AutoRoute(page: CreatePostRoute.page, path: '/feed/create'),
+    AutoRoute(page: EditProfileRoute.page, path: '/setting/edit-profile'),
   ];
 
   AutoRoute get _splashRoute => AutoRoute(

@@ -12,9 +12,9 @@ class _FeedItemWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(right: 12),
-            child: CircleAvatar(child: Text("A")),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: UserAvatarWidget(_feed.author),
           ),
           Expanded(
             child: Column(
@@ -28,15 +28,15 @@ class _FeedItemWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     const SizedBox(width: 16),
+
                     Text(
-                      _feed.createdAt.toLocal().diffText,
+                      _feed.createdAt.diffTextEn,
                       style: Theme.of(
                         context,
                       ).textTheme.labelSmall?.copyWith(color: Colors.blueGrey),
                     ),
                   ],
                 ),
-
                 if (_feed.content.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
@@ -112,8 +112,12 @@ class _FeedItemWidget extends StatelessWidget {
                   ),
 
                 Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [LikeIconWidget(_feed)]),
+                  children: [
+                    _LikeIconWidget(_feed),
+                    const SizedBox(width: 12),
+                    _CommentIconWidget(_feed),
+                  ],
+                ),
               ],
             ),
           ),

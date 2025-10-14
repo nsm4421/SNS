@@ -100,6 +100,21 @@ class EntryPage extends StatelessWidget {
                     tooltip: 'Create Chat',
                   ),
                 ],
+
+                _TabMenus.setting => [
+                  IconButton(
+                    onPressed: () {
+                      context
+                        ..read<AuthBloc>().add(
+                          const AuthEvent.signOutRequested(),
+                        )
+                        ..router.replaceAll([const SignInRoute()]);
+                    },
+                    icon: const Icon(Icons.logout_outlined, size: _iconSize),
+                    tooltip: 'Sign Out',
+                  ),
+                ],
+
                 (_) => [],
               },
 

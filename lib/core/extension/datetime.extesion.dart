@@ -8,5 +8,7 @@ extension DatetimeExtension on DateTime {
     return '$y$m$d';
   }
 
-  String get diffText => timeago.format(this, locale: 'en_short');
+  String get diffTextEn => timeago.format(toLocal(), locale: 'en');
+
+  String get diffTextEnShort => timeago.format(toLocal(), locale: 'en_short');
 }

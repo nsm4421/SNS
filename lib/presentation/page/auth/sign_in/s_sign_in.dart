@@ -37,6 +37,10 @@ class _SignInScreenState extends State<_SignInScreen> {
     await context.router.replace(const SignUpRoute());
   }
 
+  _handleClearEmail() {
+    _emailController.clear();
+  }
+
   _handleSubmit() async {
     setState(() {
       _tappable = false;
@@ -74,8 +78,12 @@ class _SignInScreenState extends State<_SignInScreen> {
                 keyboardType: TextInputType.emailAddress,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.email_outlined),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.email_outlined),
+                  suffixIcon: IconButton(
+                    onPressed: _handleClearEmail,
+                    icon: const Icon(Icons.clear),
+                  ),
                   hintText: 'Email',
                 ),
               ),
